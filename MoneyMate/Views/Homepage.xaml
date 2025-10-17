@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MoneyMate.Views.Homepage"
+             Title="Homepage">
+    <VerticalStackLayout Style="{StaticResource MainContainer}">
+
+        <Image Source="logo.png" HeightRequest="120" HorizontalOptions="Center"/>
+
+        <Button Text="LOGIN" Style="{StaticResource PrimaryButton}" />
+        <Button Text="SIGNUP" Style="{StaticResource OutlineButton}" />
+
+        <Label Text="MoneyMate © 2025. All rights reserved."
+               FontSize="12"
+               HorizontalOptions="Center"
+               TextColor="{StaticResource Secondary}" />
+
+    </VerticalStackLayout>
+</ContentPage>
