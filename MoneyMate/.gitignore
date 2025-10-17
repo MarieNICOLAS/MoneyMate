@@ -1,0 +1,73 @@
+﻿# =============================
+# 🧱 .NET MAUI / C# PROJECT
+# =============================
+
+# Build folders
+/bin/
+/obj/
+/AppPackages/
+/BundleArtifacts/
+/Package.StoreAssociation.xml
+/TestResults/
+*.appxupload
+
+# Visual Studio / Rider / VSCode
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# macOS & Windows system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs & temp files
+*.log
+*.tmp
+*.temp
+*.bak
+*.cache
+*.swp
+
+# NuGet packages
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+*.lock.json
+
+# Configuration
+*.env
+.env.*
+launchSettings.json
+
+# Auto-generated resources
+Resources/**/bin/
+Resources/**/obj/
+Platforms/**/bin/
+Platforms/**/obj/
+
+# Test coverage & reports
+coverage/
+*.coverage
+*.coveragexml
+*.testsettings
+
+# =============================
+# 🧩 MOBILE-SPECIFIC
+# =============================
+
+# Android
+*.apk
+*.aab
+*.keystore
+.gradle/
+local.properties
+
+# iOS
+*.xcuserdata
+*.xcuserstate
