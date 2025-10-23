@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using MoneyMate.Database;
 
 namespace MoneyMate
 {
@@ -15,9 +16,11 @@ namespace MoneyMate
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-#if DEBUG
-    		builder.Logging.AddDebug();
-#endif
+            #if DEBUG
+    		    builder.Logging.AddDebug();
+            #endif
+
+            builder.Services.AddSingleton<MoneyMateContext>();
 
             return builder.Build();
         }
