@@ -8,19 +8,29 @@
     Title="MoneyMate">
     
     <ShellContent
+        Title="EditCategoryPage"
+        ContentTemplate="{DataTemplate views:EditCategoryPage}"
+        Route="EditCategoryPage" />
+    
+    <ShellContent
+        Title="AddCategoryPage"
+        ContentTemplate="{DataTemplate views:AddCategoryPage}"
+        Route="AddCategoryPage" />
+    
+    <ShellContent
         Title="AddTransactionPage"
         ContentTemplate="{DataTemplate views:AddTransactionPage}"
         Route="AddTransactionPage" />
-    
+
     <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
 
-    <!--<ShellContent
-            Title="EditTransaction"
+    <ShellContent
+       Title="EditTransaction"
         ContentTemplate="{DataTemplate views:EditTransactionPage}"
-        Route="EditTransactionPage" />-->
+        Route="EditTransactionPage" />
     
 
 </Shell>
