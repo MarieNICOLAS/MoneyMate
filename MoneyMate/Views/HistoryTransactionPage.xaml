@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MoneyMate.Views.HistoryTransactionPage"
              Title="HistoryTransactionPage">
-    <VerticalStackLayout Margin="10">
+    <VerticalStackLayout Margin="10" Style="{StaticResource MainContainer}">
         <SearchBar Placeholder="Rechercher une transaction" />
         <HorizontalStackLayout Spacing="10">
             <Switch IsToggled="true"/>
@@ -42,11 +42,12 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-
-        <Border
+            <Border
+                
+                Padding="10"
                 Stroke="Gray"
                 StrokeThickness="1"
-
+                
                 StrokeShape="RoundRectangle 10">
             <Grid>
                 <Grid.RowDefinitions>
@@ -58,15 +59,16 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Label Text="Course" Grid.Row="0" Grid.Column="0" FontAttributes="Bold" />
-                <Label Text="25 €" Grid.Row="0" Grid.Column="1" TextColor="Red" HorizontalOptions="End" />
+                <Label Text="Course" Grid.Row="0" Grid.Column="0" FontAttributes="Bold" FontSize="Title"/>
+                <Label Text="25 €" Grid.Row="0" Grid.Column="1" TextColor="Red" HorizontalOptions="End" FontSize="Medium" />
                 <Label Text="Alimentation" TextColor="Green" Grid.Row="1" Grid.Column="0" HorizontalOptions="Start" FontSize="Small" />
-                <Label Text="01/11/2025" Grid.Row="1" Grid.Column="1" HorizontalOptions="End" FontSize="Small" />
+                <Label Text="01/11/2025" Grid.Row="1" Grid.Column="1" HorizontalOptions="End" FontSize="Caption" />
             </Grid>
         </Border>
 
 
         <Border
+                Padding="10"
                 Stroke="Gray"
                 StrokeThickness="1"
                 StrokeShape="RoundRectangle 10">
@@ -80,15 +82,16 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Label Text="Essence" Grid.Row="0" Grid.Column="0" FontAttributes="Bold" />
-                <Label Text="50 €" Grid.Row="0" Grid.Column="1" TextColor="Red" HorizontalOptions="End" />
+                <Label Text="Essence" Grid.Row="0" Grid.Column="0" FontAttributes="Bold" FontSize="Title"/>
+                <Label Text="50 €" Grid.Row="0" Grid.Column="1" TextColor="Red" HorizontalOptions="End" FontSize="Medium" />
                 <Label Text="Transport" TextColor="Orange" Grid.Row="1" Grid.Column="0" HorizontalOptions="Start" FontSize="Small" />
-                <Label Text="02/11/2025" Grid.Row="1" Grid.Column="1" HorizontalOptions="End" FontSize="Small" />
+                <Label Text="02/11/2025" Grid.Row="1" Grid.Column="1" HorizontalOptions="End" FontSize="Caption" />
             </Grid>
         </Border>
 
         <!-- Bloc de dépense 3 -->
         <Border
+                Padding="10"
                 Stroke="Gray"
                 StrokeThickness="1"
                 StrokeShape="RoundRectangle 10">  
@@ -102,10 +105,10 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Label Text="Restaurant" Grid.Row="0" Grid.Column="0" FontAttributes="Bold" />
-                <Label Text="30 €" Grid.Row="0" Grid.Column="1" TextColor="Red" HorizontalOptions="End" />
+                <Label Text="Restaurant" Grid.Row="0" Grid.Column="0" FontAttributes="Bold" FontSize="Title"/>
+                <Label Text="30 €" Grid.Row="0" Grid.Column="1" TextColor="Red" HorizontalOptions="End" FontSize="Medium"/>
                 <Label Text="Alimentation" TextColor="Green" Grid.Row="1" Grid.Column="0" HorizontalOptions="Start" FontSize="Small" />
-                <Label Text="03/11/2025" Grid.Row="1" Grid.Column="1" HorizontalOptions="End" FontSize="Small" />
+                <Label Text="03/11/2025" Grid.Row="1" Grid.Column="1" HorizontalOptions="End" FontSize="Caption" />
             </Grid>
         </Border>
     </VerticalStackLayout>
