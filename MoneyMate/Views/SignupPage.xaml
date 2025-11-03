@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:MoneyMate.ViewModels"
+             x:Class="MoneyMate.Views.SignupPage"
+             Title="Signup">
+
+    <ContentPage.BindingContext>
+        <viewmodel:SignupViewModel />
+    </ContentPage.BindingContext>
+
+    <VerticalStackLayout Padding="30" Spacing="15">
+
+        <Label Text="Inscription"
+               FontSize="24"
+               FontAttributes="Bold"
+               HorizontalOptions="Center" />
+
+        <Entry Placeholder="Nom complet" Text="{Binding FullName}" />
+        <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email" />
+        <Entry Placeholder="Mot de passe" Text="{Binding Password}" IsPassword="True" />
+
+        <Button Text="S'inscrire" Command="{Binding SignupCommand}" />
+
+        <Label Text="{Binding Message}"
+               TextColor="{Binding MessageColor}"
+               HorizontalOptions="Center" />
+
+        <Button Text="← Retour" Clicked="OnBackClicked" />
+    </VerticalStackLayout>
+</ContentPage>

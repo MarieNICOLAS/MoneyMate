@@ -10,7 +10,7 @@
             <Image Source="logo.png" HeightRequest="120" HorizontalOptions="Center"/>
 
             <Button Text="Login" Style="{StaticResource PrimaryButton}" Clicked="OnLoginClicked" />
-            <Button Text="Signup" Style="{StaticResource OutlineButton}" />
+            <Button Text="Signup" Style="{StaticResource OutlineButton}" Clicked="OnSignupClicked" />
 
             <Label Text="MoneyMate © 2025. All rights reserved."
                    FontSize="12"
