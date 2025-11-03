@@ -48,27 +48,41 @@
               x:Name="isRepeatable"
                                />
 
-        <CheckBox IsChecked="true" />
+        <CheckBox IsChecked="true"
+                  HorizontalOptions="Start"/>
 
-        <HorizontalStackLayout Margin="30" Spacing="20">
-            <Button Text="Valider" 
+
+        <Grid
+            ColumnDefinitions="*,*,*"
+            RowDefinitions="Auto"
+            ColumnSpacing="10"
+            Padding="20">
+
+            <Button 
+               Grid.Column="0" 
+               Text="Valider" 
                BackgroundColor="#EB9362"
                CornerRadius="10"
                VerticalOptions="Center" 
                HorizontalOptions="Center"
                                     />
-            <Button Text="Supprimer" 
-               BackgroundColor="#EB9362"
-               CornerRadius="10"
-               VerticalOptions="Center" 
-               HorizontalOptions="Center"
+            <Button 
+                Grid.Column="1"                
+                Text="Supprimer" 
+                BackgroundColor="#EB9362"
+                CornerRadius="10"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
                                     />
-            <Button Text="Annuler" 
-               BackgroundColor="#EB9362"
-               CornerRadius="10"
-               VerticalOptions="Center" 
-               HorizontalOptions="Center"
+            <Button 
+                Grid.Column="2"
+                Text="Annuler" 
+                BackgroundColor="#EB9362"
+                CornerRadius="10"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
                                     />
-        </HorizontalStackLayout>
+        </Grid>
+
     </VerticalStackLayout>  
 </ContentPage>
