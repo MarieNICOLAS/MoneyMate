@@ -27,5 +27,26 @@ namespace MoneyMate.Services
             var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(input));
             return Convert.ToHexString(bytes);
         }
+
+        public async Task<bool> RegisterAsync(string email, string password, string name)
+        {
+            var users = await _db.GetAllAsync<User>();
+            if (users.Any(u => u.Email == email))
+                return false;
+
+            string hash = ComputeHash(password);
+
+            var newUser = new User
+            {
+                Name = name,
+                Email = email,
+                PasswordHash = hash,
+                CreatedAt = DateTime.Now
+            };
+
+            await _db.InsertAsync(newUser);
+            return true;
+        }
+
     }
 }

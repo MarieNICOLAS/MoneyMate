@@ -1,58 +1,128 @@
 ﻿using System.Windows.Input;
+using Microsoft.Maui.Controls;
 using MoneyMate.Models;
-using Microsoft.Maui.Graphics;
+using MoneyMate.Services;
+using MoneyMate.ViewModels;
 
 namespace MoneyMate.ViewModels
 {
-    public class SignupViewModel /*: BaseViewModel*/
+    public class SignupViewModel : BaseViewModel
     {
-        //private readonly AuthService _authService;
+        private readonly AuthService _authService;
 
-        //public string FullName { get; set; } = "";
-        //public string Email { get; set; } = "";
-        //public string Password { get; set; } = "";
-        //public string Message { get; set; } = "";
-        //public Color MessageColor { get; set; } = Colors.Black;
+        private string name;
+        private string email;
+        private string password;
+        private string message;
+        private Color messageColor = Colors.Transparent;
 
-        //public ICommand SignupCommand { get; }
+        public string Name
+        {
+            get => name;
+            set
+            {
+                if (name != value)
+                {
+                    name = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-        //public SignupViewModel()
-        //{
-        //    _authService = new AuthService(App.Database);
-        //    SignupCommand = new Command(async () => await SignupAsync());
-        //}
+        public string Email
+        {
+            get => email;
+            set
+            {
+                if (email != value)
+                {
+                    email = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-        //private async Task SignupAsync()
-        //{
-        //    Message = "";
+        public string Password
+        {
+            get => password;
+            set
+            {
+                if (password != value)
+                {
+                    password = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-        //    if (string.IsNullOrWhiteSpace(Email) ||
-        //        string.IsNullOrWhiteSpace(Password) ||
-        //        string.IsNullOrWhiteSpace(FullName))
-        //    {
-        //        Message = "Veuillez remplir tous les champs.";
-        //        MessageColor = Colors.Red;
-        //        OnPropertyChanged(nameof(Message));
-        //        OnPropertyChanged(nameof(MessageColor));
-        //        return;
-        //    }
+        public string Message
+        {
+            get => message;
+            set
+            {
+                if (message != value)
+                {
+                    message = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-        //    var success = await _authService.RegisterAsync(Email, Password, FullName);
+        public Color MessageColor
+        {
+            get => messageColor;
+            set
+            {
+                if (messageColor != value)
+                {
+                    messageColor = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-        //    if (success)
-        //    {
-        //        Message = "Inscription réussie ! Vous pouvez maintenant vous connecter.";
-        //        MessageColor = Colors.Green;
-        //        OnPropertyChanged(nameof(Message));
-        //        OnPropertyChanged(nameof(MessageColor));
-        //    }
-        //    else
-        //    {
-        //        Message = "Cet email est déjà utilisé.";
-        //        MessageColor = Colors.Red;
-        //        OnPropertyChanged(nameof(Message));
-        //        OnPropertyChanged(nameof(MessageColor));
-        //    }
-        //}
+        public ICommand SignupCommand { get; }
+
+        public SignupViewModel()
+        {
+            _authService = new AuthService(App.Database);
+            SignupCommand = new Command(async () => await SignupAsync());
+        }
+
+        private async Task SignupAsync()
+        {
+            IsBusy = true;
+            Message = string.Empty;
+            MessageColor = Colors.Transparent;
+
+            if (string.IsNullOrWhiteSpace(Name) ||
+                string.IsNullOrWhiteSpace(Email) ||
+                string.IsNullOrWhiteSpace(Password))
+            {
+                Message = "Veuillez remplir tous les champs.";
+                MessageColor = Colors.Red;
+                IsBusy = false;
+                return;
+            }
+
+            var result = await _authService.RegisterAsync(Email, Password, Name);
+
+            if (!result)
+            {
+                Message = "⚠️ Cet email est déjà utilisé.";
+                MessageColor = Colors.Red;
+            }
+            else
+            {
+                Message = "✅ Compte créé avec succès !";
+                MessageColor = Colors.Green;
+
+                // Redirige vers la page de connexion après une petite pause
+                await Task.Delay(1500);
+                await Shell.Current.GoToAsync(".."); // Retour à LoginPage
+            }
+
+            IsBusy = false;
+        }
     }
 }
