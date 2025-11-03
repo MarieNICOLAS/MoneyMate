@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MoneyMate.Views.LoginPage"
+             Title="Login">
+
+    
+    <VerticalStackLayout Padding="30" Spacing="15">
+
+        <Label Text="Connexion" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
+
+        <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email" />
+        <Entry Placeholder="Mot de passe" Text="{Binding Password}" IsPassword="True" />
+
+        <Button Text="Se connecter" Command="{Binding LoginCommand}" />
+        <Label Text="{Binding ErrorMessage}" TextColor="Red" />
+
+        <Button Text="← Retour"
+        Clicked="OnBackClicked"
+        Style="{StaticResource OutlineButton}" />
+
+    </VerticalStackLayout>
+</ContentPage>

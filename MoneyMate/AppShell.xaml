@@ -5,22 +5,17 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MoneyMate"
     xmlns:views="clr-namespace:MoneyMate.Views"
-    Title="MoneyMate">
-    
+    Title="MoneyMate"
+    >
+
     <ShellContent
-        Title="AddTransactionPage"
-        ContentTemplate="{DataTemplate views:AddTransactionPage}"
-        Route="AddTransactionPage" />
-    
-    <ShellContent
-        Title="Home"
+        Title="MoneyMate"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
 
-    <!--<ShellContent
-            Title="EditTransaction"
-        ContentTemplate="{DataTemplate views:EditTransactionPage}"
-        Route="EditTransactionPage" />-->
-    
+    <ShellContent
+        Title="Login"
+        ContentTemplate="{DataTemplate views:LoginPage}"
+        Route="LoginPage" />
 
 </Shell>
