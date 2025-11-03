@@ -6,7 +6,11 @@
     xmlns:local="clr-namespace:MoneyMate"
     xmlns:views="clr-namespace:MoneyMate.Views"
     Title="MoneyMate"
-    >
+    Shell.FlyoutBehavior="Flyout"
+    Shell.BackgroundColor="{StaticResource Primary}"
+    Shell.TitleColor="White"
+    Shell.NavBarHasShadow="False">
+
 
     <ShellContent
         Title="MoneyMate"
