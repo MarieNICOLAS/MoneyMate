@@ -9,13 +9,12 @@
 
         private async void OnLoginClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("///LoginPage");
+            await Shell.Current.GoToAsync("//LoginPage");
         }
 
         private async void OnSignupClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("///SignupPage");
+            await Shell.Current.GoToAsync("//SignupPage");
         }
-
     }
 }

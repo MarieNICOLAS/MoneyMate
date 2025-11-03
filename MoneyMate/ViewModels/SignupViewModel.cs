@@ -2,7 +2,6 @@
 using Microsoft.Maui.Controls;
 using MoneyMate.Models;
 using MoneyMate.Services;
-using MoneyMate.ViewModels;
 
 namespace MoneyMate.ViewModels
 {
@@ -114,12 +113,22 @@ namespace MoneyMate.ViewModels
             }
             else
             {
-                Message = "✅ Compte créé avec succès !";
+                Message = "✅ Compte créé avec succès ! Redirection vers la connexion...";
                 MessageColor = Colors.Green;
 
-                // Redirige vers la page de connexion après une petite pause
-                await Task.Delay(1500);
-                await Shell.Current.GoToAsync(".."); // Retour à LoginPage
+                // 🔄 Réinitialise les champs du formulaire
+                Name = string.Empty;
+                Email = string.Empty;
+                Password = string.Empty;
+                OnPropertyChanged(nameof(Name));
+                OnPropertyChanged(nameof(Email));
+                OnPropertyChanged(nameof(Password));
+
+                // Petite pause UX (optionnelle)
+                await Task.Delay(1200);
+
+                // ✅ Redirection vers la page Login
+                await Shell.Current.GoToAsync("//LoginPage");
             }
 
             IsBusy = false;

@@ -1,14 +1,15 @@
-namespace MoneyMate.Views;
-
-public partial class LoginPage : ContentPage
+namespace MoneyMate.Views
 {
-	public LoginPage()
-	{
-		InitializeComponent();
-	}
-
-    private async void OnBackClicked(object sender, EventArgs e)
+    public partial class LoginPage : ContentPage
     {
-        await Shell.Current.GoToAsync("///MainPage");
+        public LoginPage()
+        {
+            InitializeComponent();
+        }
+
+        private async void OnBackClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//MainPage");
+        }
     }
 }

@@ -5,25 +5,22 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MoneyMate"
     xmlns:views="clr-namespace:MoneyMate.Views"
-    Title="MoneyMate"
-    Shell.FlyoutBehavior="Flyout"
-    Shell.BackgroundColor="{StaticResource Primary}"
-    Shell.TitleColor="White"
-    Shell.NavBarHasShadow="False">
-
+    Shell.FlyoutBehavior="Disabled"
+    Shell.NavBarHasShadow="False"
+    Shell.TitleColor="White">
 
     <ShellContent
-        Title="MoneyMate"
+        Title="Accueil"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
 
     <ShellContent
-        Title="Login"
+        Title="Connexion"
         ContentTemplate="{DataTemplate views:LoginPage}"
         Route="LoginPage" />
 
     <ShellContent
-        Title="Signup"
+        Title="Inscription"
         ContentTemplate="{DataTemplate views:SignupPage}"
         Route="SignupPage" />
 </Shell>
