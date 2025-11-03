@@ -6,6 +6,16 @@
     xmlns:local="clr-namespace:MoneyMate"
     xmlns:views="clr-namespace:MoneyMate.Views"
     Title="MoneyMate">
+
+    <ShellContent
+        Title="TEST"
+        ContentTemplate="{DataTemplate views:HistoryTransactionPage}"
+        Route="HistoryTransactionPage" />
+
+    <ShellContent
+       Title="Consulter ses catégories"
+       ContentTemplate="{DataTemplate views:CategoryManagementPage}"
+       Route="CategoryManagementPage" />
     
     <ShellContent
         Title="EditCategoryPage"

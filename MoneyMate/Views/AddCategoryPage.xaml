@@ -18,7 +18,7 @@
         Placeholder="Course"/>
 
         <Label 
-         Text="Price"
+         Text="Couleur"
          VerticalOptions="Center" 
          HorizontalOptions="Start" />
 

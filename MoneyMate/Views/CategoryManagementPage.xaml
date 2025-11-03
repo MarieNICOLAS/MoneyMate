@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MoneyMate.Views.CategoryManagementPage"
+             Title="CategoryManagementPage">
+    <VerticalStackLayout Margin="20" Spacing="20">
+        <SearchBar Placeholder="Rechercher une transaction" />
+        <CollectionView x:Name="ListCategories"
+                ItemsSource="{Binding Categories}"
+                ItemsLayout="VerticalList">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <VerticalStackLayout>
+                        <HorizontalStackLayout>
+                            <Label Text="{Binding Nom}" FontAttributes="Bold" />
+                            <Label Text="{Binding Couleur}" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout>
+                            <Label Text="{Binding Limite}" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Border
+         Stroke="Gray"
+         StrokeThickness="1"
+
+         StrokeShape="RoundRectangle 10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Text="Transport" Grid.Row="0" Grid.Column="0" TextColor="Red" FontAttributes="Bold" />
+                <Label Text="700 €" TextColor="Green" Grid.Row="1" Grid.Column="0" HorizontalOptions="Start" FontSize="Small" />
+            </Grid>
+        </Border>
+
+
+        <Border
+         Stroke="Gray"
+         StrokeThickness="1"
+         StrokeShape="RoundRectangle 10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Text="Loisir" Grid.Row="0" Grid.Column="0" TextColor="Orange" FontAttributes="Bold" />
+                <Label Text="300 €" TextColor="Green" Grid.Row="1" Grid.Column="0" HorizontalOptions="Start" FontSize="Small" />
+            </Grid>
+        </Border>
+
+        <!-- Bloc de dépense 3 -->
+        <Border
+         Stroke="Gray"
+         StrokeThickness="1"
+         StrokeShape="RoundRectangle 10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Text="Logement" Grid.Row="0" Grid.Column="0" TextColor="Blue" FontAttributes="Bold" />
+                <Label Text="800 €" TextColor="Green" Grid.Row="1" Grid.Column="0" HorizontalOptions="Start" FontSize="Small" />
+            </Grid>
+        </Border>
+    </VerticalStackLayout>
+</ContentPage>

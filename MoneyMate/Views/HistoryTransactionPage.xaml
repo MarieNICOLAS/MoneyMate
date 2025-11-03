@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MoneyMate.Views.HistoryTransactionPage"
+             Title="HistoryTransactionPage">
+    <VerticalStackLayout Margin="10">
+        <SearchBar Placeholder="Rechercher une transaction" />
+        <HorizontalStackLayout Spacing="10">
+            <Switch IsToggled="true"/>
+            <Label Text="Catégorie" VerticalTextAlignment="Center"></Label>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Spacing="10">
+            <Switch IsToggled="False"/>
+            <Label Text="Nom" VerticalTextAlignment="Center"></Label>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Spacing="10">
+            <Switch IsToggled="true"/>
+            <Label Text="Prix" VerticalTextAlignment="Center"></Label>
+        </HorizontalStackLayout>
+
+        <DatePicker MaximumWidthRequest="100" HorizontalOptions="Start"></DatePicker>
+
+        <Label Text="Ma liste d'éléments" 
+               FontSize="24"
+               HorizontalOptions="Center" />
+
+        <CollectionView x:Name="ListTransaction"
+                        ItemsSource="{Binding Transactions}"
+                        ItemsLayout="VerticalList">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <VerticalStackLayout>
+                        <HorizontalStackLayout>
+                            <Label Text="{Binding Nom}" FontAttributes="Bold" />
+                            <Label Text="{Binding Prix}" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout>
+                            <Label Text="{Binding Categorie}" HorizontalTextAlignment="Start" />
+                            <Label Text="{Binding Date}" FontSize="Small" HorizontalTextAlignment="Start"  />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Border
+                Stroke="Gray"
+                StrokeThickness="1"
+
+                StrokeShape="RoundRectangle 10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Text="Course" Grid.Row="0" Grid.Column="0" FontAttributes="Bold" />
+                <Label Text="25 €" Grid.Row="0" Grid.Column="1" TextColor="Red" HorizontalOptions="End" />
+                <Label Text="Alimentation" TextColor="Green" Grid.Row="1" Grid.Column="0" HorizontalOptions="Start" FontSize="Small" />
+                <Label Text="01/11/2025" Grid.Row="1" Grid.Column="1" HorizontalOptions="End" FontSize="Small" />
+            </Grid>
+        </Border>
+
+
+        <Border
+                Stroke="Gray"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Text="Essence" Grid.Row="0" Grid.Column="0" FontAttributes="Bold" />
+                <Label Text="50 €" Grid.Row="0" Grid.Column="1" TextColor="Red" HorizontalOptions="End" />
+                <Label Text="Transport" TextColor="Orange" Grid.Row="1" Grid.Column="0" HorizontalOptions="Start" FontSize="Small" />
+                <Label Text="02/11/2025" Grid.Row="1" Grid.Column="1" HorizontalOptions="End" FontSize="Small" />
+            </Grid>
+        </Border>
+
+        <!-- Bloc de dépense 3 -->
+        <Border
+                Stroke="Gray"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 10">  
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Text="Restaurant" Grid.Row="0" Grid.Column="0" FontAttributes="Bold" />
+                <Label Text="30 €" Grid.Row="0" Grid.Column="1" TextColor="Red" HorizontalOptions="End" />
+                <Label Text="Alimentation" TextColor="Green" Grid.Row="1" Grid.Column="0" HorizontalOptions="Start" FontSize="Small" />
+                <Label Text="03/11/2025" Grid.Row="1" Grid.Column="1" HorizontalOptions="End" FontSize="Small" />
+            </Grid>
+        </Border>
+    </VerticalStackLayout>
+</ContentPage>
