@@ -4,11 +4,43 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MoneyMate"
+    xmlns:views="clr-namespace:MoneyMate.Views"
     Title="MoneyMate">
+
+    <ShellContent
+        Title="TEST"
+        ContentTemplate="{DataTemplate views:HistoryTransactionPage}"
+        Route="HistoryTransactionPage" />
+
+    <ShellContent
+       Title="Consulter ses catégories"
+       ContentTemplate="{DataTemplate views:CategoryManagementPage}"
+       Route="CategoryManagementPage" />
+    
+    <ShellContent
+        Title="EditCategoryPage"
+        ContentTemplate="{DataTemplate views:EditCategoryPage}"
+        Route="EditCategoryPage" />
+    
+    <ShellContent
+        Title="AddCategoryPage"
+        ContentTemplate="{DataTemplate views:AddCategoryPage}"
+        Route="AddCategoryPage" />
+    
+    <ShellContent
+        Title="AddTransactionPage"
+        ContentTemplate="{DataTemplate views:AddTransactionPage}"
+        Route="AddTransactionPage" />
 
     <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
+
+    <ShellContent
+       Title="EditTransaction"
+        ContentTemplate="{DataTemplate views:EditTransactionPage}"
+        Route="EditTransactionPage" />
+    
 
 </Shell>
