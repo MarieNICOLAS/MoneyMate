@@ -5,17 +5,19 @@ namespace MoneyMate
 {
     public partial class App : Application
     {
-        private readonly MoneyMateContext _dbContext;
+        // ✅ Propriété statique accessible depuis tout le projet
+        public static MoneyMateContext Database { get; private set; }
 
         public App(MoneyMateContext dbContext)
         {
             InitializeComponent();
-            _dbContext = dbContext;
+
+            // Initialise la base de données pour tout le projet
+            Database = dbContext;
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            // on crée la fenêtre avant d'initialiser la base
             var window = new Window(new AppShell());
             InitializeDatabaseSafe();
             return window;
@@ -25,7 +27,7 @@ namespace MoneyMate
         {
             try
             {
-                await _dbContext.InitializeAsync();
+                await Database.InitializeAsync();
                 Debug.WriteLine("✅ Base de données initialisée avec succès !");
             }
             catch (Exception ex)

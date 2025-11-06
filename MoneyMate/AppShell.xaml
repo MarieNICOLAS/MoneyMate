@@ -43,4 +43,8 @@
         Route="EditTransactionPage" />
     
 
+    <ShellContent
+        Title="Inscription"
+        ContentTemplate="{DataTemplate views:SignupPage}"
+        Route="SignupPage" />
 </Shell>
