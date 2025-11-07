@@ -56,6 +56,23 @@ Outils : **Kanban (Trello)** & **Diagramme de Gantt (Excel/Notion)**
 
 ---
 
+## Installation et utilisation
+
+1. Cloner le dépôt :  
+   ```bash
+   git clone
+
+2. Naviguer dans le répertoire du projet :  
+   ```bash
+   cd MoneyMate
+   ```
+3. Ouvrir le projet avec Visual Studio 2022 (ou supérieur) avec le support .NET MAUI installé.
+4. Restaurer les dépendances NuGet.
+5. Lancer l’application sur un émulateur ou un appareil physique.
+
+dotnet add package sqlite-net-pcl
+
+
 ## 🧠 À propos du projet
 
 Ce projet vise à appliquer concrètement les notions de **conception logicielle, architecture MVVM, UX/UI** et **gestion de projet agile** à travers le développement d’une application mobile complète.

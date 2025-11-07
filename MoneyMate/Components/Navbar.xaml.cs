@@ -1,8 +1,8 @@
 namespace MoneyMate.Components;
 
-public partial class HeaderUser : ContentPage
+public partial class Navbar : ContentView
 {
-	public HeaderUser()
+	public Navbar()
 	{
 		InitializeComponent();
 	}

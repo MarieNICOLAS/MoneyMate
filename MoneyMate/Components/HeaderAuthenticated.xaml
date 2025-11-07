@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MoneyMate.Components.HeaderAuthenticated"
+             BackgroundColor="{StaticResource BackgroundLight}"
+             Padding="20,10"
+             HeightRequest="70">
+
+    <Grid ColumnDefinitions="Auto,*,Auto,Auto"
+          VerticalOptions="Center"
+          HorizontalOptions="Fill"
+          ColumnSpacing="16">
+
+        <!-- 🪙 Logo + Texte -->
+        <HorizontalStackLayout Grid.Column="0" Spacing="8">
+            <Image Source="money_mate_icon.png"
+                   WidthRequest="28"
+                   HeightRequest="28"
+                   VerticalOptions="Center" />
+            <Label Text="MoneyMate"
+                   FontAttributes="Bold"
+                   FontSize="20"
+                   TextColor="{StaticResource TextDark}"
+                   VerticalOptions="Center" />
+        </HorizontalStackLayout>
+
+        <!-- 🔔 Notifications -->
+        <ImageButton Grid.Column="2"
+                     Source="alarm_on_icon.png"
+                     BackgroundColor="Transparent"
+                     WidthRequest="26"
+                     HeightRequest="26"
+                     Margin="0,0,8,0"
+                     VerticalOptions="Center"
+                     Command="{Binding GoNotificationsCommand}" />
+
+        <!-- 🚪 Logout -->
+        <ImageButton Grid.Column="3"
+                     Source="logout_icon.png"
+                     BackgroundColor="Transparent"
+                     WidthRequest="26"
+                     HeightRequest="26"
+                     Margin="0,0,8,0"
+                     VerticalOptions="Center"
+                     Command="{Binding LogoutCommand}" />
+
+    </Grid>
+</ContentView>

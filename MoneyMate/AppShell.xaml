@@ -5,9 +5,28 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MoneyMate"
     xmlns:views="clr-namespace:MoneyMate.Views"
-    Title="MoneyMate">
+    Shell.NavBarIsVisible="False">
 
     <ShellContent
+        Title="Accueil"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage" />
+
+    <ShellContent
+        Title="Connexion"
+        ContentTemplate="{DataTemplate views:LoginPage}"
+        Route="LoginPage" />
+
+    <ShellContent
+        Title="Inscription"
+        ContentTemplate="{DataTemplate views:SignupPage}"
+        Route="SignupPage" />
+
+    <ShellContent
+        Title="Dashboard"
+        ContentTemplate="{DataTemplate views:DashboardPage}"
+        Route="DashboardPage" />
+
         Title="Modifier un budget"
         ContentTemplate="{DataTemplate views:EditBudgetPage}"
         Route="EditBudgetPage" />
@@ -38,14 +57,27 @@
         Route="AddTransactionPage" />
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    Title="Menu"
+    ContentTemplate="{DataTemplate views:MenuPage}"
+    Route="MenuPage" />
 
+    <ShellContent
+    Title="Notifications"
+    ContentTemplate="{DataTemplate views:NotificationsPage}"
+    Route="NotificationsPage" />
+
+    <ShellContent
+        Title="Statistics"
+        ContentTemplate="{DataTemplate views:StatisticsPage}"
+        Route="StaticticsPage" />
     <ShellContent
        Title="Modifier une transaction"
         ContentTemplate="{DataTemplate views:EditTransactionPage}"
         Route="EditTransactionPage" />
     
 
+    <ShellContent
+Title="Ajouter une dépense"
+ContentTemplate="{DataTemplate views:AddExpensePage}"
+Route="AddExpensePage" />
 </Shell>

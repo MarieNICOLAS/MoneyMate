@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MoneyMate.Components.Navbar"
+             BackgroundColor="{StaticResource BackgroundLight}"
+             HeightRequest="70"
+             VerticalOptions="End">
+
+    <Grid ColumnDefinitions="*,*,*,*,*"
+          Padding="20,10"
+          ColumnSpacing="25"
+          VerticalOptions="Center"
+          HorizontalOptions="Fill">
+
+        <!-- 🏠 Home -->
+        <ImageButton Grid.Column="0"
+                     Source="home_icon.png"
+                     BackgroundColor="Transparent"
+                     WidthRequest="28"
+                     HeightRequest="28"
+                     Command="{Binding GoHomeCommand}" />
+
+        <!-- 📊 Statistics -->
+        <ImageButton Grid.Column="1"
+                     Source="analytics_icon.png"
+                     BackgroundColor="Transparent"
+                     WidthRequest="28"
+                     HeightRequest="28"
+                     Command="{Binding GoStatisticsCommand}" />
+
+        <!-- ➕ Add -->
+        <Frame Grid.Column="2"
+               CornerRadius="25"
+               WidthRequest="50"
+               HeightRequest="50"
+               BackgroundColor="{StaticResource Primary}"
+               HasShadow="True"
+               VerticalOptions="Center"
+               HorizontalOptions="Center">
+            <ImageButton Source="add_icon.png"
+                         BackgroundColor="Transparent"
+                         WidthRequest="26"
+                         HeightRequest="26"
+                         Command="{Binding GoAddCommand}" />
+        </Frame>
+
+        <!-- 🔍 Search -->
+        <ImageButton Grid.Column="3"
+                     Source="search_icon.png"
+                     BackgroundColor="Transparent"
+                     WidthRequest="28"
+                     HeightRequest="28"
+                     Command="{Binding GoSearchCommand}" />
+
+        <!-- ☰ Menu -->
+        <ImageButton Grid.Column="4"
+                     Source="menu_burger_icon.png"
+                     BackgroundColor="Transparent"
+                     WidthRequest="28"
+                     HeightRequest="28"
+                     Command="{Binding GoMenuCommand}" />
+    </Grid>
+</ContentView>

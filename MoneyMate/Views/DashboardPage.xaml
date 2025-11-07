@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:MoneyMate.Components"
+             xmlns:viewmodel="clr-namespace:MoneyMate.ViewModels"
+             x:Class="MoneyMate.Views.DashboardPage"
+             Title="Dashboard">
+
+    <ContentPage.BindingContext>
+        <viewmodel:DashboardViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid RowDefinitions="Auto,*,Auto"
+          BackgroundColor="{StaticResource White}">
+
+        <!-- HEADER -->
+        <components:Header Grid.Row="0" />
+
+        <!-- CONTENU -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20" Spacing="25" HorizontalOptions="Center">
+
+                <!-- Solde actuel -->
+                <Label Text="CURRENT BALANCE"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource PrimaryText}"
+                       HorizontalOptions="Center"/>
+
+                <!-- Diagramme circulaire (simulé par Progress + BoxView) -->
+                <Grid HeightRequest="180" WidthRequest="180">
+                    <BoxView Color="{StaticResource Secondary}"
+                             CornerRadius="90"
+                             HeightRequest="180" WidthRequest="180" />
+                    <Label Text="{Binding CurrentBalanceFormatted}"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource PrimaryText}"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" />
+                </Grid>
+
+                <!-- Barre de progression -->
+                <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                    <ProgressBar Progress="{Binding BudgetProgress}"
+                                 ProgressColor="{StaticResource Primary}"
+                                 BackgroundColor="{StaticResource Secondary}"
+                                 HeightRequest="8"
+                                 WidthRequest="250" />
+                    <Label Text="{Binding BudgetProgressText}"
+                           FontSize="14"
+                           HorizontalOptions="Center"
+                           TextColor="{StaticResource TextDark}" />
+                </VerticalStackLayout>
+
+                <!-- Liste des catégories -->
+                <VerticalStackLayout Spacing="8" Margin="0,20,0,0">
+                    <CollectionView ItemsSource="{Binding Categories}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,Auto,Auto" Padding="5,3">
+                                    <Label Text="{Binding Name}" FontSize="14" TextColor="{StaticResource TextDark}" />
+                                    <Label Grid.Column="1" Text="{Binding AmountFormatted}" FontSize="14" />
+                                    <Frame Grid.Column="2"
+                                           Padding="6,2"
+                                           CornerRadius="12"
+                                           HasShadow="False"
+                                           BackgroundColor="{Binding TrendColor}">
+                                        <Label Text="{Binding TrendFormatted}"
+                                               FontSize="12"
+                                               TextColor="White" />
+                                    </Frame>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <components:Navbar Grid.Row="2" />
+    </Grid>
+</ContentPage>
