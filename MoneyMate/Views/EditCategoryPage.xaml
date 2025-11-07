@@ -16,6 +16,13 @@
         <Entry x:Name="NomCategory"
                Style="{StaticResource EntryForm}"
                Text="{Binding Name}" />
+        <Label Text="Budget"
+           Style="{StaticResource FormLabel}" />
+        <Picker
+                Title="Sélectionner un budget"
+                ItemsSource="{Binding Budgets}"     
+                ItemDisplayBinding="{Binding DisplayName}"
+                SelectedItem="{Binding SelectedBudget, Mode=TwoWay}" />
         
         <Label Text="Couleur"
                Style="{StaticResource FormLabel}" />
