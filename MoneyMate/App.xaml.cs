@@ -1,18 +1,17 @@
 ﻿using MoneyMate.Database;
 using System.Diagnostics;
+using MoneyMate.Services;
+using Microsoft.Maui.Controls;
 
 namespace MoneyMate
 {
     public partial class App : Application
     {
-        // ✅ Propriété statique accessible depuis tout le projet
         public static MoneyMateContext Database { get; private set; }
 
         public App(MoneyMateContext dbContext)
         {
             InitializeComponent();
-
-            // Initialise la base de données pour tout le projet
             Database = dbContext;
         }
 
@@ -20,6 +19,18 @@ namespace MoneyMate
         {
             var window = new Window(new AppShell());
             InitializeDatabaseSafe();
+
+            // ✅ Navigation différée une fois la fenêtre prête
+            window.Created += async (s, e) =>
+            {
+                await Task.Delay(500); // petit délai pour s’assurer que Shell est prêt
+
+                if (AuthService.IsUserLoggedIn())
+                    await Shell.Current.GoToAsync("//DashboardPage");
+                else
+                    await Shell.Current.GoToAsync("//MainPage");
+            };
+
             return window;
         }
 
@@ -35,5 +46,7 @@ namespace MoneyMate
                 Debug.WriteLine($"❌ Erreur d'initialisation de la base : {ex}");
             }
         }
+
+
     }
 }

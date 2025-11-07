@@ -29,5 +29,9 @@
 
         <ActivityIndicator IsRunning="{Binding IsBusy}"
                            IsVisible="{Binding IsBusy}" />
+
+        <Button Text="← Retour"
+Clicked="OnBackClicked"
+Style="{StaticResource OutlineButton}" />
     </VerticalStackLayout>
 </ContentPage>

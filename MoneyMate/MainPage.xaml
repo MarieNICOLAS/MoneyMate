@@ -1,22 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:MoneyMate.Components"
              x:Class="MoneyMate.MainPage"
-             Title="Money Mate | Accueil ">
+             BackgroundColor="{StaticResource BackgroundLight}">
 
-    <ScrollView>
-        <VerticalStackLayout Style="{StaticResource MainContainer}">
+    <Grid RowDefinitions="Auto,*,Auto">
 
-            <Image Source="logo.png" HeightRequest="120" HorizontalOptions="Center"/>
-
-            <Button Text="Login" Style="{StaticResource PrimaryButton}" Clicked="OnLoginClicked" />
-            <Button Text="Signup" Style="{StaticResource OutlineButton}" Clicked="OnSignupClicked" />
-
-            <Label Text="MoneyMate © 2025. All rights reserved."
-                   FontSize="12"
-                   HorizontalOptions="Center"
-                   TextColor="{StaticResource Secondary}" />
+        <!-- HEADER -->
+        <VerticalStackLayout Grid.Row="0" Padding="20" HorizontalOptions="Center">
+            <Image Source="money_mate_icon.png" WidthRequest="70" HeightRequest="70" />
+            <Label Text="MoneyMate"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource TextDark}"
+                   HorizontalOptions="Center" />
         </VerticalStackLayout>
-    </ScrollView>
 
+        <!-- CONTENU CENTRAL -->
+        <VerticalStackLayout Grid.Row="1"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             Spacing="20">
+
+            <Button Text="Se connecter"
+                    Clicked="OnLoginClicked"
+                    Style="{StaticResource PrimaryButton}" />
+
+            <Button Text="S'inscrire"
+                    Clicked="OnSignupClicked"
+                    Style="{StaticResource OutlineButton}" />
+        </VerticalStackLayout>
+
+        <!-- FOOTER -->
+        <Label Grid.Row="2"
+               Text="© 2025 MoneyMate - All rights reserved"
+               FontSize="12"
+               HorizontalOptions="Center"
+               VerticalOptions="End"
+               TextColor="{StaticResource Secondary}" />
+    </Grid>
 </ContentPage>

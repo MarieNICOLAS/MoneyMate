@@ -75,7 +75,7 @@ namespace MoneyMate.ViewModels
                 return;
             }
 
-            var user = await _authService.LoginAsync(Email, Password);
+            var user = await _authService.LoginAsync(Email, Password, RememberMe);
 
             if (user == null)
             {
@@ -88,10 +88,22 @@ namespace MoneyMate.ViewModels
                 await App.Database.UpdateAsync(user);
 
                 // ✅ Redirection vers la page principale (ou tableau de bord)
-                await Shell.Current.GoToAsync("//MainPage");
+                await Shell.Current.GoToAsync("//DashboardPage");
             }
 
             IsBusy = false;
         }
+
+        private bool rememberMe;
+        public bool RememberMe
+        {
+            get => rememberMe;
+            set
+            {
+                rememberMe = value;
+                OnPropertyChanged();
+            }
+        }
+
     }
 }

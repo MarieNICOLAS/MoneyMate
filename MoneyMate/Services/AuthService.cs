@@ -2,6 +2,7 @@
 using MoneyMate.Models;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Maui.Storage;
 
 namespace MoneyMate.Services
 {
@@ -14,20 +15,35 @@ namespace MoneyMate.Services
             _db = db;
         }
 
-        public async Task<User?> LoginAsync(string email, string password)
+        // ✅ Connexion avec option "Se souvenir de moi"
+        public async Task<User?> LoginAsync(string email, string password, bool rememberMe = false)
         {
             string hash = ComputeHash(password);
             var users = await _db.GetAllAsync<User>();
-            return users.FirstOrDefault(u => u.Email == email && u.PasswordHash == hash && u.IsActive);
+            var user = users.FirstOrDefault(u => u.Email == email && u.PasswordHash == hash && u.IsActive);
+
+            if (user != null && rememberMe)
+            {
+                Preferences.Set("IsLoggedIn", true);
+                Preferences.Set("UserEmail", user.Email);
+            }
+
+            return user;
         }
 
-        private static string ComputeHash(string input)
+        // ✅ Vérifie si un utilisateur est déjà connecté
+        public static bool IsUserLoggedIn()
         {
-            using var sha = SHA256.Create();
-            var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(input));
-            return Convert.ToHexString(bytes);
+            return Preferences.Get("IsLoggedIn", false);
         }
 
+        // ✅ Déconnexion (efface les préférences)
+        public static void Logout()
+        {
+            Preferences.Clear();
+        }
+
+        // ✅ Inscription d’un nouvel utilisateur
         public async Task<bool> RegisterAsync(string email, string password, string name)
         {
             var users = await _db.GetAllAsync<User>();
@@ -48,5 +64,12 @@ namespace MoneyMate.Services
             return true;
         }
 
+        // ✅ Hachage sécurisé du mot de passe
+        private static string ComputeHash(string input)
+        {
+            using var sha = SHA256.Create();
+            var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(input));
+            return Convert.ToHexString(bytes);
+        }
     }
 }

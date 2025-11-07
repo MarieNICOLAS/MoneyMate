@@ -3,13 +3,15 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
     <!-- 🎨 PALETTE MONEY MATE -->
-    <Color x:Key="Primary">#393781</Color>
-    <Color x:Key="Secondary">#9DBAD5</Color>
-    <Color x:Key="Accent">#EB9362</Color>
-    <Color x:Key="BackgroundLight">#F2F1ED</Color>
-    <Color x:Key="TextDark">#1C1C1C</Color>
+    <Color x:Key="Primary">#0B38BF</Color>
+    <Color x:Key="Secondary">#0B2B8C</Color>
+    <Color x:Key="Accent">#6089BF</Color>
+    <Color x:Key="BackgroundLight">#C9EEF2</Color>
+    <Color x:Key="TextDark">#222940</Color>
+
     <Color x:Key="White">#FFFFFF</Color>
     <Color x:Key="Black">#000000</Color>
     <Color x:Key="Success">#6CC57C</Color>
     <Color x:Key="Error">#E57373</Color>
+
 </ResourceDictionary>
