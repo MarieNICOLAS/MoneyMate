@@ -3,43 +3,65 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MoneyMate.Views.AddCategoryPage"
              Title="AddCategoryPage">
-    <VerticalStackLayout Margin="10">
-        <Label 
-         Text="Ajouter une Categorie"
-         VerticalOptions="Center" 
-         HorizontalOptions="Start" />
+
+    <VerticalStackLayout Style="{StaticResource MainContainer}">
 
         <Label 
-         Text="Nom"
-         VerticalOptions="Center" 
-         HorizontalOptions="Start" />
+            Text="Ajouter une catégorie"
+            FontSize="24"
+            HorizontalOptions="Center"
+            TextColor="{StaticResource Primary}" />
 
+        <Label Text="Nom de la catégorie"
+               Style="{StaticResource FormLabel}" />
         <Entry x:Name="NomCategory"
-        Placeholder="Course"/>
+               Placeholder="Ex: Alimentation"
+               Style="{StaticResource EntryForm}"
+               Text="{Binding Name}" />
 
-        <Label 
-         Text="Couleur"
-         VerticalOptions="Center" 
-         HorizontalOptions="Start" />
+        <Label Text="Budget"
+           Style="{StaticResource FormLabel}" />
+        <Picker
+                Title="Sélectionner un budget"
+                ItemsSource="{Binding Budgets}"     
+                ItemDisplayBinding="{Binding DisplayName}"
+                SelectedItem="{Binding SelectedBudget, Mode=TwoWay}" />
 
-        <Entry x:Name="CouleurCategory"
-         Placeholder="red"
-         Keyboard="Text" />
+        <Label Text="Couleur"
+               Style="{StaticResource FormLabel}" />
+        <Picker 
+            Title="Sélectionner une couleur"
+            ItemsSource="{Binding ColorOptions}"
+            SelectedItem="{Binding SelectedColor, Mode=TwoWay}"
+            BackgroundColor="{StaticResource White}"
+            TextColor="{StaticResource TextDark}" />
 
-        <Label 
-         Text="Limite pour l'alerte"
-         VerticalOptions="Center" 
-         HorizontalOptions="Start" />
+        <Label Text="Répartition du budget (%)"
+               Style="{StaticResource FormLabel}" />
 
-        <Entry x:Name="LimitAlertCategory"
-         Placeholder="700"
-         Keyboard="Numeric" />
+        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
+            <!-- Slider pour choisir le pourcentage -->
+            <Slider 
+                x:Name="PercentageSlider"
+                Minimum="0"
+                Maximum="100"
+                Value="{Binding Percentage, Mode=TwoWay}"
+                ThumbColor="{StaticResource Primary}"
+                MaximumTrackColor="{StaticResource Secondary}"
+                MinimumTrackColor="{StaticResource Primary}" />
 
-        <Button Text="Ajouter" 
-        BackgroundColor="#EB9362"
-        CornerRadius="10"
-        VerticalOptions="Center" 
-        HorizontalOptions="Center" />
+            <!-- Valeur affichée à droite -->
+            <Label 
+                Grid.Column="1"
+                Text="{Binding Percentage, StringFormat='{0:F0}%'}"
+                VerticalOptions="Center"
+                FontAttributes="Bold"
+                TextColor="{StaticResource Primary}" />
+        </Grid>
+
+        <Button Text="Ajouter la catégorie"
+                Style="{StaticResource PrimaryButton}"
+                Command="{Binding AddCategoryCommand}" />
 
     </VerticalStackLayout>
 </ContentPage>

@@ -8,27 +8,32 @@
     Title="MoneyMate">
 
     <ShellContent
-        Title="TEST"
-        ContentTemplate="{DataTemplate views:HistoryTransactionPage}"
-        Route="HistoryTransactionPage" />
-
-    <ShellContent
-       Title="Consulter ses catégories"
-       ContentTemplate="{DataTemplate views:CategoryManagementPage}"
-       Route="CategoryManagementPage" />
+        Title="Modifier un budget"
+        ContentTemplate="{DataTemplate views:EditBudgetPage}"
+        Route="EditBudgetPage" />
     
     <ShellContent
-        Title="EditCategoryPage"
+        Title="Ajouter un budget"
+        ContentTemplate="{DataTemplate views:AddBudgetPage}"
+        Route="AddBudgetPage" />
+    
+    <ShellContent
+        Title="Historique des transactions"
+        ContentTemplate="{DataTemplate views:HistoryTransactionPage}"
+        Route="HistoryTransactionPage" />
+    
+    <ShellContent
+        Title="Modifier une catégorie"
         ContentTemplate="{DataTemplate views:EditCategoryPage}"
         Route="EditCategoryPage" />
     
     <ShellContent
-        Title="AddCategoryPage"
+        Title="Ajouter une catégorie"
         ContentTemplate="{DataTemplate views:AddCategoryPage}"
         Route="AddCategoryPage" />
     
     <ShellContent
-        Title="AddTransactionPage"
+        Title="Ajouter une transaction"
         ContentTemplate="{DataTemplate views:AddTransactionPage}"
         Route="AddTransactionPage" />
 
@@ -38,7 +43,7 @@
         Route="MainPage" />
 
     <ShellContent
-       Title="EditTransaction"
+       Title="Modifier une transaction"
         ContentTemplate="{DataTemplate views:EditTransactionPage}"
         Route="EditTransactionPage" />
     
