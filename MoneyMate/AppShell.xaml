@@ -26,7 +26,8 @@
         Title="Dashboard"
         ContentTemplate="{DataTemplate views:DashboardPage}"
         Route="DashboardPage" />
-
+    
+    <ShellContent
         Title="Modifier un budget"
         ContentTemplate="{DataTemplate views:EditBudgetPage}"
         Route="EditBudgetPage" />
@@ -51,10 +52,7 @@
         ContentTemplate="{DataTemplate views:AddCategoryPage}"
         Route="AddCategoryPage" />
     
-    <ShellContent
-        Title="Ajouter une transaction"
-        ContentTemplate="{DataTemplate views:AddTransactionPage}"
-        Route="AddTransactionPage" />
+
 
     <ShellContent
     Title="Menu"
@@ -72,7 +70,7 @@
         Route="StaticticsPage" />
     <ShellContent
        Title="Modifier une transaction"
-        ContentTemplate="{DataTemplate views:EditTransactionPage}"
+        ContentTemplate="{DataTemplate views:EditExpensePage}"
         Route="EditTransactionPage" />
     
 
