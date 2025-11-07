@@ -12,7 +12,7 @@
 
     <!-- 🧭 Header (non connecté) -->
     <Style x:Key="HeaderGuest" TargetType="Grid">
-        <Setter Property="BackgroundColor" Value="{StaticResource White}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource PrimaryLight}" />
         <Setter Property="Padding" Value="15,10" />
         <Setter Property="RowDefinitions" Value="Auto" />
         <Setter Property="ColumnDefinitions" Value="Auto,*,Auto" />
@@ -20,47 +20,88 @@
 
     <!-- 🧭 Header (connecté) -->
     <Style x:Key="HeaderUser" TargetType="Grid" BasedOn="{StaticResource HeaderGuest}">
-        <Setter Property="BackgroundColor" Value="{StaticResource Secondary}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource PrimaryLight}" />
     </Style>
 
-    <!-- ⚓ Footer (invité & user) -->
+    <!-- ⚓ Footer -->
     <Style x:Key="FooterStyle" TargetType="Grid">
         <Setter Property="BackgroundColor" Value="{StaticResource Secondary}" />
         <Setter Property="Padding" Value="10" />
         <Setter Property="HorizontalOptions" Value="Center" />
     </Style>
 
-    <!-- 🔘 Boutons -->
+    <!-- 🔘 Bouton principal -->
     <Style x:Key="PrimaryButton" TargetType="Button">
-        <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
-        <Setter Property="TextColor" Value="{StaticResource White}" />
-        <Setter Property="CornerRadius" Value="8"/>
-        <Setter Property="Padding" Value="14,10"/>
-        <Setter Property="FontSize" Value="16"/>
-        <Setter Property="FontAttributes" Value="Bold"/>
-        <Setter Property="Shadow" Value="5,5,10,Black" />
-        <Setter Property="VisualStateManager.VisualStateGroups">
-            <VisualStateGroupList>
-                <VisualStateGroup x:Name="CommonStates">
-                    <VisualState x:Name="Normal" />
-                    <VisualState x:Name="Pressed">
-                        <VisualState.Setters>
-                            <Setter Property="BackgroundColor" Value="{StaticResource Accent}" />
-                        </VisualState.Setters>
-                    </VisualState>
-                </VisualStateGroup>
-            </VisualStateGroupList>
-        </Setter>
-    </Style>
+            <!-- ... -->
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
 
+                        <!-- Normal -->
+                        <VisualState x:Name="Normal" />
+
+                        <!-- Survol -->
+                        <VisualState x:Name="PointerOver">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryLight}" />
+                                <Setter Property="TextColor" Value="{StaticResource TextLight}" />
+                                <Setter Property="Shadow">
+                                    <Setter.Value>
+                                        <Shadow Brush="#00000025" Offset="0,4" Radius="10" Opacity="0.6"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </VisualState.Setters>
+                        </VisualState>
+
+                        <!-- Appuyé -->
+                        <VisualState x:Name="PressedPrimary">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{StaticResource Secondary}" />
+                                <Setter Property="Shadow">
+                                    <Setter.Value>
+                                        <Shadow Brush="#00000040" Offset="0,1" Radius="4" Opacity="0.4"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </VisualState.Setters>
+                        </VisualState>
+
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+
+    <!-- 🔲 Bouton secondaire -->
     <Style x:Key="OutlineButton" TargetType="Button">
-        <Setter Property="BackgroundColor" Value="Transparent"/>
-        <Setter Property="TextColor" Value="{StaticResource Primary}"/>
-        <Setter Property="BorderColor" Value="{StaticResource Primary}"/>
-        <Setter Property="BorderWidth" Value="2"/>
-        <Setter Property="CornerRadius" Value="8"/>
-        <Setter Property="Padding" Value="14,10"/>
-    </Style>
+            <!-- ... -->
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+
+                        <!-- Normal -->
+                        <VisualState x:Name="Normal" />
+
+                        <!-- Survol -->
+                        <VisualState x:Name="PointerOver">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryLight}" />
+                                <Setter Property="TextColor" Value="{StaticResource TextLight}" />
+                                <Setter Property="BorderColor" Value="{StaticResource PrimaryLight}" />
+                            </VisualState.Setters>
+                        </VisualState>
+
+                        <!-- Appuyé -->
+                        <VisualState x:Name="PressedOutline">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                                <Setter Property="TextColor" Value="{StaticResource TextLight}" />
+                                <Setter Property="BorderColor" Value="{StaticResource Primary}" />
+                            </VisualState.Setters>
+                        </VisualState>
+
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
 
     <!-- 🧾 Entrées formulaire -->
     <Style x:Key="EntryForm" TargetType="Entry">
@@ -79,6 +120,7 @@
         <Setter Property="FontAttributes" Value="Bold" />
     </Style>
 
+    <!-- 🧩 Bordure d’entrée -->
     <Style x:Key="InputBorder" TargetType="Border">
         <Setter Property="Stroke" Value="{StaticResource Secondary}" />
         <Setter Property="StrokeThickness" Value="1" />

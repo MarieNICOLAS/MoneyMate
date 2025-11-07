@@ -2,47 +2,81 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MoneyMate.Components.HeaderAuthenticated"
-             BackgroundColor="{StaticResource BackgroundLight}"
-             Padding="20,10"
-             HeightRequest="70">
+             BackgroundColor="{StaticResource PrimaryLight}"
+             HeightRequest="50"
+             HorizontalOptions="Fill"
+             Margin="0,10,0,10">
 
-    <Grid ColumnDefinitions="Auto,*,Auto,Auto"
-          VerticalOptions="Center"
-          HorizontalOptions="Fill"
-          ColumnSpacing="16">
+    <!-- 🩵 Conteneur principal avec ombre douce -->
+    <Border
+        BackgroundColor="{StaticResource PrimaryLight}"
+        HeightRequest="50"
+        Padding="0"
+        StrokeThickness="0">
+        <Border.Shadow>
+            <Shadow Brush="Black"
+                    Offset="0,4"
+                    Radius="6"
+                    Opacity="0.3" />
+        </Border.Shadow>
 
-        <!-- 🪙 Logo + Texte -->
-        <HorizontalStackLayout Grid.Column="0" Spacing="8">
-            <Image Source="money_mate_icon.png"
-                   WidthRequest="28"
-                   HeightRequest="28"
-                   VerticalOptions="Center" />
-            <Label Text="MoneyMate"
-                   FontAttributes="Bold"
-                   FontSize="20"
-                   TextColor="{StaticResource TextDark}"
-                   VerticalOptions="Center" />
-        </HorizontalStackLayout>
+        <Grid RowDefinitions="Auto,Auto">
 
-        <!-- 🔔 Notifications -->
-        <ImageButton Grid.Column="2"
-                     Source="alarm_on_icon.png"
-                     BackgroundColor="Transparent"
-                     WidthRequest="26"
-                     HeightRequest="26"
-                     Margin="0,0,8,0"
-                     VerticalOptions="Center"
-                     Command="{Binding GoNotificationsCommand}" />
+            <!-- 🧭 BARRE PRINCIPALE -->
+            <Grid Grid.Row="0"
+                  ColumnDefinitions="Auto,*,Auto,Auto"
+                  Padding="20,10"
+                  VerticalOptions="Center"
+                  HorizontalOptions="Fill">
 
-        <!-- 🚪 Logout -->
-        <ImageButton Grid.Column="3"
-                     Source="logout_icon.png"
-                     BackgroundColor="Transparent"
-                     WidthRequest="26"
-                     HeightRequest="26"
-                     Margin="0,0,8,0"
-                     VerticalOptions="Center"
-                     Command="{Binding LogoutCommand}" />
+                <!-- 🪙 Logo + Nom -->
+                <HorizontalStackLayout Grid.Column="0" Spacing="8">
+                    <Image Source="money_mate_icon.png"
+                           WidthRequest="28"
+                           HeightRequest="28"
+                           VerticalOptions="Center" />
+                    <Label Text="MoneyMate"
+                           FontAttributes="Bold"
+                           FontSize="20"
+                           TextColor="{StaticResource TextLight}"
+                           VerticalOptions="Center" />
+                </HorizontalStackLayout>
 
-    </Grid>
+                <!-- 🔔 Notifications -->
+                <ImageButton Grid.Column="2"
+                             Source="alarm_on_icon.png"
+                             BackgroundColor="{StaticResource BackgroundLight}"
+                             CornerRadius="6"
+                             WidthRequest="28"
+                             HeightRequest="28"
+                             HorizontalOptions="End"
+                             VerticalOptions="Center"
+                             Command="{Binding GoNotificationsCommand}" />
+
+                <!-- 🚪 Déconnexion -->
+                <ImageButton Grid.Column="3"
+                             Source="logout_icon.png"
+                             BackgroundColor="{StaticResource BackgroundLight}"
+                             CornerRadius="6"
+                             WidthRequest="28"
+                             HeightRequest="28"
+                             Margin="8,0,0,0"
+                             HorizontalOptions="End"
+                             VerticalOptions="Center"
+                             Command="{Binding LogoutCommand}" />
+            </Grid>
+
+            <!-- 🌫️ Ombre légère (effet de flottant sous le header) -->
+            <BoxView Grid.Row="1"
+                     HeightRequest="8"
+                     Opacity="0.3">
+                <BoxView.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#00000015" Offset="0.0" />
+                        <GradientStop Color="#00000000" Offset="1.0" />
+                    </LinearGradientBrush>
+                </BoxView.Background>
+            </BoxView>
+        </Grid>
+    </Border>
 </ContentView>
