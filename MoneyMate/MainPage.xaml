@@ -38,11 +38,6 @@
         </VerticalStackLayout>
 
         <!-- FOOTER -->
-        <Label Grid.Row="2"
-               Text="© 2025 MoneyMate - All rights reserved"
-               FontSize="12"
-               HorizontalOptions="Center"
-               VerticalOptions="End"
-               TextColor="{StaticResource TextDark}" />
+        <components:Footer Grid.Row="2"/>
     </Grid>
 </ContentPage>
