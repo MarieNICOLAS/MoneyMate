@@ -2,64 +2,69 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MoneyMate.Components.Header"
-             BackgroundColor="{StaticResource BackgroundLight}"
-             Padding="20,10"
-             HeightRequest="70">
+             BackgroundColor="{StaticResource PrimaryLight}"
+             HeightRequest="50"
+             HorizontalOptions="Fill"
+             >
 
-    <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto"
-          VerticalOptions="Center"
-          HorizontalOptions="Fill"
-          ColumnSpacing="16">
+    <Border
+        BackgroundColor="{StaticResource PrimaryLight}"
+        HeightRequest="50"
+        Margin="0"
+        Padding="0"
+        StrokeThickness="0">
+        <Border.Shadow>
+            <Shadow Brush="Black"
+                Offset="0,4"
+                Radius="6"
+                Opacity="0.3" />
+        </Border.Shadow>
+        
+        <Grid RowDefinitions="Auto,Auto">
 
-        <!-- 🪙 Logo + Texte -->
-        <HorizontalStackLayout Grid.Column="0" Spacing="8">
-            <Image Source="money_mate_icon.png"
-                   WidthRequest="28"
-                   HeightRequest="28"
-                   VerticalOptions="Center" />
-            <Label Text="MoneyMate"
-                   FontAttributes="Bold"
-                   FontSize="20"
-                   TextColor="{StaticResource TextDark}"
-                   VerticalOptions="Center" />
-        </HorizontalStackLayout>
+            <!-- BARRE PRINCIPALE -->
+            <Grid Grid.Row="0"
+                  ColumnDefinitions="Auto,*,Auto"
+                  Padding="20,10"
+                  VerticalOptions="Center"
+                  HorizontalOptions="Fill">
 
-        <!-- ⚙️ Settings -->
-        <ImageButton
-            Grid.Column="2"
-            Source="settings_icon.png"
-            BackgroundColor="Transparent"
-            WidthRequest="26"
-            HeightRequest="26"
-            Margin="0,0,8,0"
-            VerticalOptions="Center"
-            Command="{Binding GoSettingsCommand}" />
+                <!-- 🪙 Logo + Nom -->
+                <HorizontalStackLayout Grid.Column="0" Spacing="8">
+                    <Image Source="money_mate_icon.png"
+                           WidthRequest="28"
+                           HeightRequest="28"
+                           VerticalOptions="Center" />
+                    <Label Text="MoneyMate"
+                           FontAttributes="Bold"
+                           FontSize="20"
+                           TextColor="{StaticResource TextDark}"
+                           VerticalOptions="Center" />
+                </HorizontalStackLayout>
 
-        <!-- 🔔 Notifications -->
-        <ImageButton
-            Grid.Column="3"
-            Source="alarm_on_icon.png"
-            BackgroundColor="Transparent"
-            WidthRequest="26"
-            HeightRequest="26"
-            Margin="0,0,8,0"
-            VerticalOptions="Center"
-            Command="{Binding GoNotificationsCommand}" />
+                <!-- 🚪 Bouton déconnexion -->
+                <ImageButton Grid.Column="2"
+                             Source="login_icon.png"
+                             BackgroundColor="Transparent"
+                             WidthRequest="28"
+                             HeightRequest="28"
+                             HorizontalOptions="End"
+                             VerticalOptions="Center"
+                             Command="{Binding LoginCommand}" />
+            </Grid>
 
-        <!-- 👤 Profil -->
-        <Frame Grid.Column="4"
-               WidthRequest="36"
-               HeightRequest="36"
-               CornerRadius="18"
-               BackgroundColor="{StaticResource White}"
-               HasShadow="False"
-               VerticalOptions="Center"
-               HorizontalOptions="End">
-            <Image Source="account_icon.png"
-                   WidthRequest="20"
-                   HeightRequest="20"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center" />
-        </Frame>
-    </Grid>
+            <!-- 🌫️ Effet d’ombre légère (simulation du flottant) -->
+            <BoxView Grid.Row="1"
+                     HeightRequest="8"
+                     Opacity="0.3">
+                <BoxView.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#00000015" Offset="0.0" />
+                        <GradientStop Color="#00000000" Offset="1.0" />
+                    </LinearGradientBrush>
+                </BoxView.Background>
+            </BoxView>
+
+        </Grid>
+    </Border>
 </ContentView>

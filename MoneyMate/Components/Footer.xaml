@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MoneyMate.Components.Footer"
+             HeightRequest="40"
+             Padding="10"
+             BackgroundColor="Transparent">
+
+    <ContentView.Shadow>
+        <Shadow Brush="#00000020" Offset="0,-3" Radius="6" Opacity="0.2" />
+    </ContentView.Shadow>
+
+    <Label Text="© 2025 MoneyMate - All rights reserved"
+           FontSize="12"
+           HorizontalOptions="Center"
+           VerticalOptions="Center"
+           TextColor="{StaticResource TextDark}" />
+</ContentView>

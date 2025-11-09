@@ -55,14 +55,14 @@
 
 
     <ShellContent
-    Title="Menu"
-    ContentTemplate="{DataTemplate views:MenuPage}"
-    Route="MenuPage" />
+        Title="Menu"
+        ContentTemplate="{DataTemplate views:MenuPage}"
+        Route="MenuPage" />
 
     <ShellContent
-    Title="Notifications"
-    ContentTemplate="{DataTemplate views:NotificationsPage}"
-    Route="NotificationsPage" />
+        Title="Notifications"
+        ContentTemplate="{DataTemplate views:NotificationsPage}"
+        Route="NotificationsPage" />
 
     <ShellContent
         Title="Statistics"
@@ -75,7 +75,7 @@
     
 
     <ShellContent
-Title="Ajouter une dépense"
-ContentTemplate="{DataTemplate views:AddExpensePage}"
-Route="AddExpensePage" />
+        Title="Ajouter une dépense"
+        ContentTemplate="{DataTemplate views:AddExpensePage}"
+        Route="AddExpensePage" />
 </Shell>
