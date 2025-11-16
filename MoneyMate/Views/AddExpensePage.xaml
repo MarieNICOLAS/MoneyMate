@@ -1,53 +1,67 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MoneyMate.Views.AddExpensePage"
-             Title="AddExpensePage">
-    <ScrollView>
-        <VerticalStackLayout Style="{StaticResource MainContainer}">
+             xmlns:viewmodels="clr-namespace:MoneyMate.ViewModels"
+             xmlns:components="clr-namespace:MoneyMate.Components"
+             x:Class="MoneyMate.Views.AddExpensePage">
 
-            <Label Text="Ajouter une dépense"
-                FontSize="24"
-                FontAttributes="Bold"
-                TextColor="{StaticResource Primary}" />
+    <ContentPage.BindingContext>
+        <viewmodels:ExpenseViewModel />
+    </ContentPage.BindingContext>
 
-            <!-- Description -->
-            <Label Text="Description" Style="{StaticResource FormLabel}" />
-            <Border Style="{StaticResource InputBorder}">
-                <Entry x:Name="DescriptionEntry"
-                    Style="{StaticResource EntryForm}"
-                    Placeholder="Ex : courses, essence, cinéma..." />
-            </Border>
+    <Grid RowDefinitions="Auto,*,Auto"
+          BackgroundColor="{StaticResource BackgroundLight}">
 
-            <!-- Montant -->
-            <Label Text="Montant (€)" Style="{StaticResource FormLabel}" />
-            <Border Style="{StaticResource InputBorder}">
-                <Entry x:Name="AmountEntry"
-                    Style="{StaticResource EntryForm}"
-                    Placeholder="Ex : 45.90"
-                    Keyboard="Numeric" />
-            </Border>
+        <!-- ⭐ HEADER -->
+        <components:HeaderAuthenticated Grid.Row="0" />
 
-            <!--Liste de catégories-->
-            <Label Text="Catégorie" Style="{StaticResource FormLabel}" />
-            <Picker x:Name="CategoryPicker"
-                 Title="Choisir une catégorie"
-                 ItemsSource="{Binding Categories}"
-                 ItemDisplayBinding="{Binding Name}"
-                 Style="{StaticResource EntryForm}" />
+        <!-- ⭐ SCROLLVIEW (Row 1 obligatoire !) -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Style="{StaticResource MainContainer}" Spacing="15">
 
-            <!--Prendre les dates sur l'année actuelle-->
-            <DatePicker MinimumDate="01/01/2022"
-      MaximumDate="12/31/2022"
-      Date="06/21/2022" />
+                <Label Text="Ajouter une dépense"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource Primary}" />
+
+                <Label Text="Description" Style="{StaticResource FormLabel}" />
+                <Border Style="{StaticResource InputBorder}">
+                    <Entry Text="{Binding NewExpense.Description}"
+                        Placeholder="Ex : courses, essence, cinéma..." />
+                </Border>
 
 
+                <Label Text="Montant (€)" Style="{StaticResource FormLabel}" />
+                <Border Style="{StaticResource InputBorder}">
+                    <Entry Text="{Binding NewExpense.Amount}"
+                       Keyboard="Numeric"
+                       Placeholder="Ex : 45.90" />
+                </Border>
 
-            <Button Text="Ajouter" 
-             Style="{StaticResource PrimaryButton}"
-             
-                                  />
 
-        </VerticalStackLayout>
-    </ScrollView>
+                <Label Text="Catégorie" Style="{StaticResource FormLabel}" />
+                <Border Style="{StaticResource InputBorder}">
+                    <Picker ItemsSource="{Binding Categories}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedCategory}"
+                        Title="Choisir une catégorie" />
+                </Border>
+
+                <Label Text="Date" Style="{StaticResource FormLabel}" />
+                <Border Style="{StaticResource InputBorder}">
+                    <DatePicker Date="{Binding NewExpense.Date}" />
+                </Border>
+
+
+                <Button Text="Ajouter"
+                        Style="{StaticResource PrimaryButton}"
+                        Command="{Binding AddExpenseCommand}" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ⭐ NAVBAR -->
+        <components:Navbar Grid.Row="2" />
+
+    </Grid>
 </ContentPage>

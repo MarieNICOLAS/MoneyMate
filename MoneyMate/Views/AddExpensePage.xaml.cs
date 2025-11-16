@@ -1,9 +1,10 @@
-namespace MoneyMate.Views;
-
-public partial class AddExpensePage : ContentPage
+namespace MoneyMate.Views
 {
-	public AddExpensePage()
-	{
-		InitializeComponent();
-	}
+    public partial class AddExpensePage : ContentPage
+    {
+        public AddExpensePage()
+        {
+            InitializeComponent();
+        }
+    }
 }

@@ -1,12 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MoneyMate.Database;
+using MoneyMate.Models;
 
 namespace MoneyMate.Services
 {
-    class ExpenseService
+    public class ExpenseService
     {
+        private readonly MoneyMateContext _context;
+
+        public ExpenseService()
+        {
+            _context = new MoneyMateContext();
+        }
+
+        // 🧩 Ajouter une dépense
+        public async Task AddExpenseAsync(Expense expense)
+        {
+            await _context.InsertAsync(expense);
+        }
+
+        // 🧩 Supprimer une dépense
+        public async Task DeleteExpenseAsync(Expense expense)
+        {
+            await _context.DeleteAsync(expense);
+        }
+
+        // 🧩 Récupérer toutes les dépenses
+        public async Task<List<Expense>> GetExpensesAsync()
+        {
+            return await _context.GetAllAsync<Expense>();
+        }
+
+        // 🧩 Modifier une dépense
+        public async Task UpdateExpenseAsync(Expense expense)
+        {
+            await _context.UpdateAsync(expense);
+        }
     }
 }

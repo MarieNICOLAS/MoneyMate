@@ -2,11 +2,27 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:sys="clr-namespace:System;assembly=netstandard"
+             xmlns:components="clr-namespace:MoneyMate.Components"
+             xmlns:viewmodel="clr-namespace:MoneyMate.ViewModels"
              x:Class="MoneyMate.Views.AddBudgetPage"
-             Title="AddBudgetPage">
-    <VerticalStackLayout Style="{StaticResource MainContainer}" Spacing="20">
+             Title="Ajouter mon budget">
 
-        <Label 
+    <ContentPage.BindingContext>
+        <viewmodel:BaseViewModel />
+    </ContentPage.BindingContext>
+    
+    <Grid RowDefinitions="Auto,*,Auto"
+       BackgroundColor="{StaticResource BackgroundLight}">
+
+        <!-- HEADER -->
+        <components:HeaderAuthenticated Grid.Row="0" />
+
+        <!-- CONTENU -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20" Spacing="25" HorizontalOptions="Center">
+
+
+                <Label 
         Text="Créer un nouveau budget"
         FontSize="24"
         HorizontalOptions="Center"
@@ -34,6 +50,9 @@
         <Button Text="Créer le budget"
             Style="{StaticResource PrimaryButton}"
             Command="{Binding CreateBudgetCommand}" />
-
     </VerticalStackLayout>
+    </ScrollView>
+
+    <components:Navbar Grid.Row="2" />
+    </Grid>
 </ContentPage>
