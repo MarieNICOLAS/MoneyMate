@@ -42,20 +42,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
-
-		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
-
-		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
-
-		<!-- Custom Fonts -->
+		<MauiImage Include="Resources\Icons\*" />
 		<MauiFont Include="Resources\Fonts\*" />
-
-		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
@@ -68,6 +59,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<MauiXaml Update="Components\AppLayout.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Components\ButtonPrimary.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
@@ -92,6 +86,12 @@
 		<MauiXaml Update="Views\AddCategoryPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\AddExpensePage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\BasePage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\EditBudgetPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
@@ -99,7 +99,7 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\EditExpensePage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\HistoryTransactionPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -110,9 +110,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="Views\CategoryManagementPage.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</None>
+		<Folder Include="NewFolder\" />
 	</ItemGroup>
 
 </Project>
