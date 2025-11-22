@@ -57,13 +57,32 @@ namespace MoneyMate.ViewModels
             IsBusy = true;
             ErrorMessage = string.Empty;
 
-            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+            // 🔍 1. Validation empty
+            if (string.IsNullOrWhiteSpace(Email) ||
+                string.IsNullOrWhiteSpace(Password))
             {
                 ErrorMessage = "Veuillez remplir tous les champs.";
                 IsBusy = false;
                 return;
             }
 
+            // 🔍 2. Validation email
+            if (!IsValidEmail(Email))
+            {
+                ErrorMessage = "Veuillez entrer une adresse email valide.";
+                IsBusy = false;
+                return;
+            }
+
+            // 🔍 3. Validation longueur mot de passe
+            if (Password.Length < 6)
+            {
+                ErrorMessage = "Le mot de passe doit contenir au moins 6 caractères.";
+                IsBusy = false;
+                return;
+            }
+
+            // 🔐 4. Tentative de connexion
             var user = await _authService.LoginAsync(Email, Password, RememberMe);
 
             if (user == null)
@@ -74,12 +93,27 @@ namespace MoneyMate.ViewModels
             {
                 user.UpdateLastLogin();
                 await App.Database.UpdateAsync(user);
-
-                // ✅ Redirection après connexion réussie
                 await Shell.Current.GoToAsync("//DashboardPage");
             }
 
             IsBusy = false;
         }
+
+        /// <summary>
+        /// Validation simple mais solide du format email
+        /// </summary>
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
     }
 }

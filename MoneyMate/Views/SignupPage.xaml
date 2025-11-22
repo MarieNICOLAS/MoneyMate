@@ -1,98 +1,138 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewmodel="clr-namespace:MoneyMate.ViewModels"
-             xmlns:components="clr-namespace:MoneyMate.Components"
-             x:Class="MoneyMate.Views.SignupPage"
-             Title="Inscription">
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodel="clr-namespace:MoneyMate.ViewModels"
+    xmlns:components="clr-namespace:MoneyMate.Components"
+    xmlns:behaviors="clr-namespace:MoneyMate.Behaviors"
+    x:Class="MoneyMate.Views.SignupPage"
+    x:FieldModifier="public"
+    Title="Inscription">
 
-    <!-- 🔗 Lien vers le ViewModel -->
     <ContentPage.BindingContext>
         <viewmodel:SignupViewModel />
     </ContentPage.BindingContext>
 
-    <!-- ✅ Structure globale -->
-    <Grid RowDefinitions="Auto,*,Auto" Padding="0">
+    <ScrollView>
+        <Grid RowDefinitions="Auto,*,Auto">
 
-        <!-- 🧭 Header -->
-        <components:Header Grid.Row="0" />
+            <!-- HEADER -->
+            <components:Header Grid.Row="0" />
 
-        <!-- 🧾 Contenu principal -->
-        <VerticalStackLayout Grid.Row="1"
-                             Padding="30"
-                             Spacing="15"
-                             VerticalOptions="CenterAndExpand">
+            <!-- CONTENU -->
+            <VerticalStackLayout Grid.Row="1"
+                                 Padding="30"
+                                 Spacing="15">
 
-            <Label Text="Inscription"
-                   FontSize="24"
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center" />
-
-            <!-- 👤 Nom complet -->
-            <Label Text="Nom complet" Style="{StaticResource FormLabel}" />
-            <Border Style="{StaticResource InputContainer}">
-                <Entry Placeholder="Nom complet"
-                       Text="{Binding Name}"
-                       Style="{StaticResource EntryForm}" />
-            </Border>
-
-            <!-- ✉️ Email -->
-            <Label Text="Email" Style="{StaticResource FormLabel}" />
-            <Border Style="{StaticResource InputContainer}">
-                <Entry Placeholder="Adresse e-mail"
-                       Keyboard="Email"
-                       Text="{Binding Email}"
-                       Style="{StaticResource EntryForm}" />
-            </Border>
-
-            <!-- 🔑 Mot de passe -->
-            <Label Text="Mot de passe" Style="{StaticResource FormLabel}" />
-            <Border Style="{StaticResource InputContainer}">
-                <Entry Placeholder="Mot de passe"
-                       IsPassword="True"
-                       Text="{Binding Password}"
-                       Style="{StaticResource EntryForm}" />
-            </Border>
-
-            <!-- 💬 Message feedback -->
-            <Label Text="{Binding Message}"
-                   TextColor="{Binding MessageColor}"
-                   FontSize="13"
-                   HorizontalOptions="Center" />
-
-            <!-- 🔘 Bouton inscription -->
-            <Button Text="S'inscrire"
-                    Command="{Binding SignupCommand}"
-                    Style="{StaticResource PrimaryButton}" />
-
-            <!-- ↩️ Retour -->
-            <Button Text="← Retour"
-                    Command="{Binding OnBackClickedCommand}"
-                    Style="{StaticResource OutlineButton}" />
-
-            <!-- 🔗 Lien vers Connexion -->
-            <HorizontalStackLayout HorizontalOptions="Center"
-                                   Margin="0,15,0,0">
-                <Label Text="Déjà un compte ? "
-                       TextColor="{StaticResource TextDark}"
-                       FontSize="14" />
-                <Label Text="Se connecter"
-                       TextColor="{StaticResource Primary}"
+                <Label Text="Inscription"
+                       FontSize="24"
                        FontAttributes="Bold"
-                       FontSize="14"
-                       InputTransparent="False"
-                       IsEnabled="True">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer
-                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, 
-                                               Path=BindingContext.GoToLoginCommand}" />
-                    </Label.GestureRecognizers>
-                </Label>
-            </HorizontalStackLayout>
-        </VerticalStackLayout>
+                       HorizontalOptions="Center" />
 
-        <!-- ⚓ Footer -->
-        <components:Footer Grid.Row="2" />
+                <!-- NOM -->
+                <Label Text="Nom complet" Style="{StaticResource FormLabel}" />
+                <Border Style="{StaticResource InputContainer}">
+                    <Entry Placeholder="Pseudo"
+                           Text="{Binding Name}"
+                           Style="{StaticResource EntryForm}" />
+                </Border>
 
-    </Grid>
+                <!-- EMAIL -->
+                <Label Text="Email" Style="{StaticResource FormLabel}" />
+                <Border Style="{StaticResource InputContainer}">
+                    <Entry Placeholder="Adresse e-mail"
+                           Keyboard="Email"
+                           Text="{Binding Email}"
+                           Style="{StaticResource EntryForm}">
+                        <Entry.Behaviors>
+                            <behaviors:EmailValidationBehavior />
+                        </Entry.Behaviors>
+                    </Entry>
+                </Border>
+
+                <!-- PASSWORD -->
+                <Label Text="Mot de passe" Style="{StaticResource FormLabel}" />
+
+                <Grid ColumnDefinitions="*,Auto">
+
+                    <Entry x:Name="PasswordEntry"
+                           Placeholder="Mot de passe"
+                           IsPassword="True"
+                           Text="{Binding Password}"
+                           Style="{StaticResource EntryForm}">
+
+                        <Entry.Behaviors>
+
+                            <!-- FORCE MOT DE PASSE -->
+                            <behaviors:PasswordStrengthIndicatorBehavior 
+                                StrengthBar="{x:Reference SignupStrengthBar}"/>
+
+                            <!-- CRITÈRES MOT DE PASSE -->
+                            <behaviors:PasswordRequirementsBehavior 
+                                RequirementLabel="{x:Reference SignupRequirementLabel}"/>
+
+                            <!-- VISIBILITÉ MOT DE PASSE -->
+                            <behaviors:PasswordVisibilityBehavior 
+                                ToggleButton="{x:Reference EyeBtn}" />
+
+                        </Entry.Behaviors>
+
+                    </Entry>
+
+                    <!-- OEIL -->
+                    <ImageButton x:Name="EyeBtn"
+                                 Grid.Column="1"
+                                 Source="open_eye_icon.png"
+                                 HeightRequest="28"
+                                 WidthRequest="28"
+                                 BackgroundColor="Transparent"
+                                 Padding="0"
+                                 Margin="5,0"/>
+                </Grid>
+
+                <!-- CRITÈRES -->
+                <Label x:Name="SignupRequirementLabel"
+                       TextColor="Red"
+                       FontSize="12" />
+
+                <!-- BARRE FORCE -->
+                <ProgressBar x:Name="SignupStrengthBar"
+                             HeightRequest="8"
+                             Progress="0"
+                             BackgroundColor="#EEEEEE"
+                             ProgressColor="Red" />
+
+                <!-- MESSAGE -->
+                <Label Text="{Binding Message}"
+                       TextColor="{Binding MessageColor}"
+                       HorizontalOptions="Center"
+                       FontSize="13" />
+
+                <!-- BOUTONS -->
+                <Button Text="S'inscrire"
+                        Command="{Binding SignupCommand}"
+                        Style="{StaticResource PrimaryButton}" />
+
+                <Button Text="← Retour"
+                        Command="{Binding OnBackClickedCommand}"
+                        Style="{StaticResource OutlineButton}" />
+
+                <!-- LIEN LOGIN -->
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Label Text="Déjà un compte ? " />
+                    <Label Text="Se connecter"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource Primary}">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoToLoginCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+
+            <components:Footer Grid.Row="2" />
+
+        </Grid>
+    </ScrollView>
 </ContentPage>
