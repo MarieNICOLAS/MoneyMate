@@ -95,5 +95,24 @@ namespace MoneyMate.ViewModels
 
             IsBusy = false;
         }
+
+        private bool ValidateInputs()
+        {
+            if (string.IsNullOrWhiteSpace(Email) || !Email.Contains("@") || !Email.Contains("."))
+            {
+                Message = "Veuillez entrer un email valide.";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(Password) || Password.Length < 6)
+            {
+                Message = "Le mot de passe doit contenir au moins 6 caractères.";
+                return false;
+            }
+
+            Message = string.Empty;
+            return true;
+        }
+
     }
 }
