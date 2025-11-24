@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MoneyMate.ViewModels"
+             xmlns:components="clr-namespace:MoneyMate.Components"
+             x:Class="MoneyMate.Views.ProfilePage"
+             Title="Mon Profil">
+
+    <ContentPage.BindingContext>
+        <vm:ProfileViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <components:HeaderAuthenticated Grid.Row="0" />
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="25"
+                                 Padding="30, 20">
+
+                <Label Text="Mon Compte MoneyMate"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource Primary}"
+                       HorizontalOptions="Center" />
+
+                <Frame Style="{StaticResource CardFrame}">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Informations Personnelles"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource TextDark}" />
+
+                        <BoxView HeightRequest="1" Color="{StaticResource Border}" />
+
+                        <Grid ColumnDefinitions="*,2*">
+                            <Label Text="Nom" FontAttributes="Bold" />
+                            <Label Grid.Column="1" Text="{Binding DisplayName}" TextColor="{StaticResource TextMedium}" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,2*">
+                            <Label Text="Email" FontAttributes="Bold" />
+                            <Label Grid.Column="1" Text="{Binding DisplayEmail}" TextColor="{StaticResource TextMedium}" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,2*">
+                            <Label Text="Membre depuis" FontAttributes="Bold" />
+                            <Label Grid.Column="1" Text="{Binding DisplayCreationDate}" TextColor="{StaticResource TextMedium}" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,2*">
+                            <Label Text="Dernière connexion" FontAttributes="Bold" />
+                            <Label Grid.Column="1" Text="{Binding DisplayLastLogin}" TextColor="{StaticResource TextMedium}" />
+                        </Grid>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Label Text="Actions"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource TextDark}" />
+
+                <Button Text="Supprimer mon compte (Danger!)"
+                        Style="{StaticResource OutlineButton}"
+                        BackgroundColor="Transparent"
+                        TextColor="Red" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <components:Footer Grid.Row="2" />
+    </Grid>
+</ContentPage>

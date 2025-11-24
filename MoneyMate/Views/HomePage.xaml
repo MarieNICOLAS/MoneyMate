@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MoneyMate.ViewModels"
+             xmlns:components="clr-namespace:MoneyMate.Components"
+             x:Class="MoneyMate.Views.HomePage"
+             Title="Accueil"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource Background}">
+
+    <ContentPage.BindingContext>
+        <vm:HomeViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <components:HeaderAuthenticated Grid.Row="0" />
+
+        <ScrollView Grid.Row="1" Padding="20,10">
+            <VerticalStackLayout Spacing="25">
+
+                <Label Text="{Binding CurrentMonthYear, StringFormat='Résumé de {0}'}"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource TextDark}" />
+
+                <Frame Style="{StaticResource CardFrame}" BackgroundColor="{StaticResource Primary}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Montant Restant" FontSize="18" TextColor="White" Opacity="0.8" />
+                        <Label Text="{Binding RemainingAmount, StringFormat='{0:C}'}" 
+                               FontSize="48" 
+                               FontAttributes="Bold" 
+                               TextColor="White" />
+
+                        <Grid ColumnDefinitions="*,*">
+                            <VerticalStackLayout Spacing="5" Grid.Column="0">
+                                <Label Text="Budget Total" TextColor="White" Opacity="0.8" />
+                                <Label Text="{Binding TotalBudget, StringFormat='{0:C}'}" 
+                                       FontAttributes="Bold" 
+                                       TextColor="White" />
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Spacing="5" Grid.Column="1">
+                                <Label Text="Dépensé" TextColor="White" Opacity="0.8" />
+                                <Label Text="{Binding TotalSpent, StringFormat='{0:C}'}" 
+                                       FontAttributes="Bold" 
+                                       TextColor="White" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Label Text="Détail des Dépenses"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource TextDark}" />
+
+                <CollectionView ItemsSource="{Binding ExpenseBreakdown}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="Auto,*,Auto" Padding="0, 5">
+                                <BoxView Grid.Column="0" 
+                                         WidthRequest="8" 
+                                         HeightRequest="40" 
+                                         CornerRadius="4"
+                                         Margin="0,0,10,0"
+                                         Color="{Binding CategoryColor}" />
+
+                                <Label Grid.Column="1" 
+                                       Text="{Binding CategoryName}" 
+                                       VerticalOptions="Center" 
+                                       FontAttributes="Bold" />
+
+                                <Label Grid.Column="2" 
+                                       Text="{Binding TotalAmount, StringFormat='{0:C}'}" 
+                                       VerticalOptions="Center" 
+                                       TextColor="{StaticResource TextMedium}" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Button Grid.Row="0" Grid.RowSpan="2"
+                Text="+"
+                WidthRequest="60"
+                HeightRequest="60"
+                CornerRadius="30"
+                FontSize="30"
+                FontAttributes="Bold"
+                BackgroundColor="{StaticResource Accent}"
+                TextColor="White"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                Margin="20,20,20,80"
+                Shadow="{StaticResource ShadowFloatingButton}"
+                Command="{Binding GoToAddExpenseCommand}" />
+
+        <components:Footer Grid.Row="2" />
+    </Grid>
+</ContentPage>
