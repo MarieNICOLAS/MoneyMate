@@ -169,7 +169,8 @@
 
 
     <!-- 🧩 Bordure de champ d’entrée (air form) -->
-    <Style x:Key="InputContainer" TargetType="Border">
+    <!-- 🧩 Bordure de champ d’entrée (air form) -->
+    <Style x:Key="InputBorder" TargetType="Border">
         <Setter Property="Stroke" Value="Transparent" />
         <Setter Property="StrokeShape">
             <Setter.Value>
@@ -187,6 +188,7 @@
         </Setter>
     </Style>
 
+
     <!-- 🧾 Entrée intérieure -->
     <Style x:Key="EntryForm" TargetType="Entry">
         <Setter Property="BackgroundColor" Value="Transparent" />
@@ -198,6 +200,38 @@
 
 
 
+
+    <!-- ⭐ STYLE UNIVERSEL POUR TOUS LES INPUTS -->
+    <Style x:Key="InputBaseStyle" TargetType="View">
+        <!-- Hauteur identique -->
+        <Setter Property="HeightRequest" Value="52" />
+
+        <!-- Padding interne (pour respirer) -->
+        <Setter Property="Margin" Value="0,5" />
+
+        <!-- Alignements cohérents -->
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="HorizontalOptions" Value="Fill" />
+    </Style>
+
+    <!-- 🎯 ENTRY -->
+    <Style TargetType="Entry" BasedOn="{StaticResource InputBaseStyle}">
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="PlaceholderColor" Value="#999" />
+        <Setter Property="TextColor" Value="{StaticResource TextDark}" />
+    </Style>
+
+    <!-- 🎯 PICKER -->
+    <Style TargetType="Picker" BasedOn="{StaticResource InputBaseStyle}">
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="TextColor" Value="{StaticResource TextDark}" />
+    </Style>
+
+    <!-- 🎯 DATEPICKER -->
+    <Style TargetType="DatePicker" BasedOn="{StaticResource InputBaseStyle}">
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="TextColor" Value="{StaticResource TextDark}" />
+    </Style>
 
 
 

@@ -11,7 +11,7 @@
     </ContentPage.BindingContext>
 
     <Grid RowDefinitions="Auto,*,Auto"
-          BackgroundColor="{StaticResource White}">
+          BackgroundColor="{StaticResource BackgroundLight}">
 
         <!-- HEADER -->
         <components:HeaderAuthenticated Grid.Row="0" />

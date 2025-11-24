@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:MoneyMate.Components"
+             x:Class="MoneyMate.Components.AppLayout">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- ⭐ HEADER -->
+        <components:HeaderAuthenticated Grid.Row="0" />
+
+        <!-- ⭐ ZONE DE CONTENU (remplace la page) -->
+        <ContentPresenter Grid.Row="1"
+                          x:Name="PageContent" />
+
+        <!-- ⭐ NAVBAR -->
+        <components:Navbar Grid.Row="2" />
+
+    </Grid>
+
+</ContentView>

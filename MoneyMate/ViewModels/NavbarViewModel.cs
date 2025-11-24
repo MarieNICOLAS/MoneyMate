@@ -2,7 +2,7 @@ using System.Windows.Input;
 
 namespace MoneyMate.ViewModels;
 
-public class NavbarViewModel : ContentView
+public class NavbarViewModel
 {
     public ICommand GoMenuCommand { get; }
     public ICommand GoHomeCommand { get; }
