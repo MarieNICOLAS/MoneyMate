@@ -27,6 +27,9 @@ namespace MoneyMate
             builder.Services.AddTransient<BudgetViewModel>();
             builder.Services.AddTransient<AddBudgetPage>();
 
+            builder.Services.AddSingleton<CategoryService>();
+            builder.Services.AddTransient<CategoryViewModel>();
+
             builder.Services.AddSingleton<MoneyMateContext>();
 
             return builder.Build();
