@@ -8,6 +8,11 @@
     Title="MoneyMate">
 
     <ShellContent
+    Title="Home"
+    ContentTemplate="{DataTemplate local:MainPage}"
+    Route="MainPage" />
+
+    <ShellContent
         Title="TEST"
         ContentTemplate="{DataTemplate views:HistoryTransactionPage}"
         Route="HistoryTransactionPage" />
@@ -32,10 +37,7 @@
         ContentTemplate="{DataTemplate views:AddTransactionPage}"
         Route="AddTransactionPage" />
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    
 
     <ShellContent
        Title="EditTransaction"
@@ -46,5 +48,11 @@
     <ShellContent
         Title="Inscription"
         ContentTemplate="{DataTemplate views:SignupPage}"
-        Route="SignupPage" />
+        Route="SignupPage" 
+        Icon="stats.png"/>
+
+    <ShellContent
+    Title="Statistiques"
+    ContentTemplate="{DataTemplate views:StatisticsPage}"
+    Route="StatisticsPage" />
 </Shell>

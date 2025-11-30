@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using MoneyMate.Database;
+using Microcharts.Maui;
 
 namespace MoneyMate
 {
@@ -10,6 +11,7 @@ namespace MoneyMate
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMicrocharts()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

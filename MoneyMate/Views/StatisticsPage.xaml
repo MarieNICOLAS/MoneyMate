@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:MoneyMate.ViewModels"
+    xmlns:charts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
+    x:Class="MoneyMate.Views.StatisticsPage"
+    BackgroundColor="{StaticResource BackgroundLight}">
+
+    <ContentPage.BindingContext>
+        <viewmodels:StatisticsViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Style="{StaticResource MainContainer}" Spacing="20">
+
+            <!-- HEADER -->
+            <Grid Style="{StaticResource HeaderUser}">
+                <Image Source="chart_icon.png"
+                       WidthRequest="30"
+                       HeightRequest="30"
+                       HorizontalOptions="Start" />
+                <Label Text="Statistiques"
+                       FontAttributes="Bold"
+                       FontSize="22"
+                       TextColor="{StaticResource White}"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center" />
+            </Grid>
+
+            <!-- Sélecteur de période -->
+            <Label Text="Choisir la période"
+                   Style="{StaticResource FormLabel}"
+                   FontSize="18"
+                   Margin="0,10,0,0" />
+            <Border Style="{StaticResource InputBorder}">
+                <Picker ItemsSource="{Binding Periods}"
+                        SelectedItem="{Binding SelectedPeriod}"
+                        TextColor="{StaticResource TextDark}" />
+            </Border>
+
+            <!-- LINE CHART -->
+            <Frame BackgroundColor="{StaticResource White}" CornerRadius="15" HasShadow="True" Padding="10">
+                <VerticalStackLayout>
+                    <Label Text="Revenus vs Dépenses"
+                           FontAttributes="Bold"
+                           FontSize="20"
+                           TextColor="{StaticResource Primary}"
+                           HorizontalOptions="Center" />
+                    <charts:ChartView HeightRequest="250"
+                                      Chart="{Binding LineChart}" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- BAR CHART -->
+            <Frame BackgroundColor="{StaticResource White}" CornerRadius="15" HasShadow="True" Padding="10">
+                <VerticalStackLayout>
+                    <Label Text="Comparaison période précédente"
+                           FontAttributes="Bold"
+                           FontSize="20"
+                           TextColor="{StaticResource Primary}"
+                           HorizontalOptions="Center" />
+                    <charts:ChartView HeightRequest="250"
+                                      Chart="{Binding BarChart}" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- DONUT CHART -->
+            <Frame BackgroundColor="{StaticResource White}" CornerRadius="15" HasShadow="True" Padding="10">
+                <VerticalStackLayout>
+                    <Label Text="Répartition par catégorie"
+                           FontAttributes="Bold"
+                           FontSize="20"
+                           TextColor="{StaticResource Primary}"
+                           HorizontalOptions="Center" />
+                    <charts:ChartView HeightRequest="250"
+                                      Chart="{Binding DonutChart}" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- RÉSUMÉ GLOBAL -->
+            <Frame BackgroundColor="{StaticResource White}" CornerRadius="15" HasShadow="True" Padding="15">
+                <VerticalStackLayout>
+                    <Label Text="Résumé global"
+                           FontAttributes="Bold"
+                           FontSize="20"
+                           TextColor="{StaticResource Primary}"
+                           HorizontalOptions="Center"
+                           Margin="0,0,0,10" />
+                    <Grid ColumnDefinitions="*,*,*">
+                        <VerticalStackLayout>
+                            <Label Text="Revenus"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource Success}"
+                                   HorizontalOptions="Center" />
+                            <Label Text="{Binding TotalIncome}"
+                                   TextColor="{StaticResource Success}"
+                                   FontSize="16"
+                                   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout>
+                            <Label Text="Dépenses"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource Error}"
+                                   HorizontalOptions="Center" />
+                            <Label Text="{Binding TotalExpense}"
+                                   TextColor="{StaticResource Error}"
+                                   FontSize="16"
+                                   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout>
+                            <Label Text="Restant"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource Primary}"
+                                   HorizontalOptions="Center" />
+                            <Label Text="{Binding RemainingBudget}"
+                                   TextColor="{StaticResource Primary}"
+                                   FontSize="16"
+                                   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- TOP 3 CATÉGORIES -->
+            <Frame BackgroundColor="{StaticResource White}" CornerRadius="15" HasShadow="True" Padding="15">
+                <VerticalStackLayout>
+                    <Label Text="Top 3 catégories"
+                           FontAttributes="Bold"
+                           FontSize="20"
+                           TextColor="{StaticResource Primary}"
+                           HorizontalOptions="Center"
+                           Margin="0,0,0,10" />
+                    <CollectionView ItemsSource="{Binding TopCategories}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,Auto" Padding="5">
+                                    <Label Text="{Binding Name}"
+                                           FontSize="16"
+                                           TextColor="{StaticResource TextDark}" />
+                                    <Label Text="{Binding Amount, StringFormat='{0} €'}"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="End"
+                                           TextColor="{StaticResource Accent}" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- BOUTON -->
+            <Button Text="Actualiser les graphiques"
+                    Style="{StaticResource PrimaryButton}"
+                    Clicked="OnRefreshClicked" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
