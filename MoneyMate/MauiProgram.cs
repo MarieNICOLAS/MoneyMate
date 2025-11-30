@@ -23,14 +23,19 @@ namespace MoneyMate
             #if DEBUG
     		    builder.Logging.AddDebug();
 #endif
-            builder.Services.AddSingleton<BudgetService>();
-            builder.Services.AddTransient<BudgetViewModel>();
-            builder.Services.AddTransient<AddBudgetPage>();
-
-            builder.Services.AddSingleton<CategoryService>();
-            builder.Services.AddTransient<CategoryViewModel>();
-
             builder.Services.AddSingleton<MoneyMateContext>();
+
+            builder.Services.AddSingleton<BudgetService>();
+            builder.Services.AddSingleton<CategoryService>();
+            builder.Services.AddSingleton<ExpenseService>();
+
+            builder.Services.AddTransient<BudgetViewModel>();
+            builder.Services.AddTransient<CategoryViewModel>();
+            builder.Services.AddTransient<ExpenseViewModel>();
+
+            builder.Services.AddTransient<AddBudgetPage>();
+            builder.Services.AddTransient<AddCategoryPage>();
+            builder.Services.AddTransient<AddExpensePage>();
 
             return builder.Build();
         }
