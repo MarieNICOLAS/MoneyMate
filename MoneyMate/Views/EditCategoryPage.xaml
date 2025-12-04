@@ -1,83 +1,161 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MoneyMate.Views.EditCategoryPage"
-             Title="EditCategoryPage">
-    <VerticalStackLayout Style="{StaticResource MainContainer}">
+             xmlns:components="clr-namespace:MoneyMate.Components"
+             xmlns:viewmodels="clr-namespace:MoneyMate.ViewModels"
+             x:Name="PageRoot"
+             x:Class="MoneyMate.Views.EditCategoryPage">
 
-        <Label 
-            Text="Modifier une catégorie"
-            FontSize="24"
-            HorizontalOptions="Center"
-            TextColor="{StaticResource Primary}" />
-        
-        <Label Text="Nom de la catégorie"
-               Style="{StaticResource FormLabel}" />
-        <Entry x:Name="NomCategory"
-               Style="{StaticResource EntryForm}"
-               Text="{Binding Name}" />
-        <Label Text="Budget"
-           Style="{StaticResource FormLabel}" />
-        <Picker
-                Title="Sélectionner un budget"
-                ItemsSource="{Binding Budgets}"     
-                ItemDisplayBinding="{Binding DisplayName}"
-                SelectedItem="{Binding SelectedBudget, Mode=TwoWay}" />
-        
-        <Label Text="Couleur"
-               Style="{StaticResource FormLabel}" />
-        <Picker 
-            Title="Sélectionner une couleur"
-            ItemsSource="{Binding ColorOptions}"
-            SelectedItem="{Binding SelectedColor, Mode=TwoWay}"
-            BackgroundColor="{StaticResource White}"
-            TextColor="{StaticResource TextDark}" />
+    <!-- ViewModel -->
+    <ContentPage.BindingContext>
+        <viewmodels:CategoryViewModel />
+    </ContentPage.BindingContext>
 
-        <Label Text="Répartition du budget (%)"
-               Style="{StaticResource FormLabel}" />
+    <!-- STRUCTURE GLOBALE -->
+    <Grid RowDefinitions="Auto,*,Auto"
+          BackgroundColor="{StaticResource BackgroundLight}">
 
-        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
-            <Slider 
-                x:Name="PercentageSlider"
-                Minimum="0"
-                Maximum="100"
-                Value="{Binding Percentage, Mode=TwoWay}"
-                ThumbColor="{StaticResource Primary}"
-                MaximumTrackColor="{StaticResource Secondary}"
-                MinimumTrackColor="{StaticResource Primary}" />
+        <!-- ⭐ HEADER -->
+        <components:HeaderAuthenticated Grid.Row="0" />
 
-            <Label 
-                Grid.Column="1"
-                Text="{Binding Percentage, StringFormat='{0:F0}%'}"
-                VerticalOptions="Center"
-                FontAttributes="Bold"
-                TextColor="{StaticResource Primary}" />
-        </Grid>
+        <!-- ⭐ CONTENU SCROLLABLE -->
+        <ScrollView Grid.Row="1" Padding="0,0,0,40">
+            <VerticalStackLayout Style="{StaticResource MainContainer}"
+                                 Spacing="15"
+                                 Margin="0,0,0,80">
 
-        <Grid
-            ColumnDefinitions="*,*,*"
-            RowDefinitions="Auto"
-            ColumnSpacing="10"
-            Padding="20">
+                <!-- 🏷️ TITRE -->
+                <Label Text="Modifier une catégorie"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource Primary}" />
 
-            <Button 
-               Grid.Column="0" 
-               Text="Valider" 
-               Style="{StaticResource PrimaryButton}"
-               Command="{Binding UpdateCategoryCommand}" />
+                <!-- 🔤 Nom -->
+                <Label Text="Nom de la catégorie"
+                       Style="{StaticResource FormLabel}" />
 
-            <Button 
-                Grid.Column="1"                
-                Text="Supprimer" 
-                Style="{StaticResource PrimaryButton}"
-                Command="{Binding DeleteCategoryCommand}" />
+                <Border Style="{StaticResource InputBorder}">
+                    <Entry Placeholder="Ex : Alimentation"
+                           Text="{Binding Name}" />
+                </Border>
 
-            <Button 
-                Grid.Column="2"
-                Text="Annuler" 
-                Style="{StaticResource PrimaryButton}"
-                Command="{Binding CancelCommand}" />
+                <!-- 💰 Budget -->
+                <Label Text="Budget"
+                       Style="{StaticResource FormLabel}" />
 
-        </Grid>
-    </VerticalStackLayout>
+                <Border Style="{StaticResource InputBorder}">
+                    <Picker ItemsSource="{Binding Budgets}"
+                            ItemDisplayBinding="{Binding DisplayName}"
+                            SelectedItem="{Binding SelectedBudget, Mode=TwoWay}"
+                            Title="Sélectionner un budget" />
+                </Border>
+
+                <!-- 🎨 Couleur -->
+                <Label Text="Couleur"
+                       Style="{StaticResource FormLabel}" />
+
+                <CollectionView
+                    ItemsSource="{Binding ColorOptions}"
+                    SelectedItem="{Binding SelectedColor, Mode=TwoWay}"
+                    SelectionMode="Single"
+                    Margin="0,10">
+
+                    <!-- GRILLE 4 COLONNES -->
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="4" />
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <!-- Cercle couleur -->
+                                <Border
+                                    WidthRequest="50"
+                                    HeightRequest="50"
+                                    StrokeThickness="2"
+                                    Stroke="{Binding ., Converter={StaticResource SelectedColorToBorderConverter},
+                                                      ConverterParameter={Binding BindingContext.SelectedColor, Source={x:Reference PageRoot}}}"
+                                    StrokeShape="Ellipse"
+                                    BackgroundColor="{Binding .}"
+                                    Margin="8">
+
+                                    <Border.Triggers>
+
+                                        <!-- ANIMATION SELECT -->
+                                        <DataTrigger TargetType="Border"
+                                                     Binding="{Binding ., Converter={StaticResource SelectedColorToBoolConverter},
+                                                                          ConverterParameter={Binding BindingContext.SelectedColor, Source={x:Reference PageRoot}}}"
+                                                     Value="True">
+                                            <Setter Property="Scale" Value="1.15"/>
+                                        </DataTrigger>
+
+                                        <DataTrigger TargetType="Border"
+                                                     Binding="{Binding ., Converter={StaticResource SelectedColorToBoolConverter},
+                                                                          ConverterParameter={Binding BindingContext.SelectedColor, Source={x:Reference PageRoot}}}"
+                                                     Value="False">
+                                            <Setter Property="Scale" Value="1"/>
+                                        </DataTrigger>
+
+                                    </Border.Triggers>
+
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+
+                <!-- 📊 Répartition -->
+                <Label Text="Répartition du budget (%)"
+                       Style="{StaticResource FormLabel}" />
+
+                <Grid ColumnDefinitions="*,Auto"
+                      RowDefinitions="Auto">
+
+                    <Slider Minimum="0"
+                            Maximum="100"
+                            Value="{Binding Percentage, Mode=TwoWay}"
+                            ThumbColor="{StaticResource Primary}"
+                            MaximumTrackColor="{StaticResource Secondary}"
+                            MinimumTrackColor="{StaticResource Primary}" />
+
+                    <Label Grid.Column="1"
+                           Text="{Binding Percentage, StringFormat='{0:F0}%'}"
+                           VerticalOptions="Center"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource Primary}" />
+                </Grid>
+
+                <!-- 💶 Montant dynamique -->
+                <Label Text="{Binding AmountPreview, StringFormat='Montant : {0:F2} €'}"
+                       FontAttributes="Bold"
+                       HorizontalOptions="End"
+                       TextColor="{StaticResource Primary}" />
+
+                <!-- ⭐ BOUTONS -->
+                <VerticalStackLayout Spacing="10">
+
+                    <Button Text="Valider les modifications"
+                            Style="{StaticResource PrimaryButton}"
+                            Command="{Binding UpdateCategoryCommand}" />
+
+                    <Button Text="Supprimer la catégorie"
+                            BackgroundColor="{StaticResource Danger}"
+                            Style="{StaticResource PrimaryButton}"
+                            Command="{Binding DeleteCategoryCommand}" />
+
+                    <Button Text="Annuler"
+                            BackgroundColor="{StaticResource Secondary}"
+                            Style="{StaticResource PrimaryButton}"
+                            Command="{Binding CancelCommand}" />
+
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ⭐ NAVBAR -->
+        <components:Navbar Grid.Row="2" />
+
+    </Grid>
 </ContentPage>
