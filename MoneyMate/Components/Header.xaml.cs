@@ -1,5 +1,4 @@
-using Microsoft.Maui.Controls;
-using MoneyMate.ViewModels;
+using MoneyMate.ViewModels.ComponentsViewModel;
 namespace MoneyMate.Components;
 
 public partial class Header : ContentView

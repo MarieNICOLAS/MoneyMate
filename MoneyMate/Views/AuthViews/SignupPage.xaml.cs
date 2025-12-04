@@ -1,4 +1,4 @@
-using MoneyMate.ViewModels;
+using MoneyMate.ViewModels.AuthViewModel;
 
 namespace MoneyMate.Views
 {

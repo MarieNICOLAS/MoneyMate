@@ -2,7 +2,7 @@
 using MoneyMate.Services;
 using System.Windows.Input;
 
-namespace MoneyMate.ViewModels
+namespace MoneyMate.ViewModels.ComponentsViewModel
 {
     public class HeaderViewModel : BaseViewModel
     {

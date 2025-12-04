@@ -3,7 +3,7 @@ using MoneyMate.Services;
 using Microsoft.Maui.Controls;
 using MoneyMate.Models;
 
-namespace MoneyMate.ViewModels
+namespace MoneyMate.ViewModels.AuthViewModel
 {
     public class LoginViewModel : BaseViewModel
     {

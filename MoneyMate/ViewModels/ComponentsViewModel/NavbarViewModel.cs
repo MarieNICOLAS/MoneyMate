@@ -1,6 +1,6 @@
 using System.Windows.Input;
 
-namespace MoneyMate.ViewModels;
+namespace MoneyMate.ViewModels.ComponentsViewModel;
 
 public class NavbarViewModel : ContentView
 {

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:MoneyMate.Components"
+             xmlns:viewmodels="clr-namespace:MoneyMate.ViewModels"
+             xmlns:sys="clr-namespace:System;assembly=netstandard"
+             x:Class="MoneyMate.Views.AddBudgetPage"
+             x:Name="Ajouter un budget">
+
+    <!-- ViewModel -->
+    <ContentPage.BindingContext>
+        <viewmodels:BudgetViewModel />
+    </ContentPage.BindingContext>
+
+    <!-- STRUCTURE GLOBALE -->
+    <Grid RowDefinitions="Auto,*,Auto"
+          BackgroundColor="{StaticResource BackgroundLight}">
+
+        <!-- ⭐ HEADER -->
+        <components:HeaderAuthenticated Grid.Row="0" />
+
+        <!-- ⭐ CONTENU -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Style="{StaticResource MainContainer}"
+                                 Spacing="20"
+                                 Padding="0,0,0,40">
+
+                <!-- 🏷️ TITRE -->
+                <Label Text="Créer un budget"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource Primary}" />
+
+                <!-- 💶 Montant total -->
+                <Label Text="Montant total (€)" Style="{StaticResource FormLabel}" />
+                <Border Style="{StaticResource InputBorder}">
+                    <Entry Placeholder="Ex : 2000"
+                           Keyboard="Numeric"
+                           Text="{Binding TotalAmount}"
+                           Style="{StaticResource EntryForm}" />
+                </Border>
+
+                <!-- 🗓️ Date (mois/année) -->
+                <Label Text="Mois du budget" Style="{StaticResource FormLabel}" />
+                <Border Style="{StaticResource InputBorder}">
+                    <DatePicker Date="{Binding SelectedDate, Mode=TwoWay}"
+                                MaximumDate="{x:Static sys:DateTime.Now}"
+                                Format="MM/yyyy" />
+                </Border>
+
+                <!-- Message -->
+                <Label Text="{Binding Message}"
+                       TextColor="{Binding MessageColor}"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center" />
+
+                <!-- ⭐ BOUTONS -->
+                <Button Text="Créer le budget"
+                        Command="{Binding CreateBudgetCommand}"
+                        Style="{StaticResource PrimaryButton}" />
+
+                <Button Text="Annuler"
+                        Style="{StaticResource OutlineButton}"
+                        Command="{Binding CancelCommand}" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ⭐ NAVBAR -->
+        <components:Navbar Grid.Row="2" />
+
+    </Grid>
+</ContentPage>
