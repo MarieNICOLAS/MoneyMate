@@ -23,9 +23,10 @@
                              VerticalOptions="CenterAndExpand">
 
             <Label Text="Connexion"
-                   FontSize="24"
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center" />
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    TextColor="{StaticResource Primary}"
+                    HorizontalOptions="Center" />
 
             <!-- EMAIL -->
             <Label Text="Email" Style="{StaticResource FormLabel}" />

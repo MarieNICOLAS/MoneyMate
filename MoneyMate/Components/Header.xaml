@@ -42,15 +42,6 @@
                            VerticalOptions="Center" />
                 </HorizontalStackLayout>
 
-                <!-- 🚪 Bouton déconnexion -->
-                <ImageButton Grid.Column="2"
-                             Source="login_icon.png"
-                             BackgroundColor="Transparent"
-                             WidthRequest="28"
-                             HeightRequest="28"
-                             HorizontalOptions="End"
-                             VerticalOptions="Center"
-                             Command="{Binding LoginCommand}" />
             </Grid>
 
             <!-- 🌫️ Effet d’ombre légère (simulation du flottant) -->

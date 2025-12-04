@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using MoneyMate.Database;
 using MoneyMate.Models;
 using MoneyMate.Services;
 using System;
@@ -13,6 +14,7 @@ namespace MoneyMate.ViewModels
 {
     public class CategoryViewModel : BaseViewModel
     {
+        private readonly MoneyMateContext _context;
         private readonly CategoryService _categoryService;
         private readonly BudgetService _budgetService;
 
@@ -29,28 +31,37 @@ namespace MoneyMate.ViewModels
         public ObservableCollection<Budget> Budgets { get; } = new();
         public ObservableCollection<string> ColorOptions { get; } = new()
         {
-            "#FF5733", "#33C1FF", "#75FF33", "#FF33A8", "#FFC300", "#8E44AD"
-        };
+            "#FFAFAD", "#FFD6A5", "#FCFEB6",
+            "#CAFEBF", "#9DF3FD", "#A2C3FD",
+            "#BFB3FD", "#FFC7FC"
+        });
 
-        // --- Propriétés bindées ---
+        private string _name = string.Empty;
         public string Name
         {
-            get => name;
-            set => SetProperty(ref name, value);
+            get => _name;
+            set => SetProperty(ref _name, value);
         }
 
-        public Budget SelectedBudget
+        private Budget? _selectedBudget;
+        public Budget? SelectedBudget
         {
-            get => selectedBudget;
-            set => SetProperty(ref selectedBudget, value);
+            get => _selectedBudget;
+            set
+            {
+                if (SetProperty(ref _selectedBudget, value))
+                    OnPropertyChanged(nameof(AmountPreview));
+            }
         }
 
-        public string SelectedColor
+        private string? _selectedColor;
+        public string? SelectedColor
         {
-            get => selectedColor;
-            set => SetProperty(ref selectedColor, value);
+            get => _selectedColor;
+            set => SetProperty(ref _selectedColor, value);
         }
 
+        private double _percentage = 10;
         public double Percentage
         {
             get => percentage;
@@ -58,10 +69,10 @@ namespace MoneyMate.ViewModels
         }
 
         public string Message
-        {
+            {
             get => message;
             set => SetProperty(ref message, value);
-        }
+            }
 
         public Color MessageColor
         {
@@ -69,16 +80,36 @@ namespace MoneyMate.ViewModels
             set => SetProperty(ref messageColor, value);
         }
 
-        // --- Commandes ---
-        public IRelayCommand AddCategoryCommand { get; }
+        // 💶 Aperçu du montant selon budget + %
+        public double AmountPreview =>
+            SelectedBudget == null
+                ? 0
+                : SelectedBudget.TotalAmount * (Percentage / 100.0);
 
-        // --- Constructeur ---
-        public CategoryViewModel(CategoryService categoryService, BudgetService budgetService)
+        // COMMANDES
+        public IAsyncRelayCommand AddCategoryCommand { get; }
+        public IAsyncRelayCommand UpdateCategoryCommand { get; }
+        public IAsyncRelayCommand DeleteCategoryCommand { get; }
+        public IRelayCommand CancelCommand { get; }
+
+        // ⭐ Navbar commands
+        public IRelayCommand GoHomeCommand { get; }
+        public IRelayCommand GoStatisticsCommand { get; }
+        public IRelayCommand GoAddCommand { get; }
+        public IRelayCommand GoSearchCommand { get; }
+        public IRelayCommand GoMenuCommand { get; }
+
+        public CategoryViewModel()
         {
             _categoryService = categoryService;
             _budgetService = budgetService;
 
+            SelectedColor = null;
+
             AddCategoryCommand = new AsyncRelayCommand(AddCategoryAsync);
+            UpdateCategoryCommand = new AsyncRelayCommand(UpdateCategoryAsync);
+            DeleteCategoryCommand = new AsyncRelayCommand(DeleteCategoryAsync);
+            CancelCommand = new RelayCommand(Cancel);
 
             LoadBudgets();
         }
@@ -98,19 +129,19 @@ namespace MoneyMate.ViewModels
         {
             // --- VALIDATION DES CHAMPS ---
             if (string.IsNullOrWhiteSpace(Name))
-            {
+        {
                 ShowMessage("Veuillez saisir un nom de catégorie.", Colors.Red);
                 return;
-            }
+        }
 
             if (SelectedBudget == null)
-            {
+        {
                 ShowMessage("Veuillez sélectionner un budget.", Colors.Red);
                 return;
-            }
+        }
 
             if (string.IsNullOrWhiteSpace(SelectedColor))
-            {
+        {
                 ShowMessage("Veuillez choisir une couleur.", Colors.Red);
                 return;
             }
@@ -122,22 +153,49 @@ namespace MoneyMate.ViewModels
             }
 
             // --- LOGIQUE CATÉGORIE ---
-            var category = new Category
-            {
-                BudgetId = SelectedBudget.Id,
+                var category = new Category
+                {
+                    BudgetId = SelectedBudget.Id,
                 Name = Name,
                 ColorHex = SelectedColor,
-                Percentage = Percentage,
+                    Percentage = Percentage,
                 AllocatedAmount = SelectedBudget.TotalAmount * (Percentage / 100),
                 SpentAmount = 0,
                 CreatedAt = DateTime.Now
-            };
+                };
+
+                category.CalculateAllocatedAmount(SelectedBudget.TotalAmount);
+
+                await _categoryService.AddCategoryAsync(category);
+                Categories.Add(category);
+
+                ResetForm();
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        // --- UPDATE ---
+        private async Task UpdateCategoryAsync()
+        {
+            if (IsBusy || SelectedBudget is null)
+                return;
 
             try
             {
-                await _categoryService.AddCategoryAsync(category);
+                IsBusy = true;
 
-                ShowMessage("Catégorie ajoutée avec succès !", Colors.Green);
+                var category = Categories.FirstOrDefault(c => c.Id == EditingCategoryId);
+                if (category == null) return;
+
+                category.Name = Name;
+                category.Percentage = Percentage;
+                category.ColorHex = SelectedColor ?? "#CCCCCC";
+                category.BudgetId = SelectedBudget.Id;
+
+                category.CalculateAllocatedAmount(SelectedBudget.TotalAmount);
 
                 // Reset formulaire
                 Name = string.Empty;
@@ -152,11 +210,43 @@ namespace MoneyMate.ViewModels
             }
         }
 
-        private void ShowMessage(string txt, Color color)
+        // --- DELETE ---
+        private async Task DeleteCategoryAsync()
         {
-            Message = txt;
-            MessageColor = color;
+            if (IsBusy) return;
+
+            try
+            {
+                IsBusy = true;
+
+                var category = Categories.FirstOrDefault(c => c.Id == EditingCategoryId);
+                if (category == null) return;
+
+                await _categoryService.DeleteCategoryAsync(category);
+                Categories.Remove(category);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
+
+        // --- CANCEL ---
+        private void Cancel()
+        {
+            ResetForm();
+            Shell.Current.GoToAsync("..");
+        }
+
+        private void ResetForm()
+        {
+            Name = string.Empty;
+            Percentage = 10;
+            SelectedColor = null;
+            OnPropertyChanged(nameof(AmountPreview));
+        }
+
+        // Id de la catégorie en cours d'édition
+        public int EditingCategoryId { get; set; }
     }
 }
-
