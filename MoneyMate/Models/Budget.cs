@@ -1,5 +1,6 @@
 ﻿using SQLite;
 using System;
+using System.Xml.Linq;
 
 namespace MoneyMate.Models
 {
@@ -36,6 +37,9 @@ namespace MoneyMate.Models
         // Montant restant (calculé à la volée)
         [Ignore]
         public double RemainingAmount => TotalAmount - SpentAmount;
+
+        [Ignore] // 🔹 Important pour ne pas persister en DB
+        public string DisplayName => $"{TotalAmount} € ({Month}/{Year})";
 
         // Date de création (utile pour historique)
         public DateTime CreatedAt { get; set; } = DateTime.Now;

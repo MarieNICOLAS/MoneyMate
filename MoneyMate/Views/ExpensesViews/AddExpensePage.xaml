@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MoneyMate.Views.AddExpensePage"
+             Title="AddExpensePage">
+    <ScrollView>
+        <VerticalStackLayout Style="{StaticResource MainContainer}">
+
+            <Label Text="Ajouter une dépense"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource Primary}" />
+
+            <!-- Description -->
+            <Label Text="Description" Style="{StaticResource FormLabel}" />
+            <Border Style="{StaticResource InputBorder}">
+                <Entry Placeholder="Ex : courses, essence..."
+                       Text="{Binding Description}" />
+            </Border>
+
+            <!-- Montant -->
+            <Label Text="Montant (€)" Style="{StaticResource FormLabel}" />
+            <Border Style="{StaticResource InputBorder}">
+                <Entry Placeholder="Ex : 45.90"
+                       Keyboard="Numeric"
+                       Text="{Binding Amount}" />
+            </Border>
+
+            <Label Text="Budget" Style="{StaticResource FormLabel}" />
+            <Picker Title="Sélectionner un budget"
+                    ItemsSource="{Binding Budgets}"
+                    SelectedItem="{Binding SelectedBudget, Mode=TwoWay}"
+                    ItemDisplayBinding="{Binding DisplayName}" />
+
+            <Label Text="Catégorie" Style="{StaticResource FormLabel}" />
+            <Picker Title="Choisir une catégorie"
+                    ItemsSource="{Binding Categories}"
+                    SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+                    ItemDisplayBinding="{Binding Name}" />
+            
+            <!--Prendre les dates sur l'année actuelle-->
+            <Label Text="Date"
+                   Style="{StaticResource FormLabel}" />
+            <DatePicker Date="{Binding Date}"
+                        MinimumDate="2023-01-01"
+                        MaximumDate="2027-12-31" />
+            
+            <Label Text="{Binding Message}"
+                   TextColor="{Binding MessageColor}"
+                   HorizontalOptions="Center" />
+
+            <Button Text="Ajouter"
+                    Command="{Binding AddExpenseCommand}"
+                    Style="{StaticResource PrimaryButton}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

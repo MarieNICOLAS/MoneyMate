@@ -1,22 +1,43 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MoneyMate.MainPage">
+             xmlns:components="clr-namespace:MoneyMate.Components"
+             x:Class="MoneyMate.MainPage"
+             BackgroundColor="{StaticResource BackgroundLight}">
 
-    <ScrollView>
-        <VerticalStackLayout Style="{StaticResource MainContainer}">
+    <Grid RowDefinitions="Auto,*,Auto" Padding="0,0,0,10">
 
-            <Image Source="logo.png" HeightRequest="120" HorizontalOptions="Center"/>
+        <!-- HEADER -->
+        <components:Header Grid.Row="0" />
 
-            <Button Text="LOGIN" Style="{StaticResource PrimaryButton}" />
-            <Button Text="SIGNUP" Style="{StaticResource OutlineButton}" />
+        <!-- CONTENU CENTRAL -->
+        <VerticalStackLayout Grid.Row="1"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             Spacing="25">
 
-            <Label Text="MoneyMate © 2025. All rights reserved."
-            FontSize="12"
-            HorizontalOptions="Center"
-            TextColor="{StaticResource Secondary}" />
+            <Image Source="money_mate_icon.png"
+                   WidthRequest="90"
+                   HeightRequest="90"
+                   Margin="0,20,0,10" />
 
+            <Label Text="MoneyMate"
+                   FontSize="32"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource TextDark}"
+                   HorizontalOptions="Center" />
+
+            <VerticalStackLayout Spacing="15">
+                <Button Text="Se connecter"
+                        Clicked="OnLoginClicked"
+                        Style="{StaticResource PrimaryButton}" />
+
+                <Button Text="S'inscrire"
+                        Clicked="OnSignupClicked"
+                        Style="{StaticResource OutlineButton}" />
+            </VerticalStackLayout>
         </VerticalStackLayout>
-    </ScrollView>
 
+        <!-- FOOTER -->
+        <components:Footer Grid.Row="2"/>
+    </Grid>
 </ContentPage>

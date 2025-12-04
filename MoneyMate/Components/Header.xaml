@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MoneyMate.Components.Header"
+             BackgroundColor="{StaticResource PrimaryLight}"
+             HeightRequest="50"
+             HorizontalOptions="Fill"
+             >
+
+    <Border
+        BackgroundColor="{StaticResource PrimaryLight}"
+        HeightRequest="50"
+        Margin="0"
+        Padding="0"
+        StrokeThickness="0">
+        <Border.Shadow>
+            <Shadow Brush="Black"
+                Offset="0,4"
+                Radius="6"
+                Opacity="0.3" />
+        </Border.Shadow>
+        
+        <Grid RowDefinitions="Auto,Auto">
+
+            <!-- BARRE PRINCIPALE -->
+            <Grid Grid.Row="0"
+                  ColumnDefinitions="Auto,*,Auto"
+                  Padding="20,10"
+                  VerticalOptions="Center"
+                  HorizontalOptions="Fill">
+
+                <!-- 🪙 Logo + Nom -->
+                <HorizontalStackLayout Grid.Column="0" Spacing="8">
+                    <Image Source="money_mate_icon.png"
+                           WidthRequest="28"
+                           HeightRequest="28"
+                           VerticalOptions="Center" />
+                    <Label Text="MoneyMate"
+                           FontAttributes="Bold"
+                           FontSize="20"
+                           TextColor="{StaticResource TextDark}"
+                           VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+            </Grid>
+
+            <!-- 🌫️ Effet d’ombre légère (simulation du flottant) -->
+            <BoxView Grid.Row="1"
+                     HeightRequest="8"
+                     Opacity="0.3">
+                <BoxView.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#00000015" Offset="0.0" />
+                        <GradientStop Color="#00000000" Offset="1.0" />
+                    </LinearGradientBrush>
+                </BoxView.Background>
+            </BoxView>
+
+        </Grid>
+    </Border>
+</ContentView>

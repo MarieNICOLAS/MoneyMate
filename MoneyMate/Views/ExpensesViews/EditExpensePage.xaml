@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MoneyMate.Views.EditExpensePage"
+             Title="EditExpensePage">
+
+    <ScrollView>
+        <VerticalStackLayout Style="{StaticResource MainContainer}">
+
+            <Label Text="Modifier la transaction"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource Primary}" />
+
+            <!-- Nom -->
+            <Label Text="Nom" Style="{StaticResource FormLabel}" />
+            <Border Style="{StaticResource InputBorder}">
+                <Entry Text="{Binding Name}"
+                       Style="{StaticResource EntryForm}"
+                       Placeholder="Nom de la transaction" />
+            </Border>
+
+            <!-- Prix -->
+            <Label Text="Prix (€)" Style="{StaticResource FormLabel}" />
+            <Border Style="{StaticResource InputBorder}">
+                <Entry Text="{Binding Price}"
+                       Style="{StaticResource EntryForm}"
+                       Keyboard="Numeric"
+                       Placeholder="Ex : 25.00" />
+            </Border>
+
+            <!-- Catégorie -->
+            <Label Text="Catégorie" Style="{StaticResource FormLabel}" />
+            <Picker ItemsSource="{Binding Categories}"
+                    SelectedItem="{Binding SelectedCategory}"
+                    ItemDisplayBinding="{Binding Name}"
+                    Title="Choisir une catégorie"
+                    Style="{StaticResource EntryForm}" />
+
+            <!-- Date -->
+            <Label Text="Date" Style="{StaticResource FormLabel}" />
+            <DatePicker Date="{Binding Date}"
+                        Style="{StaticResource EntryForm}" />
+
+
+
+            <!-- Boutons -->
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10" Padding="10">
+                <Button Text="Valider"
+                        Style="{StaticResource PrimaryButton}"
+                        Command="{Binding SaveCommand}" />
+
+                <Button Text="Supprimer"
+                        Style="{StaticResource OutlineButton}"
+                        Command="{Binding DeleteCommand}" />
+
+                <Button Text="Annuler"
+                        Style="{StaticResource OutlineButton}"
+                        Command="{Binding CancelCommand}" />
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
