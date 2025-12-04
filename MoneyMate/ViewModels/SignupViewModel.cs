@@ -95,5 +95,7 @@ namespace MoneyMate.ViewModels
 
             IsBusy = false;
         }
+
+
     }
 }
