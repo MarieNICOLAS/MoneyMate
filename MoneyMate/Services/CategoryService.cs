@@ -1,8 +1,5 @@
 ﻿using MoneyMate.Database;
 using MoneyMate.Models;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace MoneyMate.Services
 {
