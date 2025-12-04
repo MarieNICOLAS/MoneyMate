@@ -15,26 +15,66 @@ namespace MoneyMate.Services
             _db = db;
         }
 
-        // ✅ Connexion avec option "Se souvenir de moi"
+        // Connexion avec option "Se souvenir de moi"
         public async Task<User?> LoginAsync(string email, string password, bool rememberMe = false)
         {
             string hash = ComputeHash(password);
             var users = await _db.GetAllAsync<User>();
             var user = users.FirstOrDefault(u => u.Email == email && u.PasswordHash == hash && u.IsActive);
 
-            if (user != null && rememberMe)
+            if (user != null)
             {
-                Preferences.Set("IsLoggedIn", true);
-                Preferences.Set("UserEmail", user.Email);
+                // Mise à jour de la dernière connexion, même si rememberMe est faux
+                user.UpdateLastLogin();
+                await _db.UpdateAsync(user);
+
+                if (rememberMe)
+                {
+                    // 💾 Stockage des informations dans les préférences locales (.NET MAUI Preferences)
+                    Preferences.Set("IsLoggedIn", true);
+                    Preferences.Set("UserEmail", user.Email);
+                }
             }
 
             return user;
         }
 
-        // ✅ Vérifie si un utilisateur est déjà connecté
+        // Vérifie si un utilisateur est déjà connecté
         public static bool IsUserLoggedIn()
         {
             return Preferences.Get("IsLoggedIn", false);
+        }
+
+        // Récupère l'utilisateur connecté à partir des préférences (pour l'auto-login)
+        public async Task<User?> GetLoggedInUserAsync()
+        {
+            // 1. Vérifie le drapeau de connexion
+            if (!IsUserLoggedIn())
+            {
+                return null;
+            }
+
+            // 2. Récupère l'email stocké
+            var email = Preferences.Get("UserEmail", string.Empty);
+
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                // Si l'email est manquant (erreur d'état), on déconnecte
+                Logout();
+                return null;
+            }
+
+            // 3. Récupère l'utilisateur depuis la BDD locale
+            var users = await _db.GetAllAsync<User>();
+            var user = users.FirstOrDefault(u => u.Email == email && u.IsActive);
+
+            if (user == null)
+            {
+                // Utilisateur introuvable ou inactif : session invalide
+                Logout();
+            }
+
+            return user;
         }
 
         // ✅ Déconnexion (efface les préférences)
