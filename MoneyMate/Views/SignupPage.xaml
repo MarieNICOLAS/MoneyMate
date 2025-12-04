@@ -27,6 +27,7 @@
                 <Label Text="Inscription"
                        FontSize="24"
                        FontAttributes="Bold"
+                       TextColor="{StaticResource Primary}"
                        HorizontalOptions="Center" />
 
                 <!-- NOM -->

@@ -144,6 +144,10 @@
                 <Button Text="Ajouter la catégorie"
                         Style="{StaticResource PrimaryButton}"
                         Command="{Binding AddCategoryCommand}" />
+                <Button Text="Annuler"
+                     BackgroundColor="{StaticResource Secondary}"
+                     Style="{StaticResource PrimaryButton}"
+                     Command="{Binding CancelCommand}" />
 
             </VerticalStackLayout>
         </ScrollView>
