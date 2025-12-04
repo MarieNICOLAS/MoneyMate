@@ -1,8 +1,8 @@
 namespace MoneyMate.Components;
 
-public partial class FooterUser : ContentPage
+public partial class Footer : ContentView
 {
-	public FooterUser()
+	public Footer()
 	{
 		InitializeComponent();
 	}

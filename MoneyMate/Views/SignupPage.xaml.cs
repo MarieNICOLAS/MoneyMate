@@ -1,3 +1,5 @@
+using MoneyMate.ViewModels;
+
 namespace MoneyMate.Views
 {
     public partial class SignupPage : ContentPage
@@ -7,9 +9,27 @@ namespace MoneyMate.Views
             InitializeComponent();
         }
 
-        private async void OnBackClicked(object sender, EventArgs e)
+        protected override void OnAppearing()
         {
-            await Shell.Current.GoToAsync("//LoginPage");
+            base.OnAppearing();
+
+            if (BindingContext is SignupViewModel vm)
+            {
+                vm.Name = string.Empty;
+                vm.Email = string.Empty;
+                vm.Password = string.Empty;
+                vm.Message = string.Empty;
+                vm.MessageColor = Colors.Transparent;
+            }
+
+            // Reset UI
+            SignupStrengthBar.Progress = 0;
+            SignupStrengthBar.ProgressColor = Colors.Red;
+
+            SignupRequirementLabel.Text = string.Empty;
+
+            PasswordEntry.IsPassword = true;
+            EyeBtn.Source = "open_eye_icon.png";
         }
     }
 }

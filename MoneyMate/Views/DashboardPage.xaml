@@ -14,7 +14,7 @@
           BackgroundColor="{StaticResource White}">
 
         <!-- HEADER -->
-        <components:Header Grid.Row="0" />
+        <components:HeaderAuthenticated Grid.Row="0" />
 
         <!-- CONTENU -->
         <ScrollView Grid.Row="1">

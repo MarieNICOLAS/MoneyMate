@@ -2,62 +2,114 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MoneyMate.Components.Navbar"
-             BackgroundColor="{StaticResource BackgroundLight}"
+             BackgroundColor="Transparent"
              HeightRequest="70"
-             VerticalOptions="End">
+             VerticalOptions="End"
+             Margin="0,10,0,10">
 
-    <Grid ColumnDefinitions="*,*,*,*,*"
-          Padding="20,10"
-          ColumnSpacing="25"
-          VerticalOptions="Center"
-          HorizontalOptions="Fill">
+    <!-- 🩵 NAVBAR FLOTTANTE -->
+    <Border
+        BackgroundColor="{StaticResource PrimaryLight}"
+        StrokeThickness="0"
+        Padding="0"
+        HeightRequest="70"
+        HorizontalOptions="Fill"
+        >
 
-        <!-- 🏠 Home -->
-        <ImageButton Grid.Column="0"
-                     Source="home_icon.png"
-                     BackgroundColor="Transparent"
-                     WidthRequest="28"
-                     HeightRequest="28"
-                     Command="{Binding GoHomeCommand}" />
+        <!-- 🌫️ Ombre douce (effet flottant) -->
+        <Border.Shadow>
+            <Shadow Brush="Black"
+                    Offset="0,4"
+                    Radius="10"
+                    Opacity="0.25" />
+        </Border.Shadow>
 
-        <!-- 📊 Statistics -->
-        <ImageButton Grid.Column="1"
-                     Source="analytics_icon.png"
-                     BackgroundColor="Transparent"
-                     WidthRequest="28"
-                     HeightRequest="28"
-                     Command="{Binding GoStatisticsCommand}" />
+        <Grid ColumnDefinitions="*,*,*,*,*"
+              Padding="25,10"
+              ColumnSpacing="25"
+              VerticalOptions="Center"
+              HorizontalOptions="Fill">
 
-        <!-- ➕ Add -->
-        <Frame Grid.Column="2"
-               CornerRadius="25"
-               WidthRequest="50"
-               HeightRequest="50"
-               BackgroundColor="{StaticResource Primary}"
-               HasShadow="True"
-               VerticalOptions="Center"
-               HorizontalOptions="Center">
-            <ImageButton Source="add_icon.png"
+            <!-- 🏠 Home -->
+            <ImageButton Grid.Column="0"
+                         Source="home_icon.png"
                          BackgroundColor="Transparent"
-                         WidthRequest="26"
-                         HeightRequest="26"
-                         Command="{Binding GoAddCommand}" />
-        </Frame>
+                         WidthRequest="28"
+                         HeightRequest="28"
+                         Command="{Binding GoHomeCommand}">
+                <ImageButton.Triggers>
+                    <Trigger TargetType="ImageButton" Property="IsPressed" Value="True">
+                        <Setter Property="Opacity" Value="0.6"/>
+                    </Trigger>
+                </ImageButton.Triggers>
+            </ImageButton>
 
-        <!-- 🔍 Search -->
-        <ImageButton Grid.Column="3"
-                     Source="search_icon.png"
-                     BackgroundColor="Transparent"
-                     WidthRequest="28"
-                     HeightRequest="28"
-                     Command="{Binding GoSearchCommand}" />
+            <!-- 📊 Statistics -->
+            <ImageButton Grid.Column="1"
+                         Source="analytics_icon.png"
+                         BackgroundColor="Transparent"
+                         WidthRequest="28"
+                         HeightRequest="28"
+                         Command="{Binding GoStatisticsCommand}">
+                <ImageButton.Triggers>
+                    <Trigger TargetType="ImageButton" Property="IsPressed" Value="True">
+                        <Setter Property="Opacity" Value="0.6"/>
+                    </Trigger>
+                </ImageButton.Triggers>
+            </ImageButton>
 
-        <!-- ☰ Menu -->
-        <ImageButton Grid.Column="4"
-                     Source="menu_burger_icon.png"
-                     BackgroundColor="Transparent"
-                     WidthRequest="28"
-                     HeightRequest="28"
-                     Command="{Binding GoMenuCommand}" />
-    </Grid>
+            <!-- ➕ Add (icône centrale mise en avant) -->
+            <Frame Grid.Column="2"
+                   CornerRadius="35"
+                   WidthRequest="50"
+                   HeightRequest="50"
+                   BackgroundColor="{StaticResource BackgroundLight}"
+                   HasShadow="True"
+                   BorderColor="{StaticResource BackgroundLight}"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"
+                   Padding="0">
+                <ImageButton Source="add_icon.png"
+                             BackgroundColor="Transparent"
+                             WidthRequest="28"
+                             HeightRequest="28"
+                             Command="{Binding GoAddCommand}">
+                    <ImageButton.Triggers>
+                        <Trigger TargetType="ImageButton" Property="IsPressed" Value="True">
+                            <Setter Property="Opacity" Value="0.7"/>
+                        </Trigger>
+                    </ImageButton.Triggers>
+                </ImageButton>
+            </Frame>
+
+            <!-- 🔍 Search -->
+            <ImageButton Grid.Column="3"
+                         Source="search_icon.png"
+                         BackgroundColor="Transparent"
+                         WidthRequest="28"
+                         HeightRequest="28"
+                         Command="{Binding GoSearchCommand}">
+                <ImageButton.Triggers>
+                    <Trigger TargetType="ImageButton" Property="IsPressed" Value="True">
+                        <Setter Property="Opacity" Value="0.6"/>
+                    </Trigger>
+                </ImageButton.Triggers>
+            </ImageButton>
+
+            <!-- ☰ Menu -->
+            <ImageButton Grid.Column="4"
+                         Source="menu_burger_icon.png"
+                         BackgroundColor="Transparent"
+                         WidthRequest="28"
+                         HeightRequest="28"
+                         Command="{Binding GoMenuCommand}">
+                <ImageButton.Triggers>
+                    <Trigger TargetType="ImageButton" Property="IsPressed" Value="True">
+                        <Setter Property="Opacity" Value="0.6"/>
+                    </Trigger>
+                </ImageButton.Triggers>
+            </ImageButton>
+
+        </Grid>
+    </Border>
 </ContentView>
