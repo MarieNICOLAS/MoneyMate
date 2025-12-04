@@ -24,16 +24,18 @@ namespace MoneyMate
             window.Created += async (s, e) =>
             {
                 await Task.Delay(500); // petit délai pour s’assurer que Shell est prêt
-
-                if (AuthService.IsUserLoggedIn())
+           
+                {
+                    if (AuthService.IsUserLoggedIn())
                     await Shell.Current.GoToAsync("//DashboardPage");
                 else
                     await Shell.Current.GoToAsync("//MainPage");
+                }
             };
 
             return window;
         }
-
+            
         private async void InitializeDatabaseSafe()
         {
             try

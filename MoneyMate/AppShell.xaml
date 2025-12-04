@@ -67,7 +67,7 @@
     <ShellContent
         Title="Statistics"
         ContentTemplate="{DataTemplate views:StatisticsPage}"
-        Route="StaticticsPage" />
+        Route="StatisticsPage" />
     <ShellContent
        Title="Modifier une transaction"
         ContentTemplate="{DataTemplate views:EditExpensePage}"

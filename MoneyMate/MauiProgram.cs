@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using MoneyMate.Database;
+using MoneyMate.Services;
+using MoneyMate.ViewModels;
+using MoneyMate.Views;
 
 namespace MoneyMate
 {
@@ -19,9 +22,20 @@ namespace MoneyMate
 
             #if DEBUG
     		    builder.Logging.AddDebug();
-            #endif
-
+#endif
             builder.Services.AddSingleton<MoneyMateContext>();
+
+            builder.Services.AddSingleton<BudgetService>();
+            builder.Services.AddSingleton<CategoryService>();
+            builder.Services.AddSingleton<ExpenseService>();
+
+            builder.Services.AddTransient<BudgetViewModel>();
+            builder.Services.AddTransient<CategoryViewModel>();
+            builder.Services.AddTransient<ExpenseViewModel>();
+
+            builder.Services.AddTransient<AddBudgetPage>();
+            builder.Services.AddTransient<AddCategoryPage>();
+            builder.Services.AddTransient<AddExpensePage>();
 
             return builder.Build();
         }
