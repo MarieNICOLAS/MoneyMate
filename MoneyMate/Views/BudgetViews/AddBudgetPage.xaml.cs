@@ -4,10 +4,8 @@ using MoneyMate.ViewModels;
 
 public partial class AddBudgetPage : ContentPage
 {
-	public AddBudgetPage(BudgetViewModel vm)
+	public AddBudgetPage()
 	{
 		InitializeComponent();
-        BindingContext = vm;
-
     }
 }
