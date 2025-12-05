@@ -8,11 +8,12 @@ using System.Windows.Input;
 namespace MoneyMate.ViewModels
 {
     [QueryProperty(nameof(BudgetId), "budgetId")]
+    [QueryProperty(nameof(ReturnMessage), "returnMsg")]
     public partial class BudgetViewModel : BaseViewModel
     {
         private readonly BudgetService _budgetService;
 
-        // ID du budget envoyé via Shell
+        // ID du budget passé via Shell
         public int BudgetId { get; set; }
 
         // Champs privés
@@ -22,7 +23,8 @@ namespace MoneyMate.ViewModels
         private Color messageColor = Colors.Transparent;
         private Budget selectedBudget;
 
-        // PROPRIÉTÉS BINDÉES
+        // ------------- PROPRIETES BINDÉES ----------------
+
         public string TotalAmount
         {
             get => totalAmount;
@@ -53,16 +55,18 @@ namespace MoneyMate.ViewModels
             set => SetProperty(ref selectedBudget, value);
         }
 
-        // Liste de budgets
         public ObservableCollection<Budget> Budgets { get; } = new();
 
-        // COMMANDES
+
+        // ------------- COMMANDES ----------------
+
         public ICommand CreateBudgetCommand { get; }
         public ICommand UpdateBudgetCommand { get; }
         public ICommand DeleteBudgetCommand { get; }
         public ICommand CancelCommand { get; }
 
-        // CONSTRUCTEUR
+        // ------------- CONSTRUCTEUR ----------------
+
         public BudgetViewModel()
         {
             _budgetService = new BudgetService(App.Database);
@@ -73,13 +77,16 @@ namespace MoneyMate.ViewModels
             CancelCommand = new AsyncRelayCommand(OnCancelAsync);
         }
 
-        // CHARGER LISTE DES BUDGETS
+
+        // ------------- CHARGER TOUS LES BUDGETS ----------------
+
         public async Task LoadBudgetsAsync()
         {
             try
             {
                 var list = await _budgetService.GetBudgetsAsync();
                 Budgets.Clear();
+
                 foreach (var b in list)
                     Budgets.Add(b);
             }
@@ -89,7 +96,9 @@ namespace MoneyMate.ViewModels
             }
         }
 
-        // CHARGER 1 BUDGET POUR ÉDITION
+
+        // ------------- CHARGER 1 BUDGET ----------------
+
         public async Task LoadBudgetAsync()
         {
             if (BudgetId <= 0) return;
@@ -103,7 +112,9 @@ namespace MoneyMate.ViewModels
             }
         }
 
-        // CRÉATION
+
+        // ------------- CREATION ----------------
+
         private async Task CreateBudgetAsync()
         {
             if (!double.TryParse(TotalAmount, out double total))
@@ -121,14 +132,14 @@ namespace MoneyMate.ViewModels
             try
             {
                 bool ok = await _budgetService.AddBudgetAsync(budget);
+
                 if (!ok)
                 {
                     SetMessage("Budget déjà existant pour ce mois.", Colors.Red);
                     return;
                 }
 
-                SetMessage("Budget créé avec succès.", Colors.Green);
-                await Shell.Current.GoToAsync("..");
+                await Shell.Current.GoToAsync("///BudgetListPage?returnMsg=Budget créé avec succès");
             }
             catch (Exception ex)
             {
@@ -136,7 +147,9 @@ namespace MoneyMate.ViewModels
             }
         }
 
-        // UPDATE
+
+        // ------------- UPDATE ----------------
+
         private async Task UpdateBudgetAsync()
         {
             if (SelectedBudget == null)
@@ -158,12 +171,18 @@ namespace MoneyMate.ViewModels
             bool ok = await _budgetService.UpdateBudgetAsync(SelectedBudget);
 
             if (ok)
-                await Shell.Current.GoToAsync("..");
+            {
+                await Shell.Current.GoToAsync("///BudgetListPage?returnMsg=Budget modifié");
+            }
             else
+            {
                 SetMessage("Erreur lors de la modification.", Colors.Red);
+            }
         }
 
-        // DELETE
+
+        // ------------- DELETE ----------------
+
         private async Task DeleteBudgetAsync()
         {
             if (SelectedBudget == null)
@@ -175,21 +194,42 @@ namespace MoneyMate.ViewModels
             bool ok = await _budgetService.DeleteBudgetAsync(SelectedBudget);
 
             if (ok)
-                await Shell.Current.GoToAsync("..");
+            {
+                await Shell.Current.GoToAsync("///BudgetListPage?returnMsg=Budget supprimé");
+            }
             else
+            {
                 SetMessage("Erreur suppression.", Colors.Red);
+            }
         }
 
-        // CANCEL
+
+        // ------------- CANCEL ----------------
+
         private async Task OnCancelAsync()
         {
-            await Shell.Current.GoToAsync("..");
+            await Shell.Current.GoToAsync("///BudgetListPage?returnMsg=Annulé");
         }
+
+
+        // ------------- MESSAGE UTILITAIRE ----------------
 
         private void SetMessage(string txt, Color c)
         {
             Message = txt;
             MessageColor = c;
+        }
+
+
+        // Message renvoyé depuis EditBudgetPage
+        public string ReturnMessage
+        {
+            get => message;
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                    SetMessage(value, Colors.Green);
+            }
         }
     }
 }
