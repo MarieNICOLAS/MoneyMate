@@ -138,7 +138,7 @@
                 <Label Text="{Binding AmountPreview, StringFormat='Montant : {0:F2} €'}"
                        FontAttributes="Bold"
                         HorizontalOptions="End"
-                       TextColor="{StaticResource Primary}" />  
+                       TextColor="{StaticResource Primary}" />
 
                 <!-- ⭐ BOUTON -->
                 <Button Text="Ajouter la catégorie"
