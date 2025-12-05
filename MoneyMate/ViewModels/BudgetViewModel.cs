@@ -1,83 +1,118 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using MoneyMate.Database;
 using MoneyMate.Models;
 using MoneyMate.Services;
-using SQLite;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MoneyMate.ViewModels
 {
-    public class BudgetViewModel : BaseViewModel
+    [QueryProperty(nameof(BudgetId), "budgetId")]
+    public partial class BudgetViewModel : BaseViewModel
     {
         private readonly BudgetService _budgetService;
 
-        // --- Champs privés ---
+        // ID du budget envoyé via Shell
+        public int BudgetId { get; set; }
+
+        // Champs privés
         private string totalAmount;
         private DateTime selectedDate = DateTime.Now;
         private string message;
         private Color messageColor = Colors.Transparent;
+        private Budget selectedBudget;
 
-        // --- Propriétés bindées ---
+        // PROPRIÉTÉS BINDÉES
         public string TotalAmount
         {
             get => totalAmount;
-            set { if (totalAmount != value) { totalAmount = value; OnPropertyChanged(); } }
+            set => SetProperty(ref totalAmount, value);
         }
 
         public DateTime SelectedDate
         {
             get => selectedDate;
-            set { if (selectedDate != value) { selectedDate = value; OnPropertyChanged(); } }
+            set => SetProperty(ref selectedDate, value);
         }
 
         public string Message
         {
             get => message;
-            set { if (message != value) { message = value; OnPropertyChanged(); } }
+            set => SetProperty(ref message, value);
         }
 
         public Color MessageColor
         {
             get => messageColor;
-            set { if (messageColor != value) { messageColor = value; OnPropertyChanged(); } }
+            set => SetProperty(ref messageColor, value);
         }
 
-        // --- Liste de budgets ---
+        public Budget SelectedBudget
+        {
+            get => selectedBudget;
+            set => SetProperty(ref selectedBudget, value);
+        }
+
+        // Liste de budgets
         public ObservableCollection<Budget> Budgets { get; } = new();
 
-        // --- Commandes ---
+        // COMMANDES
         public ICommand CreateBudgetCommand { get; }
+        public ICommand UpdateBudgetCommand { get; }
+        public ICommand DeleteBudgetCommand { get; }
+        public ICommand CancelCommand { get; }
 
-        // --- Constructeur ---
+        // CONSTRUCTEUR
         public BudgetViewModel()
         {
             _budgetService = new BudgetService(App.Database);
 
             CreateBudgetCommand = new AsyncRelayCommand(CreateBudgetAsync);
+            UpdateBudgetCommand = new AsyncRelayCommand(UpdateBudgetAsync);
+            DeleteBudgetCommand = new AsyncRelayCommand(DeleteBudgetAsync);
+            CancelCommand = new AsyncRelayCommand(OnCancelAsync);
         }
 
-        // --- Méthodes ---
+        // CHARGER LISTE DES BUDGETS
+        public async Task LoadBudgetsAsync()
+        {
+            try
+            {
+                var list = await _budgetService.GetBudgetsAsync();
+                Budgets.Clear();
+                foreach (var b in list)
+                    Budgets.Add(b);
+            }
+            catch (Exception ex)
+            {
+                SetMessage($"Erreur chargement budgets : {ex.Message}", Colors.Red);
+            }
+        }
+
+        // CHARGER 1 BUDGET POUR ÉDITION
+        public async Task LoadBudgetAsync()
+        {
+            if (BudgetId <= 0) return;
+
+            SelectedBudget = await _budgetService.GetBudgetByIdAsync(BudgetId);
+
+            if (SelectedBudget != null)
+            {
+                TotalAmount = SelectedBudget.TotalAmount.ToString();
+                SelectedDate = new DateTime(SelectedBudget.Year, SelectedBudget.Month, 1);
+            }
+        }
+
+        // CRÉATION
         private async Task CreateBudgetAsync()
         {
-            // Validation
             if (!double.TryParse(TotalAmount, out double total))
             {
-                Message = "Montant invalide";
-                MessageColor = Colors.Red;
+                SetMessage("Montant invalide.", Colors.Red);
                 return;
             }
 
-            var budget = new Budget(
-                userId: 1, // remplacer par l'ID réel de l'utilisateur connecté
-                totalAmount: total
-            )
+            var budget = new Budget(1, total)
             {
                 Month = SelectedDate.Month,
                 Year = SelectedDate.Year
@@ -85,85 +120,76 @@ namespace MoneyMate.ViewModels
 
             try
             {
-                bool success = await _budgetService.AddBudgetAsync(budget);
-
-                if (!success)
+                bool ok = await _budgetService.AddBudgetAsync(budget);
+                if (!ok)
                 {
-                    Message = "Un budget pour ce mois existe déjà.";
-                    MessageColor = Colors.Red;
+                    SetMessage("Budget déjà existant pour ce mois.", Colors.Red);
                     return;
                 }
 
-                Message = "Budget créé avec succès";
-                MessageColor = Colors.Green;
-
-                // Reset formulaire
-                TotalAmount = string.Empty;
-                SelectedDate = DateTime.Now;
-
+                SetMessage("Budget créé avec succès.", Colors.Green);
+                await Shell.Current.GoToAsync("..");
             }
             catch (Exception ex)
             {
-                Message = $"Erreur : {ex.Message}";
-                MessageColor = Colors.Red;
-                Debug.WriteLine(ex);
+                SetMessage(ex.Message, Colors.Red);
             }
         }
 
-        public async Task LoadBudgetsAsync()
+        // UPDATE
+        private async Task UpdateBudgetAsync()
         {
-            try
+            if (SelectedBudget == null)
             {
-                var budgets = await _budgetService.GetBudgetsAsync();
-                Budgets.Clear();
-                foreach (var b in budgets)
-                    Budgets.Add(b);
+                SetMessage("Aucun budget à modifier.", Colors.Red);
+                return;
             }
-            catch (Exception ex)
+
+            if (!double.TryParse(TotalAmount, out double total))
             {
-                Message = $"Erreur chargement budgets : {ex.Message}";
-                MessageColor = Colors.Red;
-                Debug.WriteLine(ex);
+                SetMessage("Montant invalide.", Colors.Red);
+                return;
             }
+
+            SelectedBudget.TotalAmount = total;
+            SelectedBudget.Month = SelectedDate.Month;
+            SelectedBudget.Year = SelectedDate.Year;
+
+            bool ok = await _budgetService.UpdateBudgetAsync(SelectedBudget);
+
+            if (ok)
+                await Shell.Current.GoToAsync("..");
+            else
+                SetMessage("Erreur lors de la modification.", Colors.Red);
         }
 
-        public async Task DeleteBudgetAsync(Budget budget)
+        // DELETE
+        private async Task DeleteBudgetAsync()
         {
-            if (budget == null) return;
+            if (SelectedBudget == null)
+            {
+                SetMessage("Aucun budget à supprimer.", Colors.Red);
+                return;
+            }
 
-            try
-            {
-                bool deleted = await _budgetService.DeleteBudgetAsync(budget);
-                if (deleted)
-                    Budgets.Remove(budget);
-            }
-            catch (Exception ex)
-            {
-                Message = $"Erreur suppression budget : {ex.Message}";
-                MessageColor = Colors.Red;
-                Debug.WriteLine(ex);
-            }
+            bool ok = await _budgetService.DeleteBudgetAsync(SelectedBudget);
+
+            if (ok)
+                await Shell.Current.GoToAsync("..");
+            else
+                SetMessage("Erreur suppression.", Colors.Red);
         }
 
-        public async Task UpdateBudgetAsync(Budget budget)
+        // CANCEL
+        private async Task OnCancelAsync()
         {
-            if (budget == null) return;
+            await Shell.Current.GoToAsync("..");
+        }
 
-            try
-            {
-                bool updated = await _budgetService.UpdateBudgetAsync(budget);
-                if (updated)
-                {
-                    // recharge la liste pour refléter les changements
-                    await LoadBudgetsAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                Message = $"Erreur mise à jour budget : {ex.Message}";
-                MessageColor = Colors.Red;
-                Debug.WriteLine(ex);
-            }
+        private void SetMessage(string txt, Color c)
+        {
+            Message = txt;
+            MessageColor = c;
         }
     }
 }

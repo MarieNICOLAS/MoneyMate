@@ -5,34 +5,29 @@
              xmlns:viewmodels="clr-namespace:MoneyMate.ViewModels"
              xmlns:sys="clr-namespace:System;assembly=netstandard"
              x:Class="MoneyMate.Views.AddBudgetPage"
-             x:Name="Ajouter un budget">
+             x:Name="PageRoot">
 
-    <!-- ViewModel -->
-    <ContentPage.BindingContext>
-        <viewmodels:BudgetViewModel />
-    </ContentPage.BindingContext>
-
-    <!-- STRUCTURE GLOBALE -->
     <Grid RowDefinitions="Auto,*,Auto"
           BackgroundColor="{StaticResource BackgroundLight}">
 
         <!-- ⭐ HEADER -->
         <components:HeaderAuthenticated Grid.Row="0" />
 
-        <!-- ⭐ CONTENU -->
-        <ScrollView Grid.Row="1">
+        <ScrollView Grid.Row="1" Padding="0,0,0,40">
             <VerticalStackLayout Style="{StaticResource MainContainer}"
-                                 Spacing="20"
-                                 Padding="0,0,0,40">
-
+                               Spacing="15"
+                               Margin="0,0,0,80">
                 <!-- 🏷️ TITRE -->
                 <Label Text="Créer un budget"
-                       FontSize="24"
-                       FontAttributes="Bold"
-                       TextColor="{StaticResource Primary}" />
+                     FontSize="24"
+                     FontAttributes="Bold"
+                     TextColor="{StaticResource Primary}" />
 
                 <!-- 💶 Montant total -->
-                <Label Text="Montant total (€)" Style="{StaticResource FormLabel}" />
+                <Label Text="Montant total (€)"
+                       Style="{StaticResource FormLabel}"
+                       Margin="0,10,0,0"/>
+
                 <Border Style="{StaticResource InputBorder}">
                     <Entry Placeholder="Ex : 2000"
                            Keyboard="Numeric"
@@ -40,19 +35,23 @@
                            Style="{StaticResource EntryForm}" />
                 </Border>
 
-                <!-- 🗓️ Date (mois/année) -->
-                <Label Text="Mois du budget" Style="{StaticResource FormLabel}" />
+                <!-- 🗓️ Mois / année -->
+                <Label Text="Mois du budget"
+                       Style="{StaticResource FormLabel}"
+                       Margin="0,10,0,0"/>
+
                 <Border Style="{StaticResource InputBorder}">
                     <DatePicker Date="{Binding SelectedDate, Mode=TwoWay}"
                                 MaximumDate="{x:Static sys:DateTime.Now}"
                                 Format="MM/yyyy" />
                 </Border>
 
-                <!-- Message -->
+                <!-- MESSAGE -->
                 <Label Text="{Binding Message}"
                        TextColor="{Binding MessageColor}"
                        FontAttributes="Bold"
-                       HorizontalOptions="Center" />
+                       HorizontalOptions="Center"
+                       Margin="0,10" />
 
                 <!-- ⭐ BOUTONS -->
                 <Button Text="Créer le budget"
@@ -60,8 +59,8 @@
                         Style="{StaticResource PrimaryButton}" />
 
                 <Button Text="Annuler"
-                        Style="{StaticResource OutlineButton}"
-                        Command="{Binding CancelCommand}" />
+                        Command="{Binding CancelCommand}"
+                        Style="{StaticResource OutlineButton}" />
 
             </VerticalStackLayout>
         </ScrollView>
@@ -70,4 +69,5 @@
         <components:Navbar Grid.Row="2" />
 
     </Grid>
+
 </ContentPage>

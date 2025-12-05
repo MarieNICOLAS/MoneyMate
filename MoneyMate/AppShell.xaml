@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MoneyMate"
     xmlns:views="clr-namespace:MoneyMate.Views"
+    xmlns:budgetviews="clr-namespace:MoneyMate.Views.BudgetViews"
     Shell.NavBarIsVisible="False">
 
     <ShellContent
@@ -72,10 +73,18 @@
        Title="Modifier une transaction"
         ContentTemplate="{DataTemplate views:EditExpensePage}"
         Route="EditTransactionPage" />
-    
+
 
     <ShellContent
-        Title="Ajouter une dépense"
-        ContentTemplate="{DataTemplate views:AddExpensePage}"
-        Route="AddExpensePage" />
+    Title="Ajouter une dépense"
+    ContentTemplate="{DataTemplate views:AddExpensePage}"
+    Route="AddExpensePage" />
+
+    <ShellContent
+    Title="Liste des budgets"
+    ContentTemplate="{DataTemplate budgetviews:BudgetListPage}"
+    Route="BudgetListPage" />
+
+
+
 </Shell>

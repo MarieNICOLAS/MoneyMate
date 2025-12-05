@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:MoneyMate.Components"
+             xmlns:viewmodels="clr-namespace:MoneyMate.ViewModels"
+             x:Class="MoneyMate.Views.BudgetViews.BudgetListPage">
+
+    <ContentPage.BindingContext>
+        <viewmodels:BudgetViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid RowDefinitions="Auto,*,Auto"
+          BackgroundColor="{StaticResource BackgroundLight}">
+
+        <components:HeaderAuthenticated Grid.Row="0" />
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20" Spacing="15">
+
+                <Label Text="Vos budgets"
+                       FontSize="26"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource Primary}" />
+
+                <CollectionView ItemsSource="{Binding Budgets}"
+                                SelectionMode="Single"
+                                SelectionChanged="OnBudgetSelected">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame CornerRadius="18"
+                                   Padding="15"
+                                   Margin="0,5"
+                                   BackgroundColor="White"
+                                   HasShadow="True"
+                                   BorderColor="{StaticResource Primary}">
+
+                                <VerticalStackLayout>
+
+                                    <Label Text="{Binding DisplayName}"
+                                           FontSize="20"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource Primary}" />
+
+                                    <Label Text="{Binding TotalAmount, StringFormat='Montant : {0}€'}"
+                                           FontSize="16" />
+
+                                </VerticalStackLayout>
+
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <components:Navbar Grid.Row="2" />
+    </Grid>
+
+</ContentPage>
