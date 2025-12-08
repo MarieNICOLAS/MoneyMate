@@ -31,7 +31,7 @@ namespace MoneyMate.Models
         public int Year { get; set; }
 
         // Montant déjà dépensé (sera mis à jour automatiquement)
-        [NotNull]
+        [Ignore]
         public double SpentAmount { get; set; } = 0;
 
         // Montant restant (calculé à la volée)
