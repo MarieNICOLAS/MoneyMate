@@ -1,13 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using MoneyMate.Models;
 using MoneyMate.Services;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MoneyMate.ViewModels
 {
@@ -15,113 +9,125 @@ namespace MoneyMate.ViewModels
     {
         private readonly ExpenseService _expenseService;
         private readonly BudgetService _budgetService;
-        private readonly CategoryService _categoryService;
+        private readonly BudgetCategoryService _pivotService;
 
-        // --- Champs privés ---
-        private double amount;
-        private Budget selectedBudget;
-        private Category selectedCategory;
-        private string description;
-        private DateTime date = DateTime.Now;
-        private string message;
-        private Color messageColor = Colors.Transparent;
+        // -----------------------------
+        // PROPRIÉTÉS
+        // -----------------------------
 
-        // --- Collections ---
-        public ObservableCollection<Budget> Budgets { get; } = new();
-        public ObservableCollection<Category> Categories { get; } = new();
-
-        // --- Propriétés bindées ---
-        public double Amount
+        private Budget? _selectedBudget;
+        public Budget? SelectedBudget
         {
-            get => amount;
-            set => SetProperty(ref amount, value);
-        }
-
-        public Budget SelectedBudget
-        {
-            get => selectedBudget;
+            get => _selectedBudget;
             set
             {
-                if (SetProperty(ref selectedBudget, value))
-                    LoadCategories(); 
+                if (SetProperty(ref _selectedBudget, value))
+                {
+                    _ = LoadBudgetCategories();
+                }
             }
         }
 
-        public Category SelectedCategory
+        private (BudgetCategory pivot, Category category)? _selectedPivot;
+        public (BudgetCategory pivot, Category category)? SelectedPivot
         {
-            get => selectedCategory;
-            set => SetProperty(ref selectedCategory, value);
+            get => _selectedPivot;
+            set => SetProperty(ref _selectedPivot, value);
         }
 
+        private double _amount;
+        public double Amount
+        {
+            get => _amount;
+            set => SetProperty(ref _amount, value);
+        }
+
+        private string _description = string.Empty;
         public string Description
         {
-            get => description;
-            set => SetProperty(ref description, value);
+            get => _description;
+            set => SetProperty(ref _description, value);
         }
 
+        private DateTime _date = DateTime.Now;
         public DateTime Date
         {
-            get => date;
-            set => SetProperty(ref date, value);
+            get => _date;
+            set => SetProperty(ref _date, value);
         }
 
-        public string Message
-        {
-            get => message;
-            set => SetProperty(ref message, value);
-        }
+        // Pour affichage liste des budgets
+        public ObservableCollection<Budget> Budgets { get; } = new();
 
-        public Color MessageColor
-        {
-            get => messageColor;
-            set => SetProperty(ref messageColor, value);
-        }
+        // Pour affichage liste des catégories du budget
+        public ObservableCollection<(BudgetCategory pivot, Category category)> BudgetCategories { get; } = new();
 
-        // --- Commandes ---
-        public IRelayCommand AddExpenseCommand { get; }
+        // -----------------------------
+        // COMMANDES
+        // -----------------------------
+        public IAsyncRelayCommand AddExpenseCommand { get; }
 
-        // --- Constructeur ---
-        public ExpenseViewModel(ExpenseService expenseService, BudgetService budgetService, CategoryService categoryService)
+        // -----------------------------
+        // CONSTRUCTEUR
+        // -----------------------------
+        public ExpenseViewModel()
         {
-            _expenseService = expenseService;
-            _budgetService = budgetService;
-            _categoryService = categoryService;
+            _expenseService = new ExpenseService(App.Database);
+            _budgetService = new BudgetService(App.Database);
+            _pivotService = new BudgetCategoryService(App.Database);
 
             AddExpenseCommand = new AsyncRelayCommand(AddExpenseAsync);
-            LoadBudgets();
 
+            _ = InitializeAsync();
         }
 
-        // --- Méthodes ---
-        private async Task LoadBudgets()
+        // -----------------------------
+        // INITIALISATION
+        // -----------------------------
+        private async Task InitializeAsync()
         {
             var budgets = await _budgetService.GetBudgetsAsync();
+
             Budgets.Clear();
-            foreach (var b in budgets)
+            foreach (var b in budgets.OrderByDescending(b => b.Year).ThenByDescending(b => b.Month))
                 Budgets.Add(b);
+
+            SelectedBudget = Budgets.FirstOrDefault();
         }
 
-        private async Task LoadCategories()
+        // -----------------------------
+        // CHARGEMENT DES PIVOTS (BudgetCategory)
+        // -----------------------------
+        private async Task LoadBudgetCategories()
         {
-            Categories.Clear();
-            if (SelectedBudget != null)
-            {
-                var categories = await _categoryService.GetCategoriesByBudgetAsync(SelectedBudget.Id);
-                foreach (var c in categories)
-                    Categories.Add(c);
-            }
+            if (SelectedBudget == null)
+                return;
+
+            var pivots = await _pivotService.GetCategoriesForBudgetAsync(SelectedBudget.Id);
+
+            BudgetCategories.Clear();
+
+            foreach (var p in pivots)
+                BudgetCategories.Add(p);
+
+            SelectedPivot = null;
         }
 
+        // -----------------------------
+        // AJOUT D'UNE DÉPENSE
+        // -----------------------------
         private async Task AddExpenseAsync()
         {
-            // Validation
+            if (IsBusy)
+                return;
+
             if (SelectedBudget == null)
             {
                 ShowMessage("Veuillez sélectionner un budget.", Colors.Red);
                 return;
             }
 
-            if (SelectedCategory == null)
+            if (SelectedPivot == null)
             {
                 ShowMessage("Veuillez sélectionner une catégorie.", Colors.Red);
                 return;
@@ -129,37 +135,66 @@ namespace MoneyMate.ViewModels
 
             if (Amount <= 0)
             {
-                ShowMessage("Le montant doit être supérieur à 0.", Colors.Red);
+                ShowMessage("Veuillez entrer un montant valide.", Colors.Red);
                 return;
             }
 
-            var expense = new Expense
-            {
-                BudgetId = SelectedBudget.Id,
-                CategoryId = SelectedCategory.Id,
-                Amount = Amount,
-                Description = Description,
-                Date = Date,
-                CreatedAt = DateTime.Now
-            };
-
             try
             {
-                await _expenseService.AddExpenseAsync(expense);
-                ShowMessage("Dépense ajoutée avec succès !", Colors.Green);
+                IsBusy = true;
 
-                // Reset formulaire
-                Amount = 0;
-                SelectedBudget = null;
-                SelectedCategory = null;
-                Description = string.Empty;
-                Date = DateTime.Now;
+                var expense = new Expense
+                {
+                    BudgetId = SelectedBudget.Id,
+                    BudgetCategoryId = SelectedPivot.Value.pivot.Id,
+                    CategoryId = SelectedPivot.Value.category.Id,
+                    Amount = Amount,
+                    Description = Description?.Trim() ?? "",
+                    Date = Date,
+                    CreatedAt = DateTime.Now
+                };
+
+                await _expenseService.AddExpenseAsync(expense);
+
+                ShowMessage("Dépense ajoutée avec succès.", Colors.Green);
+                ResetForm();
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
-                ShowMessage($"Erreur : {ex.Message}", Colors.Red);
+                ShowMessage(ex.Message, Colors.Red);
             }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        // -----------------------------
+        // RESET FORMULAIRE
+        // -----------------------------
+        private void ResetForm()
+        {
+            Amount = 0;
+            Description = "";
+            Date = DateTime.Now;
+            SelectedPivot = null;
+        }
+
+        // -----------------------------
+        // MESSAGE UI
+        // -----------------------------
+        private string _message = string.Empty;
+        public string Message
+        {
+            get => _message;
+            set => SetProperty(ref _message, value);
+        }
+
+        private Color _messageColor = Colors.Transparent;
+        public Color MessageColor
+        {
+            get => _messageColor;
+            set => SetProperty(ref _messageColor, value);
         }
 
         private void ShowMessage(string text, Color color)
