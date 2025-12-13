@@ -14,10 +14,6 @@ namespace MoneyMate.Models
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
-        // Référence au budget auquel cette catégorie appartient
-        [Indexed]
-        public int BudgetId { get; set; }
-
         // Nom de la catégorie (ex : Alimentation, Logement)
         [MaxLength(100), NotNull]
         public string Name { get; set; } = string.Empty;
@@ -51,7 +47,6 @@ namespace MoneyMate.Models
         // Constructeur pratique
         public Category(int budgetId, string name, double percentage, string colorHex = "#CCCCCC")
         {
-            BudgetId = budgetId;
             Name = name;
             Percentage = percentage;
             ColorHex = colorHex;
