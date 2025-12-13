@@ -1,31 +1,32 @@
-﻿using Microsoft.Maui.Controls;
+﻿using CommunityToolkit.Mvvm.Input;
 using MoneyMate.Services;
-using System.Windows.Input;
 
 namespace MoneyMate.ViewModels.ComponentsViewModel
 {
-    public class HeaderViewModel : BaseViewModel
+    public partial class HeaderViewModel : BaseViewModel
     {
-        public ICommand GoNotificationsCommand { get; }
-        public ICommand LogoutCommand { get; }
-        public ICommand LoginCommand { get; }
-
-        public HeaderViewModel()
+        // CONSTRUCTEUR ➜ Injection complète
+        public HeaderViewModel(
+            AuthService authService,
+            BudgetService budgetService,
+            ExpenseService expenseService,
+            CategoryService categoryService)
+            : base(authService, budgetService, expenseService, categoryService)
         {
-            GoNotificationsCommand = new Command(async () => await Shell.Current.GoToAsync("//NotificationsPage"));
-            LogoutCommand = new Command(ExecuteLogout);
-            LoginCommand = new Command(async () => await ExecuteLogin());
         }
 
-        private async void ExecuteLogout()
+        // 1️. Aller aux notifications
+        [RelayCommand]
+        private async Task GoNotificationsAsync()
         {
-            AuthService.Logout();
-            await Shell.Current.GoToAsync("//MainPage");
+            await Shell.Current.GoToAsync("//NotificationsPage");
         }
 
-        private async Task ExecuteLogin()
+
+        // 3️. Aller au login
+        [RelayCommand]
+        private async Task GoLoginAsync()
         {
-            // 🚀 Navigation directe vers la page de connexion
             await Shell.Current.GoToAsync("//LoginPage");
         }
     }

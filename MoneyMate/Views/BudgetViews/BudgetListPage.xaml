@@ -5,9 +5,6 @@
              xmlns:viewmodels="clr-namespace:MoneyMate.ViewModels"
              x:Class="MoneyMate.Views.BudgetViews.BudgetListPage">
 
-    <ContentPage.BindingContext>
-        <viewmodels:BudgetViewModel />
-    </ContentPage.BindingContext>
 
     <Grid RowDefinitions="Auto,*,Auto"
           BackgroundColor="{StaticResource BackgroundLight}">

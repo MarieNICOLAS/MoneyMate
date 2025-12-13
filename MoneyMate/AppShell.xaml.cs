@@ -21,7 +21,7 @@ namespace MoneyMate
 
             if (user != null)
             {
-                await Shell.Current.GoToAsync("//DashboardPage");
+                await Current.GoToAsync("//DashboardPage");
             }
         }
     }

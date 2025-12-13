@@ -5,7 +5,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MoneyMate"
     xmlns:views="clr-namespace:MoneyMate.Views"
-    xmlns:budgetviews="clr-namespace:MoneyMate.Views.BudgetViews"
+    xmlns:viewsBudget="clr-namespace:MoneyMate.Views.BudgetViews"
+    xmlns:viewsCategory="clr-namespace:MoneyMate.Views.CategoriesViews"
+    xmlns:viewsExpense="clr-namespace:MoneyMate.Views.ExpensesViews"
     Shell.NavBarIsVisible="False">
 
     <ShellContent
@@ -27,38 +29,46 @@
         Title="Dashboard"
         ContentTemplate="{DataTemplate views:DashboardPage}"
         Route="DashboardPage" />
+
+    <ShellContent
+        Title="Ajouter un budget"
+        ContentTemplate="{DataTemplate viewsBudget:AddBudgetPage}"
+        Route="AddBudgetPage" />
     
     <ShellContent
         Title="Modifier un budget"
-        ContentTemplate="{DataTemplate views:EditBudgetPage}"
+        ContentTemplate="{DataTemplate viewsBudget:EditBudgetPage}"
         Route="EditBudgetPage" />
+
+    <ShellContent
+        Title="Ajouter une catégorie"
+        ContentTemplate="{DataTemplate viewsCategory:AddCategoryPage}"
+        Route="AddCategoryPage" />
     
     <ShellContent
-        Title="Ajouter un budget"
-        ContentTemplate="{DataTemplate views:AddBudgetPage}"
-        Route="AddBudgetPage" />
+        Title="Ajouter une dépense"
+        ContentTemplate="{DataTemplate viewsExpense:AddExpensePage}"
+        Route="AddExpensePage" />
+
+    <ShellContent
+        Title="Modifier une catégorie"
+        ContentTemplate="{DataTemplate viewsCategory:EditCategoryPage}"
+        Route="EditCategoryPage" />
+    
+    <ShellContent
+       Title="Modifier une dépense"
+        ContentTemplate="{DataTemplate viewsExpense:EditExpensePage}"
+        Route="EditTransactionPage" />
     
     <ShellContent
         Title="Historique des transactions"
         ContentTemplate="{DataTemplate views:HistoryTransactionPage}"
         Route="HistoryTransactionPage" />
-    
-    <ShellContent
-        Title="Modifier une catégorie"
-        ContentTemplate="{DataTemplate views:EditCategoryPage}"
-        Route="EditCategoryPage" />
-    
-    <ShellContent
-        Title="Ajouter une catégorie"
-        ContentTemplate="{DataTemplate views:AddCategoryPage}"
-        Route="AddCategoryPage" />
-    
-
 
     <ShellContent
-        Title="Menu"
-        ContentTemplate="{DataTemplate views:MenuPage}"
-        Route="MenuPage" />
+        Title="Budget"
+        ContentTemplate="{DataTemplate viewsBudget:BudgetListPage}"
+        Route="BudgetListPage" />
 
     <ShellContent
         Title="Notifications"
@@ -69,22 +79,5 @@
         Title="Statistics"
         ContentTemplate="{DataTemplate views:StatisticsPage}"
         Route="StatisticsPage" />
-    <ShellContent
-       Title="Modifier une transaction"
-        ContentTemplate="{DataTemplate views:EditExpensePage}"
-        Route="EditTransactionPage" />
-
-
-    <ShellContent
-    Title="Ajouter une dépense"
-    ContentTemplate="{DataTemplate views:AddExpensePage}"
-    Route="AddExpensePage" />
-
-    <ShellContent
-    Title="Liste des budgets"
-    ContentTemplate="{DataTemplate budgetviews:BudgetListPage}"
-    Route="BudgetListPage" />
-
-
 
 </Shell>

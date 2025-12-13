@@ -1,107 +1,81 @@
-﻿using System.Windows.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using MoneyMate.Services;
-using Microsoft.Maui.Controls;
-using MoneyMate.Models;
 
 namespace MoneyMate.ViewModels.AuthViewModel
 {
-    public class LoginViewModel : BaseViewModel
+    public partial class LoginViewModel : BaseViewModel
     {
-        private readonly AuthService _authService;
+        // PROPRIÉTÉS OBSERVABLES (automatiquement générées)
+        [ObservableProperty]
+        private string email = string.Empty;
 
-        private string email;
-        private string password;
-        private string errorMessage;
+        [ObservableProperty]
+        private string password = string.Empty;
+
+        [ObservableProperty]
         private bool rememberMe;
 
-        public string Email
+        [ObservableProperty]
+        private string errorMessage = string.Empty;
+
+        // CONSTRUCTEUR
+        public LoginViewModel(
+            AuthService authService,
+            BudgetService budgetService,
+            ExpenseService expenseService,
+            CategoryService categoryService)
+            : base(authService, budgetService, expenseService, categoryService)
         {
-            get => email;
-            set { if (email != value) { email = value; OnPropertyChanged(); } }
         }
 
-        public string Password
-        {
-            get => password;
-            set { if (password != value) { password = value; OnPropertyChanged(); } }
-        }
-
-        public string ErrorMessage
-        {
-            get => errorMessage;
-            set { if (errorMessage != value) { errorMessage = value; OnPropertyChanged(); } }
-        }
-
-        public bool RememberMe
-        {
-            get => rememberMe;
-            set { if (rememberMe != value) { rememberMe = value; OnPropertyChanged(); } }
-        }
-
-        // 🔘 Commandes MVVM
-        public ICommand LoginCommand { get; }
-        public ICommand GoToSignupCommand { get; }
-        public ICommand OnBackClickedCommand { get; } 
-
-        public LoginViewModel()
-        {
-            _authService = new AuthService(App.Database);
-
-            LoginCommand = new Command(async () => await LoginAsync());
-            GoToSignupCommand = new Command(async () => await Shell.Current.GoToAsync("//SignupPage"));
-            OnBackClickedCommand = new Command(async () => await Shell.Current.GoToAsync("//MainPage")); 
-        }
-
+        // COMMANDES
+        [RelayCommand]
         private async Task LoginAsync()
         {
-            IsBusy = true;
-            ErrorMessage = string.Empty;
-
-            // 🔍 1. Validation empty
-            if (string.IsNullOrWhiteSpace(Email) ||
-                string.IsNullOrWhiteSpace(Password))
+            await RunSafeAsync(async () =>
             {
-                ErrorMessage = "Veuillez remplir tous les champs.";
-                IsBusy = false;
-                return;
-            }
+                ErrorMessage = string.Empty;
 
-            // 🔍 2. Validation email
-            if (!IsValidEmail(Email))
-            {
-                ErrorMessage = "Veuillez entrer une adresse email valide.";
-                IsBusy = false;
-                return;
-            }
+                if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+                {
+                    ErrorMessage = "Veuillez remplir tous les champs.";
+                    return;
+                }
 
-            // 🔍 3. Validation longueur mot de passe
-            if (Password.Length < 6)
-            {
-                ErrorMessage = "Le mot de passe doit contenir au moins 6 caractères.";
-                IsBusy = false;
-                return;
-            }
+                if (!IsValidEmail(Email))
+                {
+                    ErrorMessage = "Adresse email invalide.";
+                    return;
+                }
 
-            // 🔐 4. Tentative de connexion
-            var user = await _authService.LoginAsync(Email, Password, RememberMe);
+                if (Password.Length < 6)
+                {
+                    ErrorMessage = "Le mot de passe doit contenir au moins 6 caractères.";
+                    return;
+                }
 
-            if (user == null)
-            {
-                ErrorMessage = "Email ou mot de passe incorrect.";
-            }
-            else
-            {
-                user.UpdateLastLogin();
-                await App.Database.UpdateAsync(user);
+                var user = await _authService.LoginAsync(Email, Password, RememberMe);
+
+                if (user == null)
+                {
+                    ErrorMessage = "Email ou mot de passe incorrect.";
+                    return;
+                }
+
+                await ShowSuccessMessage("Connexion réussie !");
                 await Shell.Current.GoToAsync("//DashboardPage");
-            }
-
-            IsBusy = false;
+            });
         }
 
-        /// <summary>
-        /// Validation simple mais solide du format email
-        /// </summary>
+        [RelayCommand]
+        private async Task GoToSignupAsync() =>
+            await Shell.Current.GoToAsync("//SignupPage");
+
+        [RelayCommand]
+        private async Task GoBackAsync() =>
+            await Shell.Current.GoToAsync("//MainPage");
+
         private bool IsValidEmail(string email)
         {
             try
@@ -109,11 +83,7 @@ namespace MoneyMate.ViewModels.AuthViewModel
                 var addr = new System.Net.Mail.MailAddress(email);
                 return addr.Address == email;
             }
-            catch
-            {
-                return false;
-            }
+            catch { return false; }
         }
-
     }
 }

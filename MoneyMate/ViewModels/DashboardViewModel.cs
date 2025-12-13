@@ -1,10 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using Microsoft.Maui.Graphics;
+using MoneyMate.Services;
 
 namespace MoneyMate.ViewModels
 {
     public class DashboardViewModel : BaseViewModel
     {
+        // --- Propriétés simulées en attendant la vraie logique métier ---
         public double TotalBudget { get; set; } = 2000;
         public double TotalSpent { get; set; } = 1350;
         public double CurrentBalance => TotalBudget - TotalSpent;
@@ -13,18 +15,28 @@ namespace MoneyMate.ViewModels
         public double BudgetProgress => TotalSpent / TotalBudget;
         public string BudgetProgressText => $"{TotalSpent:0.##} / {TotalBudget:0.##} €";
 
-        public ObservableCollection<CategoryStat> Categories { get; set; }
+        public ObservableCollection<CategoryStat> Categories { get; } = new();
 
-        public DashboardViewModel()
+        // --- Constructeur CORRECT AVEC DI ---
+        public DashboardViewModel(
+            AuthService authService,
+            BudgetService budgetService,
+            ExpenseService expenseService,
+            CategoryService categoryService)
+            : base(authService, budgetService, expenseService, categoryService)
         {
-            Categories = new ObservableCollection<CategoryStat>
-            {
-                new("Category 1", 823.2, +8.2),
-                new("Category 2", 438.76, +7.0),
-                new("Category 3", 345.58, +2.5),
-                new("Category 4", 240.32, -6.5),
-                new("Category 5", 56.89, +1.7)
-            };
+            LoadMockData();
+        }
+
+        // --- Données factices en attendant la vraie DB ---
+        private void LoadMockData()
+        {
+            Categories.Clear();
+            Categories.Add(new CategoryStat("Category 1", 823.2, +8.2));
+            Categories.Add(new CategoryStat("Category 2", 438.76, +7.0));
+            Categories.Add(new CategoryStat("Category 3", 345.58, +2.5));
+            Categories.Add(new CategoryStat("Category 4", 240.32, -6.5));
+            Categories.Add(new CategoryStat("Category 5", 56.89, +1.7));
         }
     }
 

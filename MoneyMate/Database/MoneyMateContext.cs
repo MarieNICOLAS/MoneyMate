@@ -25,6 +25,7 @@ namespace MoneyMate.Database
             await _database.CreateTableAsync<Category>();
             await _database.CreateTableAsync<Expense>();
             await _database.CreateTableAsync<Alert>();
+            await _database.CreateTableAsync<BudgetCategory>();
         }
 
         // CRUD générique : utilisable par tous les services

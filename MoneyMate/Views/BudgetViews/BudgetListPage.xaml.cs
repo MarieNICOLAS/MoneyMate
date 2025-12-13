@@ -4,10 +4,10 @@ namespace MoneyMate.Views.BudgetViews;
 
 public partial class BudgetListPage : ContentPage
 {
-    public BudgetListPage()
+    public BudgetListPage(BudgetViewModel vm)
     {
         InitializeComponent();
-        BindingContext = new BudgetViewModel();
+        BindingContext = vm;
     }
 
     protected override async void OnAppearing()
@@ -18,11 +18,11 @@ public partial class BudgetListPage : ContentPage
         {
             await vm.LoadBudgetsAsync();
 
-            // Affiche le message de retour s'il existe
+            // Message de retour après modification/ajout
             if (!string.IsNullOrEmpty(vm.ReturnMessage))
             {
                 await DisplayAlert("Information", vm.ReturnMessage, "OK");
-                vm.ReturnMessage = null; // reset
+                vm.ReturnMessage = null;
             }
         }
     }

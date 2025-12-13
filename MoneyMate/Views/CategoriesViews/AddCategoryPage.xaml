@@ -1,158 +1,162 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:components="clr-namespace:MoneyMate.Components"
-             xmlns:viewmodels="clr-namespace:MoneyMate.ViewModels"
-             x:Name="PageRoot"
-             x:Class="MoneyMate.Views.AddCategoryPage">
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodel="clr-namespace:MoneyMate.ViewModels"
+    xmlns:components="clr-namespace:MoneyMate.Components"
+    x:Class="MoneyMate.Views.CategoriesViews.AddCategoryPage"
+    x:Name="PageRoot"
+    Title="Nouvelle catégorie"
+    x:DataType="viewmodel:CategoryViewModel">
 
-    <!-- ViewModel -->
-    <ContentPage.BindingContext>
-        <viewmodels:CategoryViewModel />
-    </ContentPage.BindingContext>
-
-    <!-- STRUCTURE GLOBALE -->
     <Grid RowDefinitions="Auto,*,Auto"
           BackgroundColor="{StaticResource BackgroundLight}">
 
-        <!-- ⭐ HEADER -->
+        <!-- HEADER -->
         <components:HeaderAuthenticated Grid.Row="0" />
 
-        <!-- ⭐ CONTENU SCROLLABLE -->
-        <ScrollView Grid.Row="1">
-            <VerticalStackLayout Style="{StaticResource MainContainer}" Spacing="15">
+        <!-- CONTENU SCROLLABLE -->
+        <ScrollView Grid.Row="1" Padding="0,0,0,40">
+            <VerticalStackLayout Padding="30"
+                                 Spacing="20"
+                                 Margin="0,0,0,80">
 
-                <!-- 🏷️ TITRE -->
-                <Label Text="Ajouter une catégorie"
+                <!-- TITRE -->
+                <Label Text="Nouvelle catégorie"
                        FontSize="24"
                        FontAttributes="Bold"
+                       HorizontalOptions="Center"
                        TextColor="{StaticResource Primary}" />
 
-                <!-- 🔤 Nom de la catégorie -->
+                <!-- NOM DE LA CATÉGORIE -->
                 <Label Text="Nom de la catégorie"
                        Style="{StaticResource FormLabel}" />
 
-                <Border Style="{StaticResource InputBorder}">
+                <Border Style="{StaticResource InputContainer}">
                     <Entry Placeholder="Ex : Alimentation"
-                           Text="{Binding Name}" />
+                           Text="{Binding Name}"
+                           Style="{StaticResource EntryForm}" />
                 </Border>
 
-                <!-- 💰 Budget -->
-                <Label Text="Budget"
-                       Style="{StaticResource FormLabel}" />
-
-                <Border Style="{StaticResource InputBorder}">
-                    <Picker ItemsSource="{Binding Budgets}"
-                            ItemDisplayBinding="{Binding DisplayName}"
-                            SelectedItem="{Binding SelectedBudget, Mode=TwoWay}"
-                            Title="Sélectionner un budget" />
-                </Border>
-
-                <!-- 🎨 Couleur -->
-                <Label Text="Couleur"
+                <!-- SÉLECTION DE COULEUR -->
+                <Label Text="Choisir une couleur"
                        Style="{StaticResource FormLabel}" />
 
                 <CollectionView
                     ItemsSource="{Binding ColorOptions}"
                     SelectedItem="{Binding SelectedColor, Mode=TwoWay}"
                     SelectionMode="Single"
-                    ItemsLayout="VerticalGrid,4"
                     Margin="0,10">
+
+                    <!-- GRILLE 4 COLONNES -->
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="4" HorizontalItemSpacing="10" VerticalItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid>
-
-                                <!-- Cercle couleur -->
+                                <!-- Cercle de couleur -->
                                 <Border
-                                    WidthRequest="50"
-                                    HeightRequest="50"
-                                    StrokeThickness="2"
-                                    Stroke="{Binding ., Converter={StaticResource SelectedColorToBorderConverter},
-                                                      ConverterParameter={Binding BindingContext.SelectedColor, Source={x:Reference PageRoot}}}"
-                                    StrokeShape="Ellipse"
+                                    WidthRequest="60"
+                                    HeightRequest="60"
+                                    StrokeThickness="3"
+                                    StrokeShape="RoundRectangle 30"
                                     BackgroundColor="{Binding .}"
-                                    Margin="8">
+                                    HorizontalOptions="Center"
+                                    Margin="5">
 
+                                    <!-- Bordure si sélectionné -->
                                     <Border.Triggers>
-
-                                        <!-- ANIMATION SCALE -->
                                         <DataTrigger TargetType="Border"
-                                                     Binding="{Binding ., Converter={StaticResource SelectedColorToBoolConverter},
-                                                                          ConverterParameter={Binding BindingContext.SelectedColor, Source={x:Reference PageRoot}}}"
-                                                     Value="True">
-                                            <Setter Property="Scale" Value="1.15"/>
+                                                     Binding="{Binding .}"
+                                                     Value="{Binding BindingContext.SelectedColor, Source={x:Reference PageRoot}}">
+                                            <Setter Property="Stroke" Value="{StaticResource Primary}"/>
+                                            <Setter Property="Scale" Value="1.1"/>
                                         </DataTrigger>
-
-                                        <DataTrigger TargetType="Border"
-                                                     Binding="{Binding ., Converter={StaticResource SelectedColorToBoolConverter},
-                                                                          ConverterParameter={Binding BindingContext.SelectedColor, Source={x:Reference PageRoot}}}"
-                                                     Value="False">
-                                            <Setter Property="Scale" Value="1"/>
-                                        </DataTrigger>
-
                                     </Border.Triggers>
 
-                                    <!-- ✔ CHECKMARK -->
-                                    <!--<Image Source="close_icon.png"
-                                           WidthRequest="24"
-                                           HeightRequest="24"
+                                    <!-- Icône check si sélectionné -->
+                                    <Label Text="✓"
+                                           FontSize="28"
+                                           FontAttributes="Bold"
+                                           TextColor="White"
                                            HorizontalOptions="Center"
                                            VerticalOptions="Center"
-                                           Opacity="{Binding ., Converter={StaticResource SelectedColorToOpacityConverter},
-                                                            ConverterParameter={Binding BindingContext.SelectedColor, Source={x:Reference PageRoot}}}" />-->
-
+                                           IsVisible="{Binding ., Converter={StaticResource EqualConverter}, ConverterParameter={Binding BindingContext.SelectedColor, Source={x:Reference PageRoot}}}" />
                                 </Border>
-
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
-
                 </CollectionView>
 
-
-                <!-- 📊 Répartition du budget (%) -->
+                <!-- RÉPARTITION DU BUDGET -->
                 <Label Text="Répartition du budget (%)"
-                    Style="{StaticResource FormLabel}" />
+                       Style="{StaticResource FormLabel}"
+                       Margin="0,20,0,0" />
 
                 <Grid ColumnDefinitions="*,Auto"
-                  RowDefinitions="Auto">
+                      RowDefinitions="Auto">
 
-                    <Slider Minimum="0"
-                        Maximum="100"
-                        Value="{Binding Percentage, Mode=TwoWay}"
-                        ThumbColor="{StaticResource Primary}"
-                        MaximumTrackColor="{StaticResource Secondary}"
-                        MinimumTrackColor="{StaticResource Primary}" />
+                    <Slider Grid.Column="0"
+                            Minimum="0"
+                            Maximum="100"
+                            Value="{Binding Percentage, Mode=TwoWay}"
+                            ThumbColor="{StaticResource Primary}"
+                            MaximumTrackColor="{StaticResource Secondary}"
+                            MinimumTrackColor="{StaticResource Primary}" />
 
-                    <!-- Valeur (%) -->
                     <Label Grid.Column="1"
-                       Text="{Binding Percentage, StringFormat='{0:F0}%'}"
-                       VerticalOptions="Center"
-                       FontAttributes="Bold"
-                       TextColor="{StaticResource Primary}" />
-
+                           Text="{Binding Percentage, StringFormat='{0:F0}%'}"
+                           VerticalOptions="Center"
+                           FontAttributes="Bold"
+                           FontSize="18"
+                           Margin="10,0,0,0"
+                           TextColor="{StaticResource Primary}" />
                 </Grid>
 
-                <!-- 💶 Montant dynamique -->
-                <Label Text="{Binding AmountPreview, StringFormat='Montant : {0:F2} €'}"
-                       FontAttributes="Bold"
-                        HorizontalOptions="End"
-                       TextColor="{StaticResource Primary}" />
+                <!-- MONTANT PRÉVU -->
+                <Border BackgroundColor="{StaticResource Primary}"
+                        Padding="15"
+                        Stroke="{StaticResource Primary}"
+                        StrokeShape="RoundRectangle 10"
+                        Margin="0,10,0,0">
+                    <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Label Text="Montant prévu :"
+                               TextColor="White"
+                               FontSize="16"
+                               VerticalOptions="Center" />
+                        <Label Text="{Binding AmountPreview, StringFormat='{0:F2} €'}"
+                               TextColor="White"
+                               FontAttributes="Bold"
+                               FontSize="20"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                </Border>
 
-                <!-- ⭐ BOUTON -->
-                <Button Text="Ajouter la catégorie"
-                        Style="{StaticResource PrimaryButton}"
-                        Command="{Binding AddCategoryCommand}" />
-                <Button Text="Annuler"
-                     BackgroundColor="{StaticResource Secondary}"
-                     Style="{StaticResource PrimaryButton}"
-                     Command="{Binding CancelCommand}" />
+                <!-- MESSAGE D'ERREUR/SUCCÈS -->
+                <Label Text="{Binding Message}"
+                       TextColor="{Binding MessageColor}"
+                       HorizontalOptions="Center"
+                       FontSize="14"
+                       FontAttributes="Italic"
+                       IsVisible="{Binding Message, Converter={StaticResource StringNotEmptyConverter}}" />
+
+                <!-- BOUTONS -->
+                <VerticalStackLayout Spacing="12" Margin="0,20,0,0">
+                    <Button Text="Créer la catégorie"
+                            Command="{Binding AddCategoryCommand}"
+                            Style="{StaticResource PrimaryButton}" />
+
+                    <Button Text="Annuler"
+                            Command="{Binding CancelCommand}"
+                            Style="{StaticResource OutlineButton}" />
+                </VerticalStackLayout>
 
             </VerticalStackLayout>
         </ScrollView>
 
-        <!-- ⭐ NAVBAR -->
+        <!-- NAVBAR -->
         <components:Navbar Grid.Row="2" />
 
     </Grid>

@@ -4,13 +4,8 @@
              xmlns:components="clr-namespace:MoneyMate.Components"
              xmlns:viewmodels="clr-namespace:MoneyMate.ViewModels"
              xmlns:sys="clr-namespace:System;assembly=netstandard"
-             x:Class="MoneyMate.Views.EditBudgetPage"
+             x:Class="MoneyMate.Views.BudgetViews.EditBudgetPage"
              x:Name="PageRoot">
-
-    <!-- ViewModel -->
-    <ContentPage.BindingContext>
-        <viewmodels:BudgetViewModel />
-    </ContentPage.BindingContext>
 
     <!-- STRUCTURE GLOBALE -->
     <Grid RowDefinitions="Auto,*,Auto"

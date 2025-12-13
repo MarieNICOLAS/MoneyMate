@@ -1,9 +1,29 @@
-namespace MoneyMate.Views;
+using MoneyMate.ViewModels;
 
-public partial class EditExpensePage : ContentPage
+namespace MoneyMate.Views.ExpensesViews
 {
-	public EditExpensePage()
-	{
-		InitializeComponent();
-	}
+    [QueryProperty(nameof(ExpenseId), "expenseId")]
+    public partial class EditExpensePage : ContentPage
+    {
+        public int ExpenseId { get; set; }
+
+        private readonly ExpenseViewModel _vm;
+
+        public EditExpensePage(ExpenseViewModel vm)
+        {
+            InitializeComponent();
+            BindingContext = _vm = vm;
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            // Injecter l’ID dans le ViewModel
+            _vm.ExpenseId = ExpenseId;
+
+            // Charger la dépense depuis la DB
+            await _vm.LoadExpenseAsync();
+        }
+    }
 }

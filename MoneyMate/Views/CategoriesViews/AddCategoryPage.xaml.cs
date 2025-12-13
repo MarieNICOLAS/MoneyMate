@@ -1,6 +1,6 @@
 using MoneyMate.ViewModels;
 
-namespace MoneyMate.Views;
+namespace MoneyMate.Views.CategoriesViews;
 
 public partial class AddCategoryPage : ContentPage
 {

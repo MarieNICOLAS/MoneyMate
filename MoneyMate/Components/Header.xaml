@@ -4,27 +4,24 @@
              x:Class="MoneyMate.Components.Header"
              BackgroundColor="{StaticResource PrimaryLight}"
              HeightRequest="50"
-             HorizontalOptions="Fill"
-             >
+             HorizontalOptions="Fill">
 
-    <Border
-        BackgroundColor="{StaticResource PrimaryLight}"
-        HeightRequest="50"
-        Margin="0"
-        Padding="0"
-        StrokeThickness="0">
+    <Border BackgroundColor="{StaticResource PrimaryLight}"
+            HeightRequest="50"
+            Padding="0"
+            StrokeThickness="0">
         <Border.Shadow>
             <Shadow Brush="Black"
-                Offset="0,4"
-                Radius="6"
-                Opacity="0.3" />
+                    Offset="0,4"
+                    Radius="6"
+                    Opacity="0.3" />
         </Border.Shadow>
-        
+
         <Grid RowDefinitions="Auto,Auto">
 
             <!-- BARRE PRINCIPALE -->
             <Grid Grid.Row="0"
-                  ColumnDefinitions="Auto,*,Auto"
+                  ColumnDefinitions="Auto,*"
                   Padding="20,10"
                   VerticalOptions="Center"
                   HorizontalOptions="Fill">
@@ -44,7 +41,7 @@
 
             </Grid>
 
-            <!-- 🌫️ Effet d’ombre légère (simulation du flottant) -->
+            <!-- Ombre esthétique -->
             <BoxView Grid.Row="1"
                      HeightRequest="8"
                      Opacity="0.3">

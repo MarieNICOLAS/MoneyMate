@@ -1,58 +1,96 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MoneyMate.Views.AddExpensePage"
-             Title="AddExpensePage">
-    <ScrollView>
-        <VerticalStackLayout Style="{StaticResource MainContainer}">
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:components="clr-namespace:MoneyMate.Components"
+    x:Class="MoneyMate.Views.ExpensesViews.AddExpensePage"
+    Title="Ajouter une dépense">
 
-            <Label Text="Ajouter une dépense"
-                   FontSize="24"
-                   FontAttributes="Bold"
-                   TextColor="{StaticResource Primary}" />
 
-            <!-- Description -->
-            <Label Text="Description" Style="{StaticResource FormLabel}" />
-            <Border Style="{StaticResource InputBorder}">
-                <Entry Placeholder="Ex : courses, essence..."
-                       Text="{Binding Description}" />
-            </Border>
+    <Grid RowDefinitions="Auto,*,Auto">
 
-            <!-- Montant -->
-            <Label Text="Montant (€)" Style="{StaticResource FormLabel}" />
-            <Border Style="{StaticResource InputBorder}">
-                <Entry Placeholder="Ex : 45.90"
-                       Keyboard="Numeric"
-                       Text="{Binding Amount}" />
-            </Border>
+        <!-- HEADER AUTHENTIFIÉ -->
+        <components:HeaderAuthenticated Grid.Row="0" />
 
-            <Label Text="Budget" Style="{StaticResource FormLabel}" />
-            <Picker Title="Sélectionner un budget"
-                    ItemsSource="{Binding Budgets}"
-                    SelectedItem="{Binding SelectedBudget, Mode=TwoWay}"
-                    ItemDisplayBinding="{Binding DisplayName}" />
+        <!-- CONTENU -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="25" Spacing="18">
 
-            <Label Text="Catégorie" Style="{StaticResource FormLabel}" />
-            <Picker Title="Choisir une catégorie"
-                    ItemsSource="{Binding Categories}"
-                    SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
-                    ItemDisplayBinding="{Binding Name}" />
-            
-            <!--Prendre les dates sur l'année actuelle-->
-            <Label Text="Date"
-                   Style="{StaticResource FormLabel}" />
-            <DatePicker Date="{Binding Date}"
-                        MinimumDate="2023-01-01"
-                        MaximumDate="2027-12-31" />
-            
-            <Label Text="{Binding Message}"
-                   TextColor="{Binding MessageColor}"
-                   HorizontalOptions="Center" />
+                <Label Text="Ajouter une dépense"
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource Primary}" />
 
-            <Button Text="Ajouter"
-                    Command="{Binding AddExpenseCommand}"
-                    Style="{StaticResource PrimaryButton}" />
+                <!-- BUDGET -->
+                <Label Text="Budget" 
+                       Style="{StaticResource FormLabel}" />
 
-        </VerticalStackLayout>
-    </ScrollView>
+                <Border Style="{StaticResource InputContainer}">
+                    <Picker ItemsSource="{Binding Budgets}"
+                            SelectedItem="{Binding SelectedBudget}"
+                            ItemDisplayBinding="{Binding Name}"
+                            Title="Sélectionner un budget"
+                            Style="{StaticResource EntryForm}" />
+                </Border>
+
+                <!-- CATÉGORIE -->
+                <Label Text="Catégorie"
+                       Style="{StaticResource FormLabel}" />
+
+                <Border Style="{StaticResource InputContainer}">
+                    <Picker ItemsSource="{Binding Categories}"
+                            SelectedItem="{Binding SelectedCategory}"
+                            ItemDisplayBinding="{Binding Name}"
+                            Title="Sélectionner une catégorie"
+                            Style="{StaticResource EntryForm}" />
+                </Border>
+
+                <!-- MONTANT -->
+                <Label Text="Montant (€)"
+                       Style="{StaticResource FormLabel}" />
+
+                <Border Style="{StaticResource InputContainer}">
+                    <Entry Keyboard="Numeric"
+                           Placeholder="0.00"
+                           Text="{Binding Amount}"
+                           Style="{StaticResource EntryForm}" />
+                </Border>
+
+                <!-- DESCRIPTION -->
+                <Label Text="Description"
+                       Style="{StaticResource FormLabel}" />
+
+                <Border Style="{StaticResource InputContainer}">
+                    <Entry Placeholder="Ex: Courses, Restaurant..."
+                           Text="{Binding Description}"
+                           Style="{StaticResource EntryForm}" />
+                </Border>
+
+                <!-- DATE -->
+                <Label Text="Date"
+                       Style="{StaticResource FormLabel}" />
+
+                <Border Style="{StaticResource InputContainer}">
+                    <DatePicker Date="{Binding Date}" />
+                </Border>
+
+                <!-- MESSAGE -->
+                <Label Text="{Binding Message}"
+                       TextColor="{Binding MessageColor}"
+                       HorizontalOptions="Center"
+                       FontSize="13"
+                       Margin="0,5" />
+
+                <!-- BOUTON AJOUTER -->
+                <Button Text="Ajouter la dépense"
+                        Command="{Binding AddExpenseCommand}"
+                        Style="{StaticResource PrimaryButton}" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- NAVBAR -->
+        <components:Navbar Grid.Row="2" />
+
+    </Grid>
 </ContentPage>

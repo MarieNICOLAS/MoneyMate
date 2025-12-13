@@ -2,14 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:components="clr-namespace:MoneyMate.Components"
-             xmlns:viewmodels="clr-namespace:MoneyMate.ViewModels"
-             x:Name="PageRoot"
-             x:Class="MoneyMate.Views.EditCategoryPage">
-
-    <!-- ViewModel -->
-    <ContentPage.BindingContext>
-        <viewmodels:CategoryViewModel />
-    </ContentPage.BindingContext>
+             x:Class="MoneyMate.Views.CategoriesViews.EditCategoryPage">
+  
 
     <!-- STRUCTURE GLOBALE -->
     <Grid RowDefinitions="Auto,*,Auto"

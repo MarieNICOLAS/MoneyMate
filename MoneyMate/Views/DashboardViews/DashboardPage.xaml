@@ -6,10 +6,6 @@
              x:Class="MoneyMate.Views.DashboardPage"
              Title="Dashboard">
 
-    <ContentPage.BindingContext>
-        <viewmodel:DashboardViewModel />
-    </ContentPage.BindingContext>
-
     <Grid RowDefinitions="Auto,*,Auto"
           BackgroundColor="{StaticResource White}">
 

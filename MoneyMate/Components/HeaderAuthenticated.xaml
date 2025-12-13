@@ -65,7 +65,7 @@
                              Command="{Binding LogoutCommand}" />
             </Grid>
 
-            <!-- 🌫️ Ombre légère (effet de flottant sous le header) -->
+            <!-- 🌫️ Ombre légère (effet flottant sous le header) -->
             <BoxView Grid.Row="1"
                      HeightRequest="8"
                      Opacity="0.3">

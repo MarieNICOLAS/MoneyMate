@@ -1,6 +1,6 @@
 using MoneyMate.ViewModels;
 
-namespace MoneyMate.Views;
+namespace MoneyMate.Views.BudgetViews;
 
 public partial class AddBudgetPage : ContentPage
 {

@@ -1,101 +1,143 @@
-﻿using System.Windows.Input;
-using Microsoft.Maui.Controls;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using MoneyMate.Services;
-using MoneyMate.Models;
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace MoneyMate.ViewModels.AuthViewModel
 {
-    public class SignupViewModel : BaseViewModel
+    public partial class SignupViewModel : BaseViewModel
     {
-        private readonly AuthService _authService;
+        // 1. PROPRIÉTÉS OBSERVABLES
+        
+        [ObservableProperty]
+        private string name = string.Empty;
 
-        private string name;
-        private string email;
-        private string password;
-        private string message;
+        [ObservableProperty]
+        private string email = string.Empty;
+
+        [ObservableProperty]
+        private string password = string.Empty;
+
+        // Message affiché dans la page
+        [ObservableProperty]
+        private string message = string.Empty;
+
+        [ObservableProperty]
         private Color messageColor = Colors.Transparent;
 
-        public string Name
+
+        // 2. CONSTRUCTEUR (DÉPENDANCES)
+        public SignupViewModel(
+            AuthService authService,
+            BudgetService budgetService,
+            ExpenseService expenseService,
+            CategoryService categoryService)
+            : base(authService, budgetService, expenseService, categoryService)
         {
-            get => name;
-            set { if (name != value) { name = value; OnPropertyChanged(); } }
         }
 
-        public string Email
-        {
-            get => email;
-            set { if (email != value) { email = value; OnPropertyChanged(); } }
-        }
 
-        public string Password
-        {
-            get => password;
-            set { if (password != value) { password = value; OnPropertyChanged(); } }
-        }
+        // 3. COMMANDES
 
-        public string Message
-        {
-            get => message;
-            set { if (message != value) { message = value; OnPropertyChanged(); } }
-        }
-
-        public Color MessageColor
-        {
-            get => messageColor;
-            set { if (messageColor != value) { messageColor = value; OnPropertyChanged(); } }
-        }
-
-        // 🔘 Commandes MVVM
-        public ICommand SignupCommand { get; }
-        public ICommand OnBackClickedCommand { get; }
-        public ICommand GoToLoginCommand { get; }
-
-        public SignupViewModel()
-        {
-            _authService = new AuthService(App.Database);
-            SignupCommand = new Command(async () => await SignupAsync());
-            OnBackClickedCommand = new Command(async () => await Shell.Current.GoToAsync("//MainPage"));
-            GoToLoginCommand = new Command(async () => await Shell.Current.GoToAsync("//LoginPage"));
-        }
-
+        [RelayCommand]
         private async Task SignupAsync()
         {
-            IsBusy = true;
-            Message = string.Empty;
-            MessageColor = Colors.Transparent;
-
-            if (string.IsNullOrWhiteSpace(Name) ||
-                string.IsNullOrWhiteSpace(Email) ||
-                string.IsNullOrWhiteSpace(Password))
+            await RunSafeAsync(async () =>
             {
-                Message = "Veuillez remplir tous les champs.";
-                MessageColor = Colors.Red;
-                IsBusy = false;
-                return;
-            }
+                Message = string.Empty;
+                MessageColor = Colors.Transparent;
 
-            var result = await _authService.RegisterAsync(Email, Password, Name);
+                // === VALIDATION ===
+                if (string.IsNullOrWhiteSpace(Name) ||
+                    string.IsNullOrWhiteSpace(Email) ||
+                    string.IsNullOrWhiteSpace(Password))
+                {
+                    Message = "Veuillez remplir tous les champs.";
+                    MessageColor = Colors.Red;
+                    return;
+                }
 
-            if (!result)
-            {
-                Message = "⚠️ Cet email est déjà utilisé.";
-                MessageColor = Colors.Red;
-            }
-            else
-            {
+                if (!IsValidEmail(Email))
+                {
+                    Message = "Adresse email invalide.";
+                    MessageColor = Colors.Red;
+                    return;
+                }
+
+                if (!IsStrongPassword(Password))
+                {
+                    Message = "Mot de passe trop faible.";
+                    MessageColor = Colors.Red;
+                    return;
+                }
+
+                // === INSCRIPTION ===
+                var result = await _authService.RegisterAsync(Email, Password, Name);
+
+                if (!result)
+                {
+                    Message = "⚠️ Cet email est déjà utilisé.";
+                    MessageColor = Colors.Red;
+                    return;
+                }
+
+                // === SUCCÈS ===
                 Message = "✅ Compte créé avec succès ! Redirection...";
                 MessageColor = Colors.Green;
 
-                // Réinitialisation des champs
+                // Nettoyage des champs
                 Name = Email = Password = string.Empty;
 
                 await Task.Delay(1000);
                 await Shell.Current.GoToAsync("//LoginPage");
-            }
-
-            IsBusy = false;
+            });
         }
 
 
+        [RelayCommand]
+        private async Task GoBackAsync()
+        {
+            await Shell.Current.GoToAsync("//MainPage");
+        }
+
+        [RelayCommand]
+        private async Task GoToLoginAsync()
+        {
+            await Shell.Current.GoToAsync("//LoginPage");
+        }
+
+
+        // 4. VALIDATIONS
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        // Validation complète conforme sécurité (behavior)
+        private bool IsStrongPassword(string password)
+        {
+            if (password.Length < 8)
+                return false;
+
+            if (!Regex.IsMatch(password, "[A-Z]")) // majuscule
+                return false;
+
+            if (!Regex.IsMatch(password, "[0-9]")) // chiffre
+                return false;
+
+            if (!Regex.IsMatch(password, "[^a-zA-Z0-9]")) // caractère spécial
+                return false;
+
+            return true;
+        }
     }
 }
