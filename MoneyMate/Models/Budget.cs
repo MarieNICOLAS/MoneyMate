@@ -5,6 +5,7 @@ namespace MoneyMate.Models
 {
     /// <summary>
     /// Représente le budget mensuel d’un utilisateur.
+    /// Les dépenses sont calculées à partir des BudgetCategory, pas stockées ici.
     /// </summary>
     [Table("Budgets")]
     public class Budget
@@ -24,6 +25,7 @@ namespace MoneyMate.Models
         [NotNull]
         public int Year { get; set; }
 
+        // Calculés à l’usage, pas stockés dans la DB
         [Ignore]
         public double SpentAmount { get; set; }
 
@@ -31,7 +33,7 @@ namespace MoneyMate.Models
         public double RemainingAmount => TotalAmount - SpentAmount;
 
         [Ignore]
-        public string DisplayName => $"{TotalAmount} € ({Month}/{Year})";
+        public string DisplayName => $"{TotalAmount} € - {Month}/{Year}";
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
@@ -52,16 +54,6 @@ namespace MoneyMate.Models
         public bool IsForCurrentMonth()
         {
             return Month == DateTime.Now.Month && Year == DateTime.Now.Year;
-        }
-
-        public void ResetForNewMonth(double newAmount)
-        {
-            TotalAmount = newAmount;
-            SpentAmount = 0;
-            Month = DateTime.Now.Month;
-            Year = DateTime.Now.Year;
-            IsActive = true;
-            CreatedAt = DateTime.Now;
         }
     }
 }

@@ -1,9 +1,5 @@
 ﻿using MoneyMate.Database;
 using MoneyMate.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MoneyMate.Services
 {
@@ -14,9 +10,6 @@ namespace MoneyMate.Services
         public BudgetCategoryService(MoneyMateContext db)
         {
             _db = db;
-
-            // Assure que la table BudgetCategories existe
-            _db.CreateTableAsync<BudgetCategory>().Wait();
         }
 
         // ------------------------------------------
