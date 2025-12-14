@@ -18,7 +18,7 @@
         </ScrollView>
 
         <!-- 🌟 NAVBAR -->
-        <components:Navbar Grid.Row="2" />
+        <components:Footer Grid.Row="2" />
 
     </Grid>
 
