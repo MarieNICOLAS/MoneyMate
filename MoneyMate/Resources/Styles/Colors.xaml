@@ -1,34 +1,22 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <!-- 🎨 PALETTE PRINCIPALE -->
-    <Color x:Key="Primary">#26658C</Color>
-    <Color x:Key="PrimaryLight">#54ACBF</Color>
-    <Color x:Key="PrimaryDark">#023859</Color>
-
-    <!-- 🎨 ACCENTS (pastel, doux) -->
-    <Color x:Key="Accent">#A7EBF2</Color>
-    <Color x:Key="AccentSoft">#CFF6FA</Color>
-
-    <!-- 🎨 BACKGROUNDS -->
-    <Color x:Key="BackgroundLight">#F7FAFC</Color>
-    <Color x:Key="Background">#FFFFFF</Color>
-    <Color x:Key="BackgroundDark">#1E1E1E</Color>
-
-    <!-- 🎨 TEXTES -->
-    <Color x:Key="TextPrimary">#1A1A1A</Color>
-    <Color x:Key="TextSecondary">#555555</Color>
-    <Color x:Key="TextTertiary">#888888</Color>
+    <!-- 🎨 PALETTE MONEY MATE -->
+    <Color x:Key="Primary">#6793AE</Color>
+    <Color x:Key="PrimaryLight">#B6DCE3</Color>
+    <Color x:Key="Accent">#26658C</Color>
+    <Color x:Key="Secondary">#4F7993</Color>
+    <Color x:Key="BackgroundDark">#011C40</Color>
+    <Color x:Key="BackgroundLight">#F6FDFD</Color>
     <Color x:Key="TextLight">#FFFFFF</Color>
+    <Color x:Key="TextMuted">#EAEAEA</Color>
+    <Color x:Key="TextDark">#222222</Color>
 
-    <!-- 🎨 ÉTATS -->
-    <Color x:Key="Success">#2ECC71</Color>
-    <Color x:Key="Warning">#F1C40F</Color>
-    <Color x:Key="Error">#E63946</Color>
 
-    <!-- 🎨 BORDURES -->
-    <Color x:Key="BorderLight">#E0E0E0</Color>
-    <Color x:Key="BorderDark">#9E9E9E</Color>
+    <Color x:Key="White">#FFFFFF</Color>
+    <Color x:Key="Black">#000000</Color>
+    <Color x:Key="Success">#6CC57C</Color>
+    <Color x:Key="Error">#E57373</Color>
 
 </ResourceDictionary>
