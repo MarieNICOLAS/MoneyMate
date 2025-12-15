@@ -62,16 +62,22 @@
 	<!-- Tous tes XAML -->
 	<ItemGroup>
 		<MauiXaml Update="Components\AppLayout.xaml" />
-		<MauiXaml Update="Components\ButtonPrimary.xaml" />
 		<MauiXaml Update="Components\FooterGuest.xaml" />
 		<MauiXaml Update="Components\FooterUser.xaml" />
-		<MauiXaml Update="Components\FormLogin.xaml" />
 		<MauiXaml Update="Components\HeaderGuest.xaml" />
 		<MauiXaml Update="Components\HeaderUser.xaml" />
+		<MauiXaml Update="Resources\Styles\Themes.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\BasePageWithoutNavbar.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\BudgetViews\AddBudgetPage.xaml" />
 		<MauiXaml Update="Views\CategoriesViews\AddCategoryPage.xaml" />
 		<MauiXaml Update="Views\ExpensesViews\AddExpensePage.xaml" />
-		<MauiXaml Update="Views\BasePage.xaml" />
+		<MauiXaml Update="Views\BasePage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\BudgetViews\EditBudgetPage.xaml" />
 		<MauiXaml Update="Views\CategoriesViews\EditCategoryPage.xaml" />
 		<MauiXaml Update="Views\ExpensesViews\EditExpensePage.xaml" />
@@ -83,6 +89,16 @@
 	  <Compile Update="Views\ExpensesViews\HistoryExpensePage.xaml.cs">
 	    <DependentUpon>HistoryExpensePage.xaml</DependentUpon>
 	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Components\UI\Buttons\" />
+	  <Folder Include="Components\UI\Inputs\" />
+	  <Folder Include="Components\UI\Forms\" />
+	  <Folder Include="Components\UI\Cards\" />
+	  <Folder Include="Components\UI\Modals\" />
+	  <Folder Include="Components\UI\Feedback\" />
+	  <Folder Include="Components\UI\Misc\" />
 	</ItemGroup>
 
 </Project>

@@ -1,5 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using MoneyMate.Services;
+﻿using MoneyMate.Services;
 using System.Windows.Input;
 
 namespace MoneyMate.ViewModels.ComponentsViewModel

@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:MoneyMate.ViewModels.AuthViewModel"
-             xmlns:components="clr-namespace:MoneyMate.Components"
+             xmlns:components="clr-namespace:MoneyMate.Components.Layout"
              xmlns:behaviors="clr-namespace:MoneyMate.Behaviors"
              x:Class="MoneyMate.Views.LoginPage"
              Title="Connexion">
