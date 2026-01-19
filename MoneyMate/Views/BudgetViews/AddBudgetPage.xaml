@@ -5,7 +5,7 @@
              xmlns:viewmodels="clr-namespace:MoneyMate.ViewModels"
              xmlns:sys="clr-namespace:System;assembly=netstandard"
              x:Class="MoneyMate.Views.AddBudgetPage"
-             x:Name="Ajouter un budget">
+             Title="Ajouter un budget">
 
     <!-- ViewModel -->
     <ContentPage.BindingContext>

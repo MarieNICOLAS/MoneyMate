@@ -19,9 +19,9 @@ namespace MoneyMate.ViewModels
         private readonly BudgetService _budgetService;
 
         // --- Champs privés ---
-        private string totalAmount;
+        private string totalAmount = string.Empty;
         private DateTime selectedDate = DateTime.Now;
-        private string message;
+        private string message = string.Empty;
         private Color messageColor = Colors.Transparent;
 
         // --- Propriétés bindées ---
@@ -54,6 +54,7 @@ namespace MoneyMate.ViewModels
 
         // --- Commandes ---
         public ICommand CreateBudgetCommand { get; }
+        public ICommand CancelCommand { get; }
 
         // --- Constructeur ---
         public BudgetViewModel()
@@ -61,6 +62,7 @@ namespace MoneyMate.ViewModels
             _budgetService = new BudgetService(App.Database);
 
             CreateBudgetCommand = new AsyncRelayCommand(CreateBudgetAsync);
+            CancelCommand = new Command(async () => await Shell.Current.GoToAsync("//DashboardPage"));
         }
 
         // --- Méthodes ---
