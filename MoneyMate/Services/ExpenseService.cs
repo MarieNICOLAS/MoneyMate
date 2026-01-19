@@ -6,10 +6,13 @@ namespace MoneyMate.Services
     public class ExpenseService
     {
         private readonly MoneyMateContext _db;
+        private readonly AlertService _alertService;
 
-        public ExpenseService(MoneyMateContext db)
+        // ✅ Injection de AlertService
+        public ExpenseService(MoneyMateContext db, AlertService alertService)
         {
             _db = db;
+            _alertService = alertService;
         }
 
         //  Récupérer toutes les dépenses
@@ -34,8 +37,8 @@ namespace MoneyMate.Services
         public Task<Expense> GetByIdAsync(int id)
             => _db.GetByIdAsync<Expense>(id);
 
-        //  Ajouter une dépense
-        public async Task<int> AddExpenseAsync(Expense expense)
+        //  Ajouter une dépense avec vérification des alertes
+        public async Task<int> AddExpenseAsync(Expense expense, int userId)
         {
             if (expense.Amount <= 0)
                 throw new Exception("Le montant de la dépense doit être supérieur à 0.");
@@ -51,6 +54,9 @@ namespace MoneyMate.Services
             {
                 budget.SpentAmount += expense.Amount;
                 await _db.UpdateAsync(budget);
+                
+                // ✅ Vérifier les alertes budget
+                await _alertService.CheckBudgetThresholdAsync(budget.Id, userId);
             }
 
             // ✅ 3️⃣ Mettre à jour la catégorie
@@ -59,13 +65,16 @@ namespace MoneyMate.Services
             {
                 category.SpentAmount += expense.Amount;
                 await _db.UpdateAsync(category);
+                
+                // ✅ Vérifier les alertes catégorie
+                await _alertService.CheckCategoryThresholdAsync(category.Id, userId);
             }
 
             return result;
         }
 
         //  Mettre à jour une dépense
-        public async Task<int> UpdateExpenseAsync(Expense expense)
+        public async Task<int> UpdateExpenseAsync(Expense expense, int userId)
         {
             // Récupérer l'ancienne dépense pour calculer la différence
             var oldExpense = await _db.GetByIdAsync<Expense>(expense.Id);
@@ -83,6 +92,9 @@ namespace MoneyMate.Services
             {
                 budget.SpentAmount += difference;
                 await _db.UpdateAsync(budget);
+                
+                // ✅ Vérifier les alertes
+                await _alertService.CheckBudgetThresholdAsync(budget.Id, userId);
             }
 
             // Mettre à jour la catégorie
@@ -91,6 +103,9 @@ namespace MoneyMate.Services
             {
                 category.SpentAmount += difference;
                 await _db.UpdateAsync(category);
+                
+                // ✅ Vérifier les alertes
+                await _alertService.CheckCategoryThresholdAsync(category.Id, userId);
             }
 
             return result;

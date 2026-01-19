@@ -16,6 +16,7 @@ namespace MoneyMate.ViewModels
         private readonly ExpenseService _expenseService;
         private readonly BudgetService _budgetService;
         private readonly CategoryService _categoryService;
+        private readonly int _userId; // Ajoutez ce champ pour stocker l'identifiant utilisateur
 
         // --- Champs privés ---
         private double amount;
@@ -81,11 +82,12 @@ namespace MoneyMate.ViewModels
         public IRelayCommand AddExpenseCommand { get; }
 
         // --- Constructeur ---
-        public ExpenseViewModel(ExpenseService expenseService, BudgetService budgetService, CategoryService categoryService)
+        public ExpenseViewModel(ExpenseService expenseService, BudgetService budgetService, CategoryService categoryService, int userId)
         {
             _expenseService = expenseService;
             _budgetService = budgetService;
             _categoryService = categoryService;
+            _userId = userId; // Initialisez le champ userId
 
             AddExpenseCommand = new AsyncRelayCommand(AddExpenseAsync);
             LoadBudgets();
@@ -145,7 +147,7 @@ namespace MoneyMate.ViewModels
 
             try
             {
-                await _expenseService.AddExpenseAsync(expense);
+                await _expenseService.AddExpenseAsync(expense, _userId); // Passez l'identifiant utilisateur ici
                 ShowMessage("Dépense ajoutée avec succès !", Colors.Green);
 
                 // Reset formulaire

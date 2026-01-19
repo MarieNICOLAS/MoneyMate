@@ -12,11 +12,13 @@ namespace MoneyMate.ViewModels
         private readonly BudgetService _budgetService;
         private readonly CategoryService _categoryService;
         private readonly ExpenseService _expenseService;
+        private readonly AlertService _alertService;
 
         // --- Champs privés ---
         private double totalBudget;
         private double totalSpent;
         private Budget currentBudget;
+        private int unreadAlertsCount;
 
         // --- Propriétés bindées ---
         public double TotalBudget
@@ -49,8 +51,13 @@ namespace MoneyMate.ViewModels
             }
         }
 
-        public double CurrentBalance => TotalBudget - TotalSpent;
+        public int UnreadAlertsCount
+        {
+            get => unreadAlertsCount;
+            set => SetProperty(ref unreadAlertsCount, value);
+        }
 
+        public double CurrentBalance => TotalBudget - TotalSpent;
         public string CurrentBalanceFormatted => $"{CurrentBalance:0.00} €";
         public double BudgetProgress => TotalBudget > 0 ? TotalSpent / TotalBudget : 0;
         public string BudgetProgressText => $"{TotalSpent:0.##} / {TotalBudget:0.##} €";
@@ -60,12 +67,17 @@ namespace MoneyMate.ViewModels
         // --- Commandes ---
         public IAsyncRelayCommand RefreshCommand { get; }
 
-        // --- Constructeur ---
-        public DashboardViewModel()
+        // ✅ Constructeur avec injection de dépendances
+        public DashboardViewModel(
+            BudgetService budgetService, 
+            CategoryService categoryService, 
+            ExpenseService expenseService,
+            AlertService alertService)
         {
-            _budgetService = new BudgetService(App.Database);
-            _categoryService = new CategoryService(App.Database);
-            _expenseService = new ExpenseService(App.Database);
+            _budgetService = budgetService;
+            _categoryService = categoryService;
+            _expenseService = expenseService;
+            _alertService = alertService;
 
             Categories = new ObservableCollection<CategoryStat>();
             RefreshCommand = new AsyncRelayCommand(LoadDashboardDataAsync);
@@ -89,10 +101,10 @@ namespace MoneyMate.ViewModels
 
                 if (currentBudget == null)
                 {
-                    // Aucun budget pour ce mois
                     TotalBudget = 0;
                     TotalSpent = 0;
                     Categories.Clear();
+                    UnreadAlertsCount = 0;
                     return;
                 }
 
@@ -100,17 +112,19 @@ namespace MoneyMate.ViewModels
                 TotalBudget = currentBudget.TotalAmount;
                 TotalSpent = currentBudget.SpentAmount;
 
-                // 3️⃣ Charger les catégories avec leurs dépenses
+                // 3️⃣ Charger les alertes non lues
+                var alerts = await _alertService.GetUnreadAlertsAsync(currentBudget.UserId);
+                UnreadAlertsCount = alerts.Count;
+
+                // 4️⃣ Charger les catégories avec leurs dépenses
                 var categories = await _categoryService.GetCategoriesByBudgetAsync(currentBudget.Id);
                 var expenses = await _expenseService.GetExpensesByBudgetAsync(currentBudget.Id);
 
                 Categories.Clear();
                 foreach (var category in categories)
                 {
-                    // Calculer le total dépensé pour cette catégorie
                     var categoryExpenses = expenses.Where(e => e.CategoryId == category.Id).Sum(e => e.Amount);
                     
-                    // Calculer la tendance (comparaison avec le budget alloué)
                     var trend = category.AllocatedAmount > 0 
                         ? ((categoryExpenses - category.AllocatedAmount) / category.AllocatedAmount) * 100 
                         : 0;
@@ -121,7 +135,6 @@ namespace MoneyMate.ViewModels
                         trend
                     ));
                 }
-
             }
             catch (Exception ex)
             {
@@ -142,7 +155,7 @@ namespace MoneyMate.ViewModels
 
         public string AmountFormatted => $"{Amount:0.00} €";
         public string TrendFormatted => $"{Trend:+0.0;-0.0}%";
-        public Color TrendColor => Trend < 0 ? Colors.Gray : Color.FromArgb("#393781");
+        public Color TrendColor => Trend < 0 ? Colors.Green : (Trend > 0 ? Colors.Red : Colors.Gray);
 
         public CategoryStat(string name, double amount, double trend)
         {

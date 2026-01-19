@@ -6,9 +6,11 @@ namespace MoneyMate.Views
     {
         private DashboardViewModel ViewModel => BindingContext as DashboardViewModel;
 
-        public DashboardPage()
+        // ✅ Injection de dépendances
+        public DashboardPage(DashboardViewModel viewModel)
         {
             InitializeComponent();
+            BindingContext = viewModel;
         }
 
         protected override async void OnAppearing()
