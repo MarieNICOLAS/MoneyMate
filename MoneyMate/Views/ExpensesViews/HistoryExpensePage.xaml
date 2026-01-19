@@ -1,161 +1,102 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MoneyMate.Views.HistoryTransactionPage"
+             x:Class="MoneyMate.Views.HistoryExpensePage"
              Title="HistoryTransactionPage">
     <ScrollView>
         <VerticalStackLayout Style="{StaticResource MainContainer}">
 
-            <SearchBar Placeholder="Rechercher une transaction"
-                       Text="{Binding SearchQuery}"
-                       SearchCommand="{Binding SearchCommand}" />
 
-            <HorizontalStackLayout Spacing="10">
-                <Switch IsToggled="{Binding FilterByCategory}" />
-                <Label Text="Catégorie" VerticalTextAlignment="Center" />
-            </HorizontalStackLayout>
-
-            <HorizontalStackLayout Spacing="10">
-                <Switch IsToggled="{Binding FilterByName}" />
-                <Label Text="Nom" VerticalTextAlignment="Center" />
-            </HorizontalStackLayout>
-
-            <HorizontalStackLayout Spacing="10">
-                <Switch IsToggled="{Binding FilterByPrice}" />
-                <Label Text="Prix" VerticalTextAlignment="Center" />
-            </HorizontalStackLayout>
-
-            <DatePicker Date="{Binding SelectedDate}" />
 
             <Label Text="Ma liste d'éléments"
-                   FontSize="24"
-                   HorizontalOptions="Center"
-                   FontAttributes="Bold"
-                   TextColor="{StaticResource Primary}" />
+                FontSize="24"
+                HorizontalOptions="Center"
+                FontAttributes="Bold"
+                TextColor="{StaticResource Primary}" />
+            <!-- Filtres -->
+            <HorizontalStackLayout Spacing="15" Margin="0,10">
+
+
+
+
+                <SearchBar Placeholder="Rechercher une dépense"
+           Text="{Binding SearchQuery}"
+           SearchCommand="{Binding SearchCommand}" />
+                <!-- Filtre date -->
+                <DatePicker Date="{Binding SelectedDate}" />
+
+                <!-- Filtre catégorie -->
+                <Picker 
+            ItemsSource="{Binding Categories}"
+            ItemDisplayBinding="{Binding Name}"
+            SelectedItem="{Binding SelectedCategory}" />
+
+                <Button Text="Reset"
+            Command="{Binding ResetFiltersCommand}"
+            VerticalOptions="Center" />
+            </HorizontalStackLayout>
 
             <CollectionView x:Name="ListTransaction"
-                            ItemsSource="{Binding Transactions}"
-                            SelectionMode="Single"
-                            SelectionChangedCommand="{Binding SelectTransactionCommand}"
-                            ItemsLayout="VerticalList"
-                            Margin="0,10,0,20">
+                ItemsSource="{Binding Expenses}"
+                SelectionMode="Single"
+                SelectionChangedCommand="{Binding SelectExpenseCommand}"
+                ItemsLayout="VerticalList"
+                Margin="0,10,0,20">
+
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
+
                         <Border Padding="10"
-                                Stroke="Gray"
-                                StrokeThickness="1"
-                                StrokeShape="RoundRectangle 10"
-                                Margin="0,5">
+                    Stroke="Gray"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 10"
+                    Margin="0,5">
+
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
+
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Label Text="{Binding Nom}"
-                                       Grid.Row="0"
-                                       Grid.Column="0"
-                                       FontAttributes="Bold"
-                                       FontSize="Title" />
+                                <!-- Description -->
+                                <Label Text="{Binding Description}"
+                           Grid.Row="0"
+                           Grid.Column="0"
+                           FontAttributes="Bold"
+                           FontSize="Title" />
 
-                                <Label Text="{Binding Prix, StringFormat='{0} €'}"
-                                       Grid.Row="0"
-                                       Grid.Column="1"
-                                       TextColor="Red"
-                                       HorizontalOptions="End"
-                                       FontSize="Medium" />
+                                <!-- Montant -->
+                                <Label Text="{Binding FormattedAmount}"
+                           Grid.Row="0"
+                           Grid.Column="1"
+                           TextColor="Red"
+                           HorizontalOptions="End"
+                           FontSize="Medium" />
 
-                                <Label Text="{Binding Categorie}"
-                                       Grid.Row="1"
-                                       Grid.Column="0"
-                                       TextColor="Green"
-                                       FontSize="Small" />
+                                <!-- Catégorie (ID pour l’instant) -->
+                                <Label Text="{Binding CategoryName}"
+                           Grid.Row="1"
+                           Grid.Column="0"
+                           TextColor="Green"
+                           FontSize="Small" />
 
-                                <Label Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}"
-                                       Grid.Row="1"
-                                       Grid.Column="1"
-                                       HorizontalOptions="End"
-                                       FontSize="Caption" />
+                                <!-- Date -->
+                                <Label Text="{Binding FormattedDate}"
+                           Grid.Row="1"
+                           Grid.Column="1"
+                           HorizontalOptions="End"
+                           FontSize="Caption" />
                             </Grid>
+
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-
-            <Label Text="Exemples de transactions (fixes)"
-                   FontAttributes="Bold"
-                   FontSize="18"
-                   TextColor="{StaticResource Secondary}" />
-
-            <Border Padding="10"
-                    Stroke="Gray"
-                    StrokeThickness="1"
-                    StrokeShape="RoundRectangle 10"
-                    Margin="0,5">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Label Text="Course" Grid.Row="0" Grid.Column="0" FontAttributes="Bold" FontSize="Title" />
-                    <Label Text="25 €" Grid.Row="0" Grid.Column="1" TextColor="Red" HorizontalOptions="End" FontSize="Medium" />
-                    <Label Text="Alimentation" Grid.Row="1" Grid.Column="0" TextColor="Green" FontSize="Small" />
-                    <Label Text="01/11/2025" Grid.Row="1" Grid.Column="1" HorizontalOptions="End" FontSize="Caption" />
-                </Grid>
-            </Border>
-
-            <Border Padding="10"
-                    Stroke="Gray"
-                    StrokeThickness="1"
-                    StrokeShape="RoundRectangle 10"
-                    Margin="0,5">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Label Text="Essence" Grid.Row="0" Grid.Column="0" FontAttributes="Bold" FontSize="Title" />
-                    <Label Text="50 €" Grid.Row="0" Grid.Column="1" TextColor="Red" HorizontalOptions="End" FontSize="Medium" />
-                    <Label Text="Transport" Grid.Row="1" Grid.Column="0" TextColor="Orange" FontSize="Small" />
-                    <Label Text="02/11/2025" Grid.Row="1" Grid.Column="1" HorizontalOptions="End" FontSize="Caption" />
-                </Grid>
-            </Border>
-
-            <Border Padding="10"
-                    Stroke="Gray"
-                    StrokeThickness="1"
-                    StrokeShape="RoundRectangle 10"
-                    Margin="0,5">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Label Text="Restaurant" Grid.Row="0" Grid.Column="0" FontAttributes="Bold" FontSize="Title" />
-                    <Label Text="30 €" Grid.Row="0" Grid.Column="1" TextColor="Red" HorizontalOptions="End" FontSize="Medium" />
-                    <Label Text="Alimentation" Grid.Row="1" Grid.Column="0" TextColor="Green" FontSize="Small" />
-                    <Label Text="03/11/2025" Grid.Row="1" Grid.Column="1" HorizontalOptions="End" FontSize="Caption" />
-                </Grid>
-            </Border>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

@@ -39,8 +39,8 @@
     
     <ShellContent
         Title="Historique des transactions"
-        ContentTemplate="{DataTemplate views:HistoryTransactionPage}"
-        Route="HistoryTransactionPage" />
+        ContentTemplate="{DataTemplate views:HistoryExpensePage}"
+        Route="HistoryExpensePage" />
     
     <ShellContent
         Title="Modifier une catégorie"

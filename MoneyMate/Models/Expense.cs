@@ -64,5 +64,7 @@ namespace MoneyMate.Models
         // Méthode utilitaire pour formater la date (utile dans les vues)
         [Ignore]
         public string FormattedDate => Date.ToString("dd/MM/yyyy");
+        [Ignore] // SQLite ignore cette propriété
+        public string CategoryName { get; set; }
     }
 }

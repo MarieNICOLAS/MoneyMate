@@ -37,6 +37,10 @@ namespace MoneyMate
             builder.Services.AddTransient<AddCategoryPage>();
             builder.Services.AddTransient<AddExpensePage>();
 
+            builder.Services.AddSingleton<HistoryViewModel>();
+            builder.Services.AddSingleton<HistoryExpensePage>();
+
+
             return builder.Build();
         }
     }
