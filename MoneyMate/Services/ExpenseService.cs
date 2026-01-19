@@ -1,10 +1,5 @@
 ﻿using MoneyMate.Database;
 using MoneyMate.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MoneyMate.Services
 {
@@ -46,15 +41,83 @@ namespace MoneyMate.Services
                 throw new Exception("Le montant de la dépense doit être supérieur à 0.");
 
             expense.CreatedAt = DateTime.Now;
-            return await _db.InsertAsync(expense);
+            
+            // ✅ 1️⃣ Insérer la dépense
+            var result = await _db.InsertAsync(expense);
+
+            // ✅ 2️⃣ Mettre à jour le budget
+            var budget = await _db.GetByIdAsync<Budget>(expense.BudgetId);
+            if (budget != null)
+            {
+                budget.SpentAmount += expense.Amount;
+                await _db.UpdateAsync(budget);
+            }
+
+            // ✅ 3️⃣ Mettre à jour la catégorie
+            var category = await _db.GetByIdAsync<Category>(expense.CategoryId);
+            if (category != null)
+            {
+                category.SpentAmount += expense.Amount;
+                await _db.UpdateAsync(category);
+            }
+
+            return result;
         }
 
         //  Mettre à jour une dépense
-        public Task<int> UpdateExpenseAsync(Expense expense)
-            => _db.UpdateAsync(expense);
+        public async Task<int> UpdateExpenseAsync(Expense expense)
+        {
+            // Récupérer l'ancienne dépense pour calculer la différence
+            var oldExpense = await _db.GetByIdAsync<Expense>(expense.Id);
+            if (oldExpense == null)
+                throw new Exception("Dépense introuvable.");
+
+            var difference = expense.Amount - oldExpense.Amount;
+
+            // Mettre à jour la dépense
+            var result = await _db.UpdateAsync(expense);
+
+            // Mettre à jour le budget
+            var budget = await _db.GetByIdAsync<Budget>(expense.BudgetId);
+            if (budget != null)
+            {
+                budget.SpentAmount += difference;
+                await _db.UpdateAsync(budget);
+            }
+
+            // Mettre à jour la catégorie
+            var category = await _db.GetByIdAsync<Category>(expense.CategoryId);
+            if (category != null)
+            {
+                category.SpentAmount += difference;
+                await _db.UpdateAsync(category);
+            }
+
+            return result;
+        }
 
         //  Supprimer une dépense
-        public Task<int> DeleteExpenseAsync(Expense expense)
-            => _db.DeleteAsync(expense);
+        public async Task<int> DeleteExpenseAsync(Expense expense)
+        {
+            // Mettre à jour le budget avant suppression
+            var budget = await _db.GetByIdAsync<Budget>(expense.BudgetId);
+            if (budget != null)
+            {
+                budget.SpentAmount -= expense.Amount;
+                if (budget.SpentAmount < 0) budget.SpentAmount = 0; // Sécurité
+                await _db.UpdateAsync(budget);
+            }
+
+            // Mettre à jour la catégorie avant suppression
+            var category = await _db.GetByIdAsync<Category>(expense.CategoryId);
+            if (category != null)
+            {
+                category.SpentAmount -= expense.Amount;
+                if (category.SpentAmount < 0) category.SpentAmount = 0; // Sécurité
+                await _db.UpdateAsync(category);
+            }
+
+            return await _db.DeleteAsync(expense);
+        }
     }
 }
