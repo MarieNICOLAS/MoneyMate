@@ -1,8 +1,9 @@
 using System.Windows.Input;
+using Microsoft.Maui.Controls;
 
 namespace MoneyMate.ViewModels.ComponentsViewModel;
 
-public class NavbarViewModel : ContentView
+public class NavbarViewModel : BaseViewModel
 {
     public ICommand GoMenuCommand { get; }
     public ICommand GoHomeCommand { get; }
@@ -18,5 +19,4 @@ public class NavbarViewModel : ContentView
         GoSearchCommand = new Command(async () => await Shell.Current.GoToAsync("//SearchPage"));
         GoMenuCommand = new Command(async () => await Shell.Current.GoToAsync("//MenuPage"));
     }
-
 }
