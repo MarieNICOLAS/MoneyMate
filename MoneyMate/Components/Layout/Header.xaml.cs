@@ -1,10 +1,9 @@
 using MoneyMate.ViewModels.ComponentsViewModel;
+namespace MoneyMate.Components.Layout;
 
-namespace MoneyMate.Components;
-
-public partial class HeaderAuthenticated : ContentView
+public partial class Header : ContentView
 {
-	public HeaderAuthenticated()
+	public Header()
 	{
 		InitializeComponent();
         BindingContext = new HeaderViewModel();

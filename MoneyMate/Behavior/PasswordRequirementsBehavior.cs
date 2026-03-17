@@ -1,11 +1,10 @@
-﻿using Microsoft.Maui.Controls;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace MoneyMate.Behaviors
 {
     public class PasswordRequirementsBehavior : Behavior<Entry>
     {
-        public Label RequirementLabel { get; set; }
+        public Label? RequirementLabel { get; set; }
 
         protected override void OnAttachedTo(Entry entry)
         {
@@ -19,7 +18,7 @@ namespace MoneyMate.Behaviors
             base.OnDetachingFrom(entry);
         }
 
-        private void OnPasswordChanged(object sender, TextChangedEventArgs e)
+        private void OnPasswordChanged(object? sender, TextChangedEventArgs e)
         {
             if (RequirementLabel == null) return;
 

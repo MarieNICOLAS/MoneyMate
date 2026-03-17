@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MoneyMate.Components.HeaderAuthenticated"
+             x:Class="MoneyMate.Components.Layout.Header"
              BackgroundColor="{StaticResource PrimaryLight}"
              HeightRequest="50"
-             HorizontalOptions="Fill">
+             HorizontalOptions="Fill"
+             >
 
-    <!-- 🩵 Conteneur principal avec ombre douce -->
     <Border
         BackgroundColor="{StaticResource PrimaryLight}"
         HeightRequest="50"
+        Margin="0"
         Padding="0"
         StrokeThickness="0">
         <Border.Shadow>
             <Shadow Brush="Black"
-                    Offset="0,4"
-                    Radius="6"
-                    Opacity="0.3" />
+                Offset="0,4"
+                Radius="6"
+                Opacity="0.3" />
         </Border.Shadow>
-
+        
         <Grid RowDefinitions="Auto,Auto">
 
-            <!-- 🧭 BARRE PRINCIPALE -->
+            <!-- BARRE PRINCIPALE -->
             <Grid Grid.Row="0"
-                  ColumnDefinitions="Auto,*,Auto,Auto"
+                  ColumnDefinitions="Auto,*,Auto"
                   Padding="20,10"
                   VerticalOptions="Center"
                   HorizontalOptions="Fill">
@@ -41,31 +42,9 @@
                            VerticalOptions="Center" />
                 </HorizontalStackLayout>
 
-                <!-- 🔔 Notifications -->
-                <ImageButton Grid.Column="2"
-                             Source="alarm_on_icon.png"
-                             BackgroundColor="Transparent"
-                             CornerRadius="6"
-                             WidthRequest="28"
-                             HeightRequest="28"
-                             HorizontalOptions="End"
-                             VerticalOptions="Center"
-                             Command="{Binding GoNotificationsCommand}" />
-
-                <!-- 🚪 Déconnexion -->
-                <ImageButton Grid.Column="3"
-                             Source="logout_icon.png"
-                             BackgroundColor="Transparent"
-                             CornerRadius="6"
-                             WidthRequest="28"
-                             HeightRequest="28"
-                             Margin="8,0,0,0"
-                             HorizontalOptions="End"
-                             VerticalOptions="Center"
-                             Command="{Binding LogoutCommand}" />
             </Grid>
 
-            <!-- 🌫️ Ombre légère (effet de flottant sous le header) -->
+            <!-- 🌫️ Effet d’ombre légère (simulation du flottant) -->
             <BoxView Grid.Row="1"
                      HeightRequest="8"
                      Opacity="0.3">
@@ -76,6 +55,7 @@
                     </LinearGradientBrush>
                 </BoxView.Background>
             </BoxView>
+
         </Grid>
     </Border>
 </ContentView>
