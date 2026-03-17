@@ -7,10 +7,7 @@
              x:Class="MoneyMate.Views.EditBudgetPage"
              x:Name="PageRoot">
 
-    <!-- ViewModel -->
-    <ContentPage.BindingContext>
-        <viewmodels:BudgetViewModel />
-    </ContentPage.BindingContext>
+ 
 
     <!-- STRUCTURE GLOBALE -->
     <Grid RowDefinitions="Auto,*,Auto"

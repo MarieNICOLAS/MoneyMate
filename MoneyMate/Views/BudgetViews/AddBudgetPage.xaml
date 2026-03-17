@@ -7,31 +7,21 @@
              x:Class="MoneyMate.Views.AddBudgetPage"
              Title="Ajouter un budget">
 
-    <!-- ViewModel -->
-    <ContentPage.BindingContext>
-        <viewmodels:BudgetViewModel />
-    </ContentPage.BindingContext>
-
-    <!-- STRUCTURE GLOBALE -->
     <Grid RowDefinitions="Auto,*,Auto"
           BackgroundColor="{StaticResource BackgroundLight}">
 
-        <!-- ⭐ HEADER -->
         <components:HeaderAuthenticated Grid.Row="0" />
 
-        <!-- ⭐ CONTENU -->
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Style="{StaticResource MainContainer}"
                                  Spacing="20"
                                  Padding="0,0,0,40">
 
-                <!-- 🏷️ TITRE -->
                 <Label Text="Créer un budget"
                        FontSize="24"
                        FontAttributes="Bold"
                        TextColor="{StaticResource Primary}" />
 
-                <!-- 💶 Montant total -->
                 <Label Text="Montant total (€)" Style="{StaticResource FormLabel}" />
                 <Border Style="{StaticResource InputBorder}">
                     <Entry Placeholder="Ex : 2000"
@@ -40,7 +30,6 @@
                            Style="{StaticResource EntryForm}" />
                 </Border>
 
-                <!-- 🗓️ Date (mois/année) -->
                 <Label Text="Mois du budget" Style="{StaticResource FormLabel}" />
                 <Border Style="{StaticResource InputBorder}">
                     <DatePicker Date="{Binding SelectedDate, Mode=TwoWay}"
@@ -48,25 +37,22 @@
                                 Format="MM/yyyy" />
                 </Border>
 
-                <!-- Message -->
                 <Label Text="{Binding Message}"
                        TextColor="{Binding MessageColor}"
                        FontAttributes="Bold"
                        HorizontalOptions="Center" />
 
-                <!-- ⭐ BOUTONS -->
                 <Button Text="Créer le budget"
                         Command="{Binding CreateBudgetCommand}"
                         Style="{StaticResource PrimaryButton}" />
 
                 <Button Text="Annuler"
-                        Style="{StaticResource OutlineButton}"
-                        Command="{Binding CancelCommand}" />
+                        Command="{Binding CancelCommand}"
+                        Style="{StaticResource OutlineButton}" />
 
             </VerticalStackLayout>
         </ScrollView>
 
-        <!-- ⭐ NAVBAR -->
         <components:Navbar Grid.Row="2" />
 
     </Grid>

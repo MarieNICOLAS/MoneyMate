@@ -40,6 +40,11 @@ namespace MoneyMate
             builder.Services.AddSingleton<HistoryViewModel>();
             builder.Services.AddSingleton<HistoryExpensePage>();
 
+            builder.Services.AddTransient<StatisticsPage>();
+            builder.Services.AddTransient<StatisticsViewModel>();
+
+            builder.Services.AddTransient<EditBudgetPage>();
+
 
             return builder.Build();
         }
