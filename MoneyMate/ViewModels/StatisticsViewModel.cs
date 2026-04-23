@@ -79,7 +79,7 @@ namespace MoneyMate.ViewModels
         private async Task LoadLineChartAsync()
         {
             LinePoints.Clear();
-            var allExpenses = await _expenseService.GetAllExpensesAsync();
+            var allExpenses = await _expenseService.GetExpensesAsync();
 
             if (SelectedPeriod == "Year")
             {
@@ -140,7 +140,7 @@ namespace MoneyMate.ViewModels
 
             int year = int.Parse(SelectedYear);
             var allBudgets = await _budgetService.GetBudgetsAsync();
-            var allExpenses = await _expenseService.GetAllExpensesAsync();
+            var allExpenses = await _expenseService.GetExpensesAsync();
 
             string[] labels = { "Jan","Feb","Mar","Apr","May","Jun",
                                  "Jul","Aug","Sep","Oct","Nov","Dec" };
