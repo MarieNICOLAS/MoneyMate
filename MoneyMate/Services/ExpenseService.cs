@@ -92,6 +92,12 @@ namespace MoneyMate.Services
                       .ToList();
         }
 
+        // 🔹 RÉCUPÉRER TOUTES LES DÉPENSES
+        public async Task<List<Expense>> GetAllExpensesAsync()
+        {
+            return await _db.GetAllAsync<Expense>();
+        }
+
         // -----------------------------------------
         // 🔹 RÉCUPÉRER LES DÉPENSES PAR BUDGETCATEGORY
         // -----------------------------------------

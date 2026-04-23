@@ -2,7 +2,7 @@ using System.Windows.Input;
 
 namespace MoneyMate.ViewModels.ComponentsViewModel;
 
-public class NavbarViewModel : ContentView
+public class NavbarViewModel : BaseViewModel
 {
     public ICommand GoMenuCommand { get; }
     public ICommand GoHomeCommand { get; }
@@ -15,8 +15,7 @@ public class NavbarViewModel : ContentView
         GoHomeCommand = new Command(async () => await Shell.Current.GoToAsync("//DashboardPage"));
         GoStatisticsCommand = new Command(async () => await Shell.Current.GoToAsync("//StatisticsPage"));
         GoAddCommand = new Command(async () => await Shell.Current.GoToAsync("//AddExpensePage"));
-        GoSearchCommand = new Command(async () => await Shell.Current.GoToAsync("//SearchPage"));
+        GoSearchCommand = new Command(async () => await Shell.Current.GoToAsync("//HistoryTransactionPage"));
         GoMenuCommand = new Command(async () => await Shell.Current.GoToAsync("//MenuPage"));
     }
-
 }
