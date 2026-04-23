@@ -83,6 +83,9 @@
 		<MauiXaml Update="Views\ExpensesViews\EditExpensePage.xaml" />
 		<MauiXaml Update="Views\ExpensesViews\HistoryExpensePage.xaml" />
 		<MauiXaml Update="Views\Homepage.xaml" />
+		<MauiXaml Update="Views\StatisticsViews\NewPage1.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>

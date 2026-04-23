@@ -46,11 +46,11 @@
 
             <!-- 📊 Statistics -->
             <ImageButton Grid.Column="1"
-                         Source="analytics_icon.png"
-                         BackgroundColor="Transparent"
-                         WidthRequest="28"
-                         HeightRequest="28"
-                         Command="{Binding GoStatisticsCommand}">
+             Source="analytics_icon.png"
+             BackgroundColor="Transparent"
+             WidthRequest="28"
+             HeightRequest="28"
+             Command="{Binding GoStatisticsCommand}">
                 <ImageButton.Triggers>
                     <Trigger TargetType="ImageButton" Property="IsPressed" Value="True">
                         <Setter Property="Opacity" Value="0.6"/>

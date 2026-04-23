@@ -64,10 +64,12 @@
         ContentTemplate="{DataTemplate views:NotificationsPage}"
         Route="NotificationsPage" />
 
+    <!-- Par ceci — sans DataTemplate -->
     <ShellContent
-        Title="Statistics"
-        ContentTemplate="{DataTemplate views:StatisticsPage}"
-        Route="StatisticsPage" />
+    Title="Statistics"
+    ContentTemplate="{DataTemplate views:StatisticsPage}"
+    Route="StatisticsPage" />
+    
     <ShellContent
        Title="Modifier une transaction"
         ContentTemplate="{DataTemplate views:EditExpensePage}"

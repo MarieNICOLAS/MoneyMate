@@ -11,14 +11,10 @@ namespace MoneyMate
             CheckLoginStatus();
         }
 
-        /// <summary>
-        /// Vérifie l'état de la connexion et redirige l'utilisateur.
-        /// </summary>
         private async void CheckLoginStatus()
         {
             var authService = new AuthService(App.Database);
             var user = await authService.GetLoggedInUserAsync();
-
             if (user != null)
             {
                 await Shell.Current.GoToAsync("//DashboardPage");

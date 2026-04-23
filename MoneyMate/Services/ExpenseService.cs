@@ -6,113 +6,133 @@ namespace MoneyMate.Services
     public class ExpenseService
     {
         private readonly MoneyMateContext _db;
-        private readonly BudgetCategoryService _pivotService;
+        private readonly AlertService _alertService;
 
-        public ExpenseService(MoneyMateContext db)
+        // ✅ Injection de AlertService
+        public ExpenseService(MoneyMateContext db, AlertService alertService)
         {
             _db = db;
-            _pivotService = new BudgetCategoryService(db);
+            _alertService = alertService;
         }
 
-        // -----------------------------------------
-        // 🔹 AJOUT D’UNE DÉPENSE
-        // -----------------------------------------
-        public async Task<int> AddExpenseAsync(Expense expense)
+        //  Récupérer toutes les dépenses
+        public Task<List<Expense>> GetExpensesAsync()
+            => _db.GetAllAsync<Expense>();
+
+        //  Récupérer les dépenses par catégorie
+        public async Task<List<Expense>> GetExpensesByCategoryAsync(int categoryId)
+        {
+            var expenses = await _db.GetAllAsync<Expense>();
+            return expenses.Where(e => e.CategoryId == categoryId).ToList();
+        }
+
+        //  Récupérer les dépenses par budget
+        public async Task<List<Expense>> GetExpensesByBudgetAsync(int budgetId)
+        {
+            var expenses = await _db.GetAllAsync<Expense>();
+            return expenses.Where(e => e.BudgetId == budgetId).ToList();
+        }
+
+        //  Récupérer une dépense par ID
+        public Task<Expense> GetByIdAsync(int id)
+            => _db.GetByIdAsync<Expense>(id);
+
+        //  Ajouter une dépense avec vérification des alertes
+        public async Task<int> AddExpenseAsync(Expense expense, int userId)
         {
             if (expense.Amount <= 0)
-                throw new Exception("Le montant doit être supérieur à 0.");
+                throw new Exception("Le montant de la dépense doit être supérieur à 0.");
 
-            // 1️⃣ Enregistrer la dépense en base
-            var id = await _db.InsertAsync(expense);
+            expense.CreatedAt = DateTime.Now;
+            
+            // ✅ 1️⃣ Insérer la dépense
+            var result = await _db.InsertAsync(expense);
 
-            // 2️⃣ Mettre à jour le pivot (BudgetCategory)
-            await _pivotService.AddExpenseToBudgetCategoryAsync(
-                expense.BudgetCategoryId,
-                expense.Amount
-            );
-
-            return id;
-        }
-
-        // -----------------------------------------
-        // 🔹 SUPPRESSION D’UNE DÉPENSE
-        // -----------------------------------------
-        public async Task DeleteExpenseAsync(Expense expense)
-        {
-            // Diminuer le SpentAmount de la catégorie
-            var pivot = await _db.GetByIdAsync<BudgetCategory>(expense.BudgetCategoryId);
-
-            if (pivot != null)
+            // ✅ 2️⃣ Mettre à jour le budget
+            var budget = await _db.GetByIdAsync<Budget>(expense.BudgetId);
+            if (budget != null)
             {
-                pivot.SpentAmount -= expense.Amount;
-                if (pivot.SpentAmount < 0)
-                    pivot.SpentAmount = 0;
-
-                await _db.UpdateAsync(pivot);
+                budget.SpentAmount += expense.Amount;
+                await _db.UpdateAsync(budget);
+                
+                // ✅ Vérifier les alertes budget
+                await _alertService.CheckBudgetThresholdAsync(budget.Id, userId);
             }
 
-            // Supprimer la dépense
-            await _db.DeleteAsync(expense);
+            // ✅ 3️⃣ Mettre à jour la catégorie
+            var category = await _db.GetByIdAsync<Category>(expense.CategoryId);
+            if (category != null)
+            {
+                category.SpentAmount += expense.Amount;
+                await _db.UpdateAsync(category);
+                
+                // ✅ Vérifier les alertes catégorie
+                await _alertService.CheckCategoryThresholdAsync(category.Id, userId);
+            }
+
+            return result;
         }
 
-        // -----------------------------------------
-        // 🔹 MODIFICATION D’UNE DÉPENSE
-        // -----------------------------------------
-        public async Task UpdateExpenseAsync(Expense oldExpense, Expense updatedExpense)
+        //  Mettre à jour une dépense
+        public async Task<int> UpdateExpenseAsync(Expense expense, int userId)
         {
-            // 1️⃣ Calcul différence montant
-            double difference = updatedExpense.Amount - oldExpense.Amount;
+            // Récupérer l'ancienne dépense pour calculer la différence
+            var oldExpense = await _db.GetByIdAsync<Expense>(expense.Id);
+            if (oldExpense == null)
+                throw new Exception("Dépense introuvable.");
 
-            // 2️⃣ Gérer l’impact sur la BudgetCategory
-            var pivot = await _db.GetByIdAsync<BudgetCategory>(oldExpense.BudgetCategoryId);
+            var difference = expense.Amount - oldExpense.Amount;
 
-            if (pivot == null)
-                throw new Exception("Impossible de mettre à jour la catégorie du budget.");
+            // Mettre à jour la dépense
+            var result = await _db.UpdateAsync(expense);
 
-            pivot.SpentAmount += difference;
+            // Mettre à jour le budget
+            var budget = await _db.GetByIdAsync<Budget>(expense.BudgetId);
+            if (budget != null)
+            {
+                budget.SpentAmount += difference;
+                await _db.UpdateAsync(budget);
+                
+                // ✅ Vérifier les alertes
+                await _alertService.CheckBudgetThresholdAsync(budget.Id, userId);
+            }
 
-            // Sécurité
-            if (pivot.SpentAmount < 0) pivot.SpentAmount = 0;
-            if (pivot.SpentAmount > pivot.AllocatedAmount) pivot.SpentAmount = pivot.AllocatedAmount;
+            // Mettre à jour la catégorie
+            var category = await _db.GetByIdAsync<Category>(expense.CategoryId);
+            if (category != null)
+            {
+                category.SpentAmount += difference;
+                await _db.UpdateAsync(category);
+                
+                // ✅ Vérifier les alertes
+                await _alertService.CheckCategoryThresholdAsync(category.Id, userId);
+            }
 
-            await _db.UpdateAsync(pivot);
-
-            // 3️⃣ Mettre à jour l’Expense
-            await _db.UpdateAsync(updatedExpense);
+            return result;
         }
 
-        // -----------------------------------------
-        // 🔹 RÉCUPÉRER TOUTES LES DÉPENSES D’UN BUDGET
-        // -----------------------------------------
-        public async Task<List<Expense>> GetExpensesForBudgetAsync(int budgetId)
+        //  Supprimer une dépense
+        public async Task<int> DeleteExpenseAsync(Expense expense)
         {
-            var all = await _db.GetAllAsync<Expense>();
-            return all.Where(e => e.BudgetId == budgetId)
-                      .OrderByDescending(e => e.Date)
-                      .ToList();
-        }
+            // Mettre à jour le budget avant suppression
+            var budget = await _db.GetByIdAsync<Budget>(expense.BudgetId);
+            if (budget != null)
+            {
+                budget.SpentAmount -= expense.Amount;
+                if (budget.SpentAmount < 0) budget.SpentAmount = 0; // Sécurité
+                await _db.UpdateAsync(budget);
+            }
 
-        // 🔹 RÉCUPÉRER TOUTES LES DÉPENSES
-        public async Task<List<Expense>> GetAllExpensesAsync()
-        {
-            return await _db.GetAllAsync<Expense>();
-        }
+            // Mettre à jour la catégorie avant suppression
+            var category = await _db.GetByIdAsync<Category>(expense.CategoryId);
+            if (category != null)
+            {
+                category.SpentAmount -= expense.Amount;
+                if (category.SpentAmount < 0) category.SpentAmount = 0; // Sécurité
+                await _db.UpdateAsync(category);
+            }
 
-        // -----------------------------------------
-        // 🔹 RÉCUPÉRER LES DÉPENSES PAR BUDGETCATEGORY
-        // -----------------------------------------
-        public async Task<List<Expense>> GetExpensesForCategoryAsync(int pivotId)
-        {
-            var all = await _db.GetAllAsync<Expense>();
-            return all.Where(e => e.BudgetCategoryId == pivotId)
-                      .OrderByDescending(e => e.Date)
-                      .ToList();
+            return await _db.DeleteAsync(expense);
         }
-
-        // -----------------------------------------
-        // 🔹 RÉCUPÉRER UNE DÉPENSE PAR ID
-        // -----------------------------------------
-        public Task<Expense> GetExpenseByIdAsync(int id)
-            => _db.GetByIdAsync<Expense>(id);
     }
 }
