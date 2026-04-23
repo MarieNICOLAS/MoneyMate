@@ -50,7 +50,7 @@
 
                 <!-- Profil -->
                 <Border Grid.Column="4" StrokeThickness="1"
-                        Stroke="{StaticResource TextGray}"
+                        Stroke="#AAAAAA"
                         StrokeShape="RoundRectangle 20"
                         WidthRequest="32" HeightRequest="32" VerticalOptions="Center">
                     <Image Source="profile_icon.png" WidthRequest="28" HeightRequest="28"
@@ -108,7 +108,7 @@
                                                          Binding="{Binding SelectedPeriod}"
                                                          Value="Month">
                                                 <Setter Property="BackgroundColor" Value="Transparent"/>
-                                                <Setter Property="TextColor" Value="{StaticResource TextGray}"/>
+                                                <Setter Property="TextColor" Value="#AAAAAA"/>
                                             </DataTrigger>
                                         </Button.Triggers>
                                     </Button>
@@ -129,7 +129,7 @@
                                                          Binding="{Binding SelectedPeriod}"
                                                          Value="Year">
                                                 <Setter Property="BackgroundColor" Value="Transparent"/>
-                                                <Setter Property="TextColor" Value="{StaticResource TextGray}"/>
+                                                <Setter Property="TextColor" Value="#AAAAAA"/>
                                             </DataTrigger>
                                         </Button.Triggers>
                                     </Button>
@@ -140,7 +140,7 @@
 
                         <!-- Total -->
                         <Label Text="{Binding LineTotal}"
-                               FontSize="12" TextColor="{StaticResource TextGray}"
+                               FontSize="12" TextColor="#AAAAAA"
                                HorizontalOptions="End"/>
 
                         <!-- Graphique courbes -->
@@ -229,14 +229,14 @@
                                          BackgroundColor="{StaticResource Primary}"
                                          CornerRadius="2" VerticalOptions="Center"/>
                                 <Label Text="Budget" FontSize="12"
-                                       TextColor="{StaticResource TextGray}" VerticalOptions="Center"/>
+                                       TextColor="#AAAAAA" VerticalOptions="Center"/>
                             </HorizontalStackLayout>
                             <HorizontalStackLayout Spacing="6">
                                 <BoxView WidthRequest="12" HeightRequest="12"
                                          BackgroundColor="#D4D8DE"
                                          CornerRadius="2" VerticalOptions="Center"/>
                                 <Label Text="Dépenses" FontSize="12"
-                                       TextColor="{StaticResource TextGray}" VerticalOptions="Center"/>
+                                       TextColor="#AAAAAA" VerticalOptions="Center"/>
                             </HorizontalStackLayout>
                         </HorizontalStackLayout>
 
@@ -286,7 +286,7 @@
                         </Grid>
 
                         <Label Text="Aucune donnée disponible pour cette année."
-                               FontSize="13" TextColor="{StaticResource TextGray}"
+                               FontSize="13" TextColor="#AAAAAA"
                                HorizontalOptions="Center"
                                IsVisible="{Binding HasNoData}"/>
 

@@ -12,31 +12,52 @@ namespace MoneyMate.Services
             _db = db;
         }
 
-        // 🔹 Récupère toutes les catégories globales
+        //  Récupérer toutes les catégories
         public Task<List<Category>> GetCategoriesAsync()
             => _db.GetAllAsync<Category>();
 
-        // 🔹 Récupère une catégorie par son ID
+        //  Récupérer les catégories d'un budget
+        public async Task<List<Category>> GetCategoriesByBudgetAsync(int budgetId)
+        {
+            var categories = await _db.GetAllAsync<Category>();
+            return categories.Where(c => c.BudgetId == budgetId).ToList();
+        }
+
+        //  Récupérer une catégorie par ID
         public Task<Category> GetByIdAsync(int id)
             => _db.GetByIdAsync<Category>(id);
 
-        // 🔹 Ajoute une catégorie globale
+        //  Ajouter une nouvelle catégorie
         public async Task<int> AddCategoryAsync(Category category)
         {
-            // Vérification : éviter les doublons globaux
-            var categories = await GetCategoriesAsync();
-            if (categories.Any(c => c.Name.Trim().ToLower() == category.Name.Trim().ToLower()))
-                throw new Exception("Une catégorie portant ce nom existe déjà.");
+            // Empêcher 2 catégories avec le même nom dans le même budget
+            var categories = await GetCategoriesByBudgetAsync(category.BudgetId);
+            if (categories.Any(c => c.Name == category.Name))
+                throw new Exception("Une catégorie avec ce nom existe déjà dans ce budget.");
 
             return await _db.InsertAsync(category);
         }
 
-        // 🔹 Met à jour une catégorie
+        //  Mettre à jour une catégorie
         public Task<int> UpdateCategoryAsync(Category category)
             => _db.UpdateAsync(category);
 
-        // 🔹 Supprime une catégorie
+        //  Supprimer une catégorie
         public Task<int> DeleteCategoryAsync(Category category)
             => _db.DeleteAsync(category);
+
+        //  Supprimer toutes les catégories d’un budget (optionnel)
+        public async Task<int> DeleteCategoriesByBudgetAsync(int budgetId)
+        {
+            var categories = await GetCategoriesByBudgetAsync(budgetId);
+            int count = 0;
+
+            foreach (var c in categories)
+                count += await _db.DeleteAsync(c);
+
+            return count;
+        }
     }
 }
+
+
