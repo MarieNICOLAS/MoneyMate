@@ -1,4 +1,5 @@
 ﻿using MoneyMate.Services;
+using MoneyMate.Models;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -8,6 +9,7 @@ namespace MoneyMate.ViewModels
     {
         private readonly ExpenseService _expenseService;
         private readonly BudgetService _budgetService;
+        private readonly CategoryService _categoryService;
 
         private string _selectedPeriod = "Year";
         public string SelectedPeriod
@@ -20,11 +22,13 @@ namespace MoneyMate.ViewModels
         public string SelectedYear
         {
             get => _selectedYear;
-            set { _selectedYear = value; OnPropertyChanged(); _ = LoadBarChartAsync(); }
+            set { _selectedYear = value; OnPropertyChanged(); _ = LoadAllAsync(); }
         }
 
         public List<string> YearOptions { get; } = new();
+
         public ObservableCollection<ChartPoint> LinePoints { get; } = new();
+
         public ObservableCollection<BarMonth> BarMonths { get; } = new();
 
         private double _barMaxValue = 1;
@@ -33,7 +37,6 @@ namespace MoneyMate.ViewModels
             get => _barMaxValue;
             set { _barMaxValue = value; OnPropertyChanged(); OnPropertyChanged(nameof(BarMidValue)); }
         }
-
         public double BarMidValue => Math.Round(BarMaxValue / 2);
 
         private string _lineTotal = "0 €";
@@ -42,6 +45,63 @@ namespace MoneyMate.ViewModels
             get => _lineTotal;
             set { _lineTotal = value; OnPropertyChanged(); }
         }
+
+        private string _totalSpent = "0 €";
+        public string TotalSpent
+        {
+            get => _totalSpent;
+            set { _totalSpent = value; OnPropertyChanged(); }
+        }
+
+        private string _totalBudget = "0 €";
+        public string TotalBudget
+        {
+            get => _totalBudget;
+            set { _totalBudget = value; OnPropertyChanged(); }
+        }
+
+        private string _totalRemaining = "0 €";
+        public string TotalRemaining
+        {
+            get => _totalRemaining;
+            set { _totalRemaining = value; OnPropertyChanged(); }
+        }
+
+        private string _currentMonthTotal = "0 €";
+        public string CurrentMonthTotal
+        {
+            get => _currentMonthTotal;
+            set { _currentMonthTotal = value; OnPropertyChanged(); }
+        }
+
+        private string _previousMonthTotal = "0 €";
+        public string PreviousMonthTotal
+        {
+            get => _previousMonthTotal;
+            set { _previousMonthTotal = value; OnPropertyChanged(); }
+        }
+
+        private string _monthEvolution = "0%";
+        public string MonthEvolution
+        {
+            get => _monthEvolution;
+            set { _monthEvolution = value; OnPropertyChanged(); }
+        }
+
+        private bool _isPositiveEvolution = true;
+        public bool IsPositiveEvolution
+        {
+            get => _isPositiveEvolution;
+            set { _isPositiveEvolution = value; OnPropertyChanged(); OnPropertyChanged(nameof(EvolutionColor)); }
+        }
+
+        public Color EvolutionColor => IsPositiveEvolution
+            ? Color.FromArgb("#6CC57C")
+            : Color.FromArgb("#E57373");
+
+        public ObservableCollection<StatCategoryItem> TopCategories { get; } = new();
+
+        public ObservableCollection<PieSlice> PieSlices { get; } = new();
 
         private bool _hasNoData = false;
         public bool HasNoData
@@ -53,10 +113,11 @@ namespace MoneyMate.ViewModels
         public ICommand SelectPeriodCommand { get; }
         public ICommand SelectYearCommand { get; }
 
-        public StatisticsViewModel(ExpenseService expenseService, BudgetService budgetService)
+        public StatisticsViewModel(ExpenseService expenseService, BudgetService budgetService, CategoryService categoryService)
         {
             _expenseService = expenseService;
             _budgetService = budgetService;
+            _categoryService = categoryService;
 
             SelectPeriodCommand = new Command<string>(p => SelectedPeriod = p);
             SelectYearCommand = new Command<string>(y => SelectedYear = y);
@@ -74,6 +135,9 @@ namespace MoneyMate.ViewModels
         {
             await LoadLineChartAsync();
             await LoadBarChartAsync();
+            await LoadSummaryAsync();
+            await LoadComparisonAsync();
+            await LoadTopCategoriesAsync();
         }
 
         private async Task LoadLineChartAsync()
@@ -182,6 +246,111 @@ namespace MoneyMate.ViewModels
             HasNoData = !anyData;
             OnPropertyChanged(nameof(BarMonths));
         }
+
+        private async Task LoadSummaryAsync()
+        {
+            var now = DateTime.Now;
+            var allExpenses = await _expenseService.GetExpensesAsync();
+            var allBudgets = await _budgetService.GetBudgetsAsync();
+
+            double spent = allExpenses
+                .Where(e => e.Date.Year == now.Year && e.Date.Month == now.Month)
+                .Sum(e => e.Amount);
+
+            var budget = allBudgets
+                .FirstOrDefault(b => b.Year == now.Year && b.Month == now.Month);
+            double total = budget?.TotalAmount ?? 0;
+
+            TotalSpent = $"{spent:0.00} €";
+            TotalBudget = $"{total:0.00} €";
+            TotalRemaining = $"{Math.Max(0, total - spent):0.00} €";
+        }
+
+        private async Task LoadComparisonAsync()
+        {
+            var now = DateTime.Now;
+            var allExpenses = await _expenseService.GetExpensesAsync();
+
+            double currentMonth = allExpenses
+                .Where(e => e.Date.Year == now.Year && e.Date.Month == now.Month)
+                .Sum(e => e.Amount);
+
+            var prevDate = now.AddMonths(-1);
+            double previousMonth = allExpenses
+                .Where(e => e.Date.Year == prevDate.Year && e.Date.Month == prevDate.Month)
+                .Sum(e => e.Amount);
+
+            CurrentMonthTotal = $"{currentMonth:0.00} €";
+            PreviousMonthTotal = $"{previousMonth:0.00} €";
+
+            if (previousMonth > 0)
+            {
+                double evolution = ((currentMonth - previousMonth) / previousMonth) * 100;
+                IsPositiveEvolution = evolution <= 0; // positif = on dépense moins
+                MonthEvolution = $"{evolution:+0.0;-0.0}%";
+            }
+            else
+            {
+                MonthEvolution = "N/A";
+                IsPositiveEvolution = true;
+            }
+        }
+
+        private async Task LoadTopCategoriesAsync()
+        {
+            TopCategories.Clear();
+            PieSlices.Clear();
+
+            var now = DateTime.Now;
+            var allExpenses = await _expenseService.GetExpensesAsync();
+            var allCategories = await _categoryService.GetCategoriesAsync();
+
+            var monthExpenses = allExpenses
+                .Where(e => e.Date.Year == now.Year && e.Date.Month == now.Month)
+                .ToList();
+
+            double totalSpent = monthExpenses.Sum(e => e.Amount);
+            if (totalSpent <= 0) return;
+
+            var grouped = monthExpenses
+                .GroupBy(e => e.CategoryId)
+                .Select(g =>
+                {
+                    var cat = allCategories.FirstOrDefault(c => c.Id == g.Key);
+                    return new
+                    {
+                        Name = cat?.Name ?? $"Catégorie {g.Key}",
+                        Color = cat?.ColorHex ?? "#CCCCCC",
+                        Amount = g.Sum(e => e.Amount)
+                    };
+                })
+                .OrderByDescending(x => x.Amount)
+                .Take(5)
+                .ToList();
+
+            foreach (var item in grouped.Take(3))
+            {
+                double percentage = totalSpent > 0 ? (item.Amount / totalSpent) * 100 : 0;
+                TopCategories.Add(new StatCategoryItem(
+                    item.Name,
+                    item.Amount,
+                    percentage,
+                    item.Color
+                ));
+            }
+
+            double startAngle = 0;
+            foreach (var item in grouped)
+            {
+                double percentage = (item.Amount / totalSpent) * 100;
+                double sweepAngle = (item.Amount / totalSpent) * 360;
+                PieSlices.Add(new PieSlice(item.Name, item.Amount, percentage, item.Color, startAngle, sweepAngle));
+                startAngle += sweepAngle;
+            }
+
+            OnPropertyChanged(nameof(TopCategories));
+            OnPropertyChanged(nameof(PieSlices));
+        }
     }
 
     public class ChartPoint
@@ -209,7 +378,7 @@ namespace MoneyMate.ViewModels
         public bool IsOverBudget { get; }
 
         public Color SpentBarColor => IsOverBudget
-            ? Color.FromArgb("#D9534F")
+            ? Color.FromArgb("#E57373")
             : Color.FromArgb("#D4D8DE");
 
         public BarMonth(string month, double budgetAmount, double spentAmount,
@@ -221,6 +390,46 @@ namespace MoneyMate.ViewModels
             BudgetBarHeight = budgetBarHeight;
             SpentBarHeight = spentBarHeight;
             IsOverBudget = isOverBudget;
+        }
+    }
+
+    public class StatCategoryItem
+    {
+        public string Name { get; }
+        public double Amount { get; }
+        public double Percentage { get; }
+        public string Color { get; }
+        public string FormattedAmount => $"{Amount:0.00} €";
+        public string FormattedPercentage => $"{Percentage:0.0}%";
+        public double BarWidth => Percentage / 100 * 200; // largeur max 200px
+
+        public StatCategoryItem(string name, double amount, double percentage, string color)
+        {
+            Name = name;
+            Amount = amount;
+            Percentage = percentage;
+            Color = color;
+        }
+    }
+
+    public class PieSlice
+    {
+        public string Name { get; }
+        public double Amount { get; }
+        public double Percentage { get; }
+        public string Color { get; }
+        public double StartAngle { get; }
+        public double SweepAngle { get; }
+        public string FormattedPercentage => $"{Percentage:0.0}%";
+
+        public PieSlice(string name, double amount, double percentage, string color, double startAngle, double sweepAngle)
+        {
+            Name = name;
+            Amount = amount;
+            Percentage = percentage;
+            Color = color;
+            StartAngle = startAngle;
+            SweepAngle = sweepAngle;
         }
     }
 }

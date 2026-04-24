@@ -10,6 +10,7 @@ public partial class StatisticsPage : ContentPage
         InitializeComponent();
         var expenseService = IPlatformApplication.Current.Services.GetService<ExpenseService>();
         var budgetService = IPlatformApplication.Current.Services.GetService<BudgetService>();
-        BindingContext = new StatisticsViewModel(expenseService, budgetService);
+        var categoryService = IPlatformApplication.Current.Services.GetService<CategoryService>();
+        BindingContext = new StatisticsViewModel(expenseService, budgetService, categoryService);
     }
 }
