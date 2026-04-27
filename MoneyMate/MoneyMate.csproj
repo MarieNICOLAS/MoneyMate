@@ -43,16 +43,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <AndroidResource Remove="NewFolder\**" />
-	  <Compile Remove="NewFolder\**" />
-	  <EmbeddedResource Remove="NewFolder\**" />
-	  <MauiCss Remove="NewFolder\**" />
-	  <MauiXaml Remove="NewFolder\**" />
-	  <None Remove="NewFolder\**" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<PackageReference Include="Microcharts.Maui" Version="1.0.1" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.5" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
@@ -74,24 +66,18 @@
 		</MauiXaml>
 		<MauiXaml Update="Views\BudgetViews\AddBudgetPage.xaml" />
 		<MauiXaml Update="Views\CategoriesViews\AddCategoryPage.xaml" />
-		<MauiXaml Update="Views\ExpensesViews\AddExpensePage.xaml" />
 		<MauiXaml Update="Views\BasePage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\BudgetViews\EditBudgetPage.xaml" />
 		<MauiXaml Update="Views\CategoriesViews\EditCategoryPage.xaml" />
-		<MauiXaml Update="Views\ExpensesViews\EditExpensePage.xaml" />
-		<MauiXaml Update="Views\ExpensesViews\HistoryExpensePage.xaml" />
-		<MauiXaml Update="Views\Homepage.xaml" />
-		<MauiXaml Update="Views\StatisticsViews\NewPage1.xaml">
+		<MauiXaml Update="Views\ExpensesViews\AddExpensePage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Compile Update="Views\ExpensesViews\HistoryExpensePage.xaml.cs">
-	    <DependentUpon>HistoryExpensePage.xaml</DependentUpon>
-	  </Compile>
+		<MauiXaml Update="Views\HistoryViews\HistoryTransactionPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Homepage.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>

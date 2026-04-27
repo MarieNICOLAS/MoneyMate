@@ -22,13 +22,13 @@ namespace MoneyMate.ViewModels
         public string SelectedYear
         {
             get => _selectedYear;
-            set { _selectedYear = value; OnPropertyChanged(); _ = LoadAllAsync(); }
+            set { _selectedYear = value; OnPropertyChanged(); _ = LoadBarChartAsync(); }
         }
 
         public List<string> YearOptions { get; } = new();
 
         public ObservableCollection<ChartPoint> LinePoints { get; } = new();
-
+        public ObservableCollection<ChartPoint> BudgetPoints { get; } = new();
         public ObservableCollection<BarMonth> BarMonths { get; } = new();
 
         private double _barMaxValue = 1;
@@ -81,7 +81,7 @@ namespace MoneyMate.ViewModels
             set { _previousMonthTotal = value; OnPropertyChanged(); }
         }
 
-        private string _monthEvolution = "0%";
+        private string _monthEvolution = "N/A";
         public string MonthEvolution
         {
             get => _monthEvolution;
@@ -100,8 +100,6 @@ namespace MoneyMate.ViewModels
             : Color.FromArgb("#E57373");
 
         public ObservableCollection<StatCategoryItem> TopCategories { get; } = new();
-
-        public ObservableCollection<PieSlice> PieSlices { get; } = new();
 
         private bool _hasNoData = false;
         public bool HasNoData
@@ -143,7 +141,10 @@ namespace MoneyMate.ViewModels
         private async Task LoadLineChartAsync()
         {
             LinePoints.Clear();
+            BudgetPoints.Clear();
+
             var allExpenses = await _expenseService.GetExpensesAsync();
+            var allBudgets = await _budgetService.GetBudgetsAsync();
 
             if (SelectedPeriod == "Year")
             {
@@ -151,21 +152,28 @@ namespace MoneyMate.ViewModels
                 string[] labels = { "Jan","Feb","Mar","Apr","May","Jun",
                                     "Jul","Aug","Sep","Oct","Nov","Dec" };
 
-                var values = new double[12];
+                var expValues = new double[12];
+                var budValues = new double[12];
                 double total = 0;
+
                 for (int m = 1; m <= 12; m++)
                 {
-                    values[m - 1] = allExpenses
+                    expValues[m - 1] = allExpenses
                         .Where(e => e.Date.Year == year && e.Date.Month == m)
                         .Sum(e => e.Amount);
-                    total += values[m - 1];
+                    var budget = allBudgets.FirstOrDefault(b => b.Year == year && b.Month == m);
+                    budValues[m - 1] = budget?.TotalAmount ?? 0;
+                    total += expValues[m - 1];
                 }
 
-                double max = values.Max();
+                double max = Math.Max(expValues.Max(), budValues.Max());
                 if (max <= 0) max = 1;
 
                 for (int m = 0; m < 12; m++)
-                    LinePoints.Add(new ChartPoint(labels[m], values[m], values[m] / max * 140));
+                {
+                    LinePoints.Add(new ChartPoint(labels[m], expValues[m], expValues[m] / max * 140));
+                    BudgetPoints.Add(new ChartPoint(labels[m], budValues[m], budValues[m] / max * 140));
+                }
 
                 LineTotal = $"{total:0.00} €";
             }
@@ -176,26 +184,33 @@ namespace MoneyMate.ViewModels
                     .Where(e => e.Date.Year == now.Year && e.Date.Month == now.Month)
                     .ToList();
 
-                var values = new double[5];
+                var budget = allBudgets.FirstOrDefault(b => b.Year == now.Year && b.Month == now.Month);
+                double weeklyBudget = (budget?.TotalAmount ?? 0) / 5;
+
+                var expValues = new double[5];
                 for (int w = 0; w < 5; w++)
                 {
                     int dayStart = w * 7 + 1;
                     int dayEnd = Math.Min((w + 1) * 7, DateTime.DaysInMonth(now.Year, now.Month));
-                    values[w] = expenses
+                    expValues[w] = expenses
                         .Where(e => e.Date.Day >= dayStart && e.Date.Day <= dayEnd)
                         .Sum(e => e.Amount);
                 }
 
-                double max = values.Max();
+                double max = Math.Max(expValues.Max(), weeklyBudget);
                 if (max <= 0) max = 1;
 
                 for (int w = 0; w < 5; w++)
-                    LinePoints.Add(new ChartPoint($"W{w + 1}", values[w], values[w] / max * 140));
+                {
+                    LinePoints.Add(new ChartPoint($"W{w + 1}", expValues[w], expValues[w] / max * 140));
+                    BudgetPoints.Add(new ChartPoint($"W{w + 1}", weeklyBudget, weeklyBudget / max * 140));
+                }
 
                 LineTotal = $"{expenses.Sum(e => e.Amount):0.00} €";
             }
 
             OnPropertyChanged(nameof(LinePoints));
+            OnPropertyChanged(nameof(BudgetPoints));
         }
 
         private async Task LoadBarChartAsync()
@@ -286,7 +301,7 @@ namespace MoneyMate.ViewModels
             if (previousMonth > 0)
             {
                 double evolution = ((currentMonth - previousMonth) / previousMonth) * 100;
-                IsPositiveEvolution = evolution <= 0; // positif = on dépense moins
+                IsPositiveEvolution = evolution <= 0;
                 MonthEvolution = $"{evolution:+0.0;-0.0}%";
             }
             else
@@ -298,9 +313,6 @@ namespace MoneyMate.ViewModels
 
         private async Task LoadTopCategoriesAsync()
         {
-            TopCategories.Clear();
-            PieSlices.Clear();
-
             var now = DateTime.Now;
             var allExpenses = await _expenseService.GetExpensesAsync();
             var allCategories = await _categoryService.GetCategoriesAsync();
@@ -325,31 +337,19 @@ namespace MoneyMate.ViewModels
                     };
                 })
                 .OrderByDescending(x => x.Amount)
-                .Take(5)
+                .Take(3)
                 .ToList();
 
-            foreach (var item in grouped.Take(3))
+            MainThread.BeginInvokeOnMainThread(() =>
             {
-                double percentage = totalSpent > 0 ? (item.Amount / totalSpent) * 100 : 0;
-                TopCategories.Add(new StatCategoryItem(
-                    item.Name,
-                    item.Amount,
-                    percentage,
-                    item.Color
-                ));
-            }
-
-            double startAngle = 0;
-            foreach (var item in grouped)
-            {
-                double percentage = (item.Amount / totalSpent) * 100;
-                double sweepAngle = (item.Amount / totalSpent) * 360;
-                PieSlices.Add(new PieSlice(item.Name, item.Amount, percentage, item.Color, startAngle, sweepAngle));
-                startAngle += sweepAngle;
-            }
-
-            OnPropertyChanged(nameof(TopCategories));
-            OnPropertyChanged(nameof(PieSlices));
+                TopCategories.Clear();
+                foreach (var item in grouped)
+                {
+                    double percentage = totalSpent > 0 ? (item.Amount / totalSpent) * 100 : 0;
+                    TopCategories.Add(new StatCategoryItem(item.Name, item.Amount, percentage, item.Color));
+                }
+                OnPropertyChanged(nameof(TopCategories));
+            });
         }
     }
 
@@ -401,7 +401,7 @@ namespace MoneyMate.ViewModels
         public string Color { get; }
         public string FormattedAmount => $"{Amount:0.00} €";
         public string FormattedPercentage => $"{Percentage:0.0}%";
-        public double BarWidth => Percentage / 100 * 200; // largeur max 200px
+        public double BarWidth => Percentage / 100 * 200;
 
         public StatCategoryItem(string name, double amount, double percentage, string color)
         {

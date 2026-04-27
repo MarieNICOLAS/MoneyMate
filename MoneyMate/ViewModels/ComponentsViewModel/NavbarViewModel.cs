@@ -17,6 +17,6 @@ public class NavbarViewModel : BaseViewModel
         GoStatisticsCommand = new Command(async () => await Shell.Current.GoToAsync("//StatisticsPage"));
         GoAddCommand = new Command(async () => await Shell.Current.GoToAsync("//AddExpensePage"));
         GoSearchCommand = new Command(async () => await Shell.Current.GoToAsync("//HistoryTransactionPage"));
-        GoMenuCommand = new Command(async () => await Shell.Current.GoToAsync("//MenuPage"));
+        GoMenuCommand = new Command(async () => await Shell.Current.GoToAsync("///MenuPage"));
     }
 }

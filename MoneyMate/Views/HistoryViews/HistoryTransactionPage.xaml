@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:MoneyMate.Components.Layout"
+             xmlns:vm="clr-namespace:MoneyMate.ViewModels"
+             x:Class="MoneyMate.Views.HistoryTransactionPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource BackgroundLight}">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- ══════════════════════════════════════
+             HEADER
+             ══════════════════════════════════════ -->
+        <Border Grid.Row="0" BackgroundColor="{StaticResource PrimaryLight}"
+                StrokeThickness="0" Padding="0">
+            <Border.Shadow>
+                <Shadow Brush="Black" Offset="0,4" Radius="6" Opacity="0.2"/>
+            </Border.Shadow>
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto" Padding="16,10">
+                <HorizontalStackLayout Grid.Column="0" Spacing="8" VerticalOptions="Center">
+                    <Image Source="money_mate_icon.png" WidthRequest="26" HeightRequest="26" VerticalOptions="Center"/>
+                    <Label Text="MoneyMate" FontAttributes="Bold" FontSize="18"
+                           TextColor="{StaticResource TextDark}" VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+                <Grid Grid.Column="2" Margin="0,0,10,0" VerticalOptions="Center">
+                    <ImageButton Source="alarm_on_icon.png" BackgroundColor="Transparent"
+                                 WidthRequest="26" HeightRequest="26"/>
+                </Grid>
+                <ImageButton Grid.Column="3" Source="settings_icon.png"
+                             BackgroundColor="Transparent" WidthRequest="26" HeightRequest="26"
+                             Margin="0,0,10,0" VerticalOptions="Center"/>
+                <Border Grid.Column="4" StrokeThickness="1" Stroke="{StaticResource TextMuted}"
+                        StrokeShape="RoundRectangle 20"
+                        WidthRequest="32" HeightRequest="32" VerticalOptions="Center">
+                    <Label Text="👤" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- ══════════════════════════════════════
+             CONTENU PRINCIPAL
+             ══════════════════════════════════════ -->
+        <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,*">
+
+            <!-- Titre -->
+            <Label Grid.Row="0" Text="Historique" FontSize="28" FontAttributes="Bold"
+                   TextColor="{StaticResource TextDark}" Margin="20,14,20,8"/>
+
+            <!-- ── Barre de recherche ── -->
+            <Frame Grid.Row="1" Margin="16,0,16,8" Padding="0" CornerRadius="14"
+                   BackgroundColor="White" BorderColor="Transparent" HasShadow="True">
+                <SearchBar Placeholder="Rechercher une transaction"
+                           Text="{Binding SearchQuery}"
+                           SearchCommand="{Binding SearchCommand}"
+                           BackgroundColor="Transparent"
+                           PlaceholderColor="#AAAAAA"
+                           TextColor="{StaticResource TextDark}"
+                           CancelButtonColor="{StaticResource Primary}"
+                           FontSize="14"/>
+            </Frame>
+
+            <!-- ── Filtres + résumé ── -->
+            <Frame Grid.Row="2" Margin="16,0,16,8" Padding="14,12" CornerRadius="14"
+                   BackgroundColor="White" BorderColor="Transparent" HasShadow="True">
+                <VerticalStackLayout Spacing="10">
+
+                    <!-- Ligne filtres toggle -->
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                        <!-- Filtre Nom -->
+                        <VerticalStackLayout Grid.Column="0" Spacing="4" HorizontalOptions="Center">
+                            <Switch IsToggled="{Binding FilterByName}"
+                                    HorizontalOptions="Center" Scale="0.8"/>
+                            <Label Text="Nom" FontSize="10" TextColor="#AAAAAA"
+                                   HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+
+                        <!-- Filtre Catégorie -->
+                        <VerticalStackLayout Grid.Column="1" Spacing="4" HorizontalOptions="Center">
+                            <Switch IsToggled="{Binding FilterByCategory}"
+                                    HorizontalOptions="Center" Scale="0.8"/>
+                            <Label Text="Catégorie" FontSize="10" TextColor="#AAAAAA"
+                                   HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+
+                        <!-- Filtre Prix -->
+                        <VerticalStackLayout Grid.Column="2" Spacing="4" HorizontalOptions="Center">
+                            <Switch IsToggled="{Binding FilterByPrice}"
+                                    HorizontalOptions="Center" Scale="0.8"/>
+                            <Label Text="Prix ↓" FontSize="10" TextColor="#AAAAAA"
+                                   HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <!-- Séparateur -->
+                    <BoxView HeightRequest="1" BackgroundColor="{StaticResource BackgroundLight}"
+                             HorizontalOptions="Fill"/>
+
+                    <!-- Filtre date -->
+                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                        <Switch Grid.Column="0" IsToggled="{Binding FilterByDate}"
+                                VerticalOptions="Center" Scale="0.8"/>
+                        <Label Grid.Column="1" Text="Filtrer par date" FontSize="12"
+                               TextColor="{StaticResource TextDark}" VerticalOptions="Center"/>
+                        <DatePicker Grid.Column="2"
+                                    Date="{Binding SelectedDate}"
+                                    IsEnabled="{Binding FilterByDate}"
+                                    FontSize="12"
+                                    TextColor="{StaticResource TextDark}"
+                                    Format="dd/MM/yyyy"
+                                    MinimumWidthRequest="110"/>
+                    </Grid>
+
+                    <!-- Séparateur -->
+                    <BoxView HeightRequest="1" BackgroundColor="{StaticResource BackgroundLight}"
+                             HorizontalOptions="Fill"/>
+
+                    <!-- Résumé -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="{Binding TransactionCount}"
+                               FontSize="12" TextColor="#AAAAAA" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="{Binding TotalAmount}"
+                               FontSize="14" FontAttributes="Bold"
+                               TextColor="{StaticResource Primary}" VerticalOptions="Center"/>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- ── Liste des transactions ── -->
+            <RefreshView Grid.Row="3"
+                         Command="{Binding RefreshCommand}"
+                         IsRefreshing="{Binding IsLoading}">
+                <CollectionView ItemsSource="{Binding Transactions}"
+                                VerticalOptions="Fill"
+                                Margin="16,0,16,8">
+
+                    <!-- État vide -->
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center"
+                                             Spacing="12" Padding="0,40">
+                            <Label Text="💸" FontSize="48" HorizontalOptions="Center"/>
+                            <Label Text="Aucune transaction trouvée"
+                                   FontSize="16" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextDark}"
+                                   HorizontalOptions="Center"/>
+                            <Label Text="Ajoutez une dépense pour commencer"
+                                   FontSize="13" TextColor="#AAAAAA"
+                                   HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ExpenseDisplayItem">
+                            <SwipeView>
+                                <!-- Action swipe gauche : supprimer -->
+                                <SwipeView.RightItems>
+                                    <SwipeItems>
+                                        <SwipeItem Text="Supprimer"
+                                                   BackgroundColor="{StaticResource Error}"
+                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HistoryTransactionViewModel}}, Path=DeleteCommand}"
+                                                   CommandParameter="{Binding .}"/>
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+
+                                <Frame Padding="14,12" CornerRadius="14"
+                                       BackgroundColor="White" BorderColor="Transparent"
+                                       HasShadow="True" Margin="0,4">
+                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+
+                                        <!-- Icône catégorie -->
+                                        <Border Grid.Column="0"
+                                                BackgroundColor="{Binding CategoryColor}"
+                                                StrokeThickness="0"
+                                                StrokeShape="RoundRectangle 12"
+                                                WidthRequest="44" HeightRequest="44"
+                                                VerticalOptions="Center">
+                                            <Label Text="{Binding CategoryInitial}"
+                                                   FontSize="18" FontAttributes="Bold"
+                                                   TextColor="White"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"/>
+                                        </Border>
+
+                                        <!-- Description + catégorie -->
+                                        <VerticalStackLayout Grid.Column="1" Spacing="3"
+                                                             VerticalOptions="Center">
+                                            <Label Text="{Binding Description}"
+                                                   FontSize="14" FontAttributes="Bold"
+                                                   TextColor="{StaticResource TextDark}"
+                                                   LineBreakMode="TailTruncation"/>
+                                            <Label Text="{Binding CategoryName}"
+                                                   FontSize="12" TextColor="#AAAAAA"/>
+                                        </VerticalStackLayout>
+
+                                        <!-- Montant + date -->
+                                        <VerticalStackLayout Grid.Column="2" Spacing="3"
+                                                             HorizontalOptions="End"
+                                                             VerticalOptions="Center">
+                                            <Label Text="{Binding FormattedAmount}"
+                                                   FontSize="14" FontAttributes="Bold"
+                                                   TextColor="{StaticResource Error}"
+                                                   HorizontalOptions="End"/>
+                                            <Label Text="{Binding FormattedDate}"
+                                                   FontSize="11" TextColor="#AAAAAA"
+                                                   HorizontalOptions="End"/>
+                                        </VerticalStackLayout>
+
+                                    </Grid>
+                                </Frame>
+                            </SwipeView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+            </RefreshView>
+
+        </Grid>
+
+        <!-- ══════════════════════════════════════
+             NAVBAR
+             ══════════════════════════════════════ -->
+        <components:Navbar Grid.Row="2" />
+
+    </Grid>
+</ContentPage>

@@ -6,10 +6,7 @@
              x:Name="PageRoot"
              x:Class="MoneyMate.Views.EditCategoryPage">
 
-    <!-- ViewModel -->
-    <ContentPage.BindingContext>
-        <viewmodels:CategoryViewModel />
-    </ContentPage.BindingContext>
+   
 
     <!-- STRUCTURE GLOBALE -->
     <Grid RowDefinitions="Auto,*,Auto"

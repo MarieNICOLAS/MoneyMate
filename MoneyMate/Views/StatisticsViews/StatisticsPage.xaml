@@ -9,64 +9,46 @@
 
     <Grid RowDefinitions="Auto,*,Auto">
 
-        <!-- ══════════════════════════════════════
-             HEADER
-             ══════════════════════════════════════ -->
-        <Border Grid.Row="0"
-                BackgroundColor="{StaticResource PrimaryLight}"
+        <!-- ══ HEADER ══ -->
+        <Border Grid.Row="0" BackgroundColor="{StaticResource PrimaryLight}"
                 StrokeThickness="0" Padding="0">
             <Border.Shadow>
                 <Shadow Brush="Black" Offset="0,4" Radius="6" Opacity="0.2"/>
             </Border.Shadow>
             <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto" Padding="16,10">
                 <HorizontalStackLayout Grid.Column="0" Spacing="8" VerticalOptions="Center">
-                    <Image Source="money_mate_icon.png" WidthRequest="26" HeightRequest="26" VerticalOptions="Center"/>
+                    <Image Source="money_mate_icon.png" WidthRequest="26" HeightRequest="26"/>
                     <Label Text="MoneyMate" FontAttributes="Bold" FontSize="18"
                            TextColor="{StaticResource TextDark}" VerticalOptions="Center"/>
                 </HorizontalStackLayout>
                 <Grid Grid.Column="2" Margin="0,0,10,0" VerticalOptions="Center">
                     <ImageButton Source="alarm_on_icon.png" BackgroundColor="Transparent"
                                  WidthRequest="26" HeightRequest="26"/>
-                    <Border BackgroundColor="Red" StrokeThickness="0"
-                            StrokeShape="RoundRectangle 8"
-                            WidthRequest="14" HeightRequest="14"
-                            HorizontalOptions="End" VerticalOptions="Start" Margin="0,0,-2,0">
-                        <Label Text="2" FontSize="8" TextColor="White"
-                               HorizontalOptions="Center" VerticalOptions="Center"/>
-                    </Border>
                 </Grid>
                 <ImageButton Grid.Column="3" Source="settings_icon.png"
                              BackgroundColor="Transparent" WidthRequest="26" HeightRequest="26"
                              Margin="0,0,10,0" VerticalOptions="Center"/>
                 <Border Grid.Column="4" StrokeThickness="1" Stroke="{StaticResource TextMuted}"
-                        StrokeShape="RoundRectangle 20"
-                        WidthRequest="32" HeightRequest="32" VerticalOptions="Center">
+                        StrokeShape="RoundRectangle 20" WidthRequest="32" HeightRequest="32">
                     <Label Text="👤" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
                 </Border>
             </Grid>
         </Border>
 
-        <!-- ══════════════════════════════════════
-             CONTENU SCROLLABLE
-             ══════════════════════════════════════ -->
+        <!-- ══ CONTENU ══ -->
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Spacing="0" Padding="0,0,0,12">
 
                 <Label Text="Statistics" FontSize="28" FontAttributes="Bold"
                        TextColor="{StaticResource TextDark}" Margin="20,14,20,4"/>
 
-                <!-- ══════════════════════════════════════
-                     CARTE 0 — RÉSUMÉ GLOBAL
-                     ══════════════════════════════════════ -->
+                <!-- ── Résumé du mois ── -->
                 <Frame Margin="16,4,16,12" Padding="16,14" CornerRadius="16"
                        BackgroundColor="White" BorderColor="Transparent" HasShadow="True">
                     <VerticalStackLayout Spacing="12">
-
                         <Label Text="Résumé du mois" FontSize="15" FontAttributes="Bold"
                                TextColor="{StaticResource TextDark}"/>
-
                         <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
-                            <!-- Total dépensé -->
                             <Frame Grid.Column="0" Padding="10,8" CornerRadius="12"
                                    BackgroundColor="{StaticResource BackgroundLight}" BorderColor="Transparent">
                                 <VerticalStackLayout Spacing="4">
@@ -75,7 +57,6 @@
                                            TextColor="{StaticResource Error}" HorizontalOptions="Center"/>
                                 </VerticalStackLayout>
                             </Frame>
-                            <!-- Budget -->
                             <Frame Grid.Column="1" Padding="10,8" CornerRadius="12"
                                    BackgroundColor="{StaticResource BackgroundLight}" BorderColor="Transparent">
                                 <VerticalStackLayout Spacing="4">
@@ -84,7 +65,6 @@
                                            TextColor="{StaticResource Primary}" HorizontalOptions="Center"/>
                                 </VerticalStackLayout>
                             </Frame>
-                            <!-- Restant -->
                             <Frame Grid.Column="2" Padding="10,8" CornerRadius="12"
                                    BackgroundColor="{StaticResource BackgroundLight}" BorderColor="Transparent">
                                 <VerticalStackLayout Spacing="4">
@@ -94,56 +74,41 @@
                                 </VerticalStackLayout>
                             </Frame>
                         </Grid>
-
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- ══════════════════════════════════════
-                     CARTE 1 — COMPARAISON MENSUELLE
-                     ══════════════════════════════════════ -->
+                <!-- ── Comparaison mensuelle ── -->
                 <Frame Margin="16,0,16,12" Padding="16,14" CornerRadius="16"
                        BackgroundColor="White" BorderColor="Transparent" HasShadow="True">
                     <VerticalStackLayout Spacing="12">
-
                         <Label Text="Comparaison mensuelle" FontSize="15" FontAttributes="Bold"
                                TextColor="{StaticResource TextDark}"/>
-
                         <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="8">
-                            <!-- Mois précédent -->
                             <VerticalStackLayout Grid.Column="0" Spacing="4" HorizontalOptions="Center">
                                 <Label Text="Mois précédent" FontSize="10" TextColor="#AAAAAA" HorizontalOptions="Center"/>
                                 <Label Text="{Binding PreviousMonthTotal}" FontSize="15" FontAttributes="Bold"
                                        TextColor="{StaticResource TextDark}" HorizontalOptions="Center"/>
                             </VerticalStackLayout>
-
-                            <!-- Évolution -->
                             <Frame Grid.Column="1" Padding="10,6" CornerRadius="12"
                                    BackgroundColor="{StaticResource BackgroundLight}" BorderColor="Transparent">
                                 <Label Text="{Binding MonthEvolution}" FontSize="13" FontAttributes="Bold"
                                        TextColor="{Binding EvolutionColor}" HorizontalOptions="Center"/>
                             </Frame>
-
-                            <!-- Mois actuel -->
                             <VerticalStackLayout Grid.Column="2" Spacing="4" HorizontalOptions="Center">
                                 <Label Text="Ce mois" FontSize="10" TextColor="#AAAAAA" HorizontalOptions="Center"/>
                                 <Label Text="{Binding CurrentMonthTotal}" FontSize="15" FontAttributes="Bold"
                                        TextColor="{StaticResource TextDark}" HorizontalOptions="Center"/>
                             </VerticalStackLayout>
                         </Grid>
-
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- ══════════════════════════════════════
-                     CARTE 2 — TOP 3 CATÉGORIES
-                     ══════════════════════════════════════ -->
+                <!-- ── Top catégories ── -->
                 <Frame Margin="16,0,16,12" Padding="16,14" CornerRadius="16"
                        BackgroundColor="White" BorderColor="Transparent" HasShadow="True">
                     <VerticalStackLayout Spacing="12">
-
                         <Label Text="Top catégories" FontSize="15" FontAttributes="Bold"
                                TextColor="{StaticResource TextDark}"/>
-
                         <CollectionView ItemsSource="{Binding TopCategories}">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="vm:StatCategoryItem">
@@ -154,49 +119,38 @@
                                                          Color="{Binding Color}"
                                                          CornerRadius="6" VerticalOptions="Center"/>
                                                 <Label Text="{Binding Name}" FontSize="13"
-                                                       TextColor="{StaticResource TextDark}"
-                                                       VerticalOptions="Center"/>
+                                                       TextColor="{StaticResource TextDark}" VerticalOptions="Center"/>
                                             </HorizontalStackLayout>
                                             <VerticalStackLayout Grid.Column="1" HorizontalOptions="End">
                                                 <Label Text="{Binding FormattedAmount}" FontSize="13"
-                                                       FontAttributes="Bold"
-                                                       TextColor="{StaticResource TextDark}"
+                                                       FontAttributes="Bold" TextColor="{StaticResource TextDark}"
                                                        HorizontalOptions="End"/>
                                                 <Label Text="{Binding FormattedPercentage}" FontSize="11"
                                                        TextColor="#AAAAAA" HorizontalOptions="End"/>
                                             </VerticalStackLayout>
                                         </Grid>
-                                        <!-- Barre de progression -->
                                         <Grid HeightRequest="6" BackgroundColor="{StaticResource BackgroundLight}"
                                               HorizontalOptions="Fill">
-                                            <BoxView HeightRequest="6"
-                                                     Color="{Binding Color}"
-                                                     CornerRadius="3"
-                                                     WidthRequest="{Binding BarWidth}"
+                                            <BoxView HeightRequest="6" Color="{Binding Color}"
+                                                     CornerRadius="3" WidthRequest="{Binding BarWidth}"
                                                      HorizontalOptions="Start"/>
                                         </Grid>
                                     </VerticalStackLayout>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
-
                         <Label Text="Aucune dépense ce mois." FontSize="12" TextColor="#AAAAAA"
-                               HorizontalOptions="Center"
-                               IsVisible="{Binding HasNoData}"/>
-
+                               HorizontalOptions="Center" IsVisible="{Binding HasNoData}"/>
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- ══════════════════════════════════════
-                     CARTE 3 — GRAPHIQUE EN COURBES
-                     ══════════════════════════════════════ -->
+                <!-- ── Graphique Évolution (GraphicsView) ── -->
                 <Frame Margin="16,0,16,12" Padding="16,14" CornerRadius="16"
                        BackgroundColor="White" BorderColor="Transparent" HasShadow="True">
                     <VerticalStackLayout Spacing="12">
 
                         <Grid ColumnDefinitions="*,Auto">
-                            <Label Grid.Column="0" Text="Évolution des dépenses"
-                                   FontSize="15" FontAttributes="Bold"
+                            <Label Grid.Column="0" Text="Évolution" FontSize="15" FontAttributes="Bold"
                                    TextColor="{StaticResource TextDark}" VerticalOptions="Center"/>
                             <Border Grid.Column="1" BackgroundColor="#F0F0F0" StrokeThickness="0"
                                     StrokeShape="RoundRectangle 14" Padding="3">
@@ -233,59 +187,38 @@
                             </Border>
                         </Grid>
 
+                        <!-- Légende -->
+                        <HorizontalStackLayout Spacing="20">
+                            <HorizontalStackLayout Spacing="6">
+                                <BoxView WidthRequest="16" HeightRequest="3" BackgroundColor="#7B9EC5"
+                                         CornerRadius="2" VerticalOptions="Center"/>
+                                <Label Text="Dépenses" FontSize="11" TextColor="#AAAAAA" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Spacing="6">
+                                <BoxView WidthRequest="16" HeightRequest="3" BackgroundColor="#B0BEC5"
+                                         CornerRadius="2" VerticalOptions="Center"/>
+                                <Label Text="Budget" FontSize="11" TextColor="#AAAAAA" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                        </HorizontalStackLayout>
+
                         <Label Text="{Binding LineTotal}" FontSize="12" TextColor="#AAAAAA"
                                HorizontalOptions="End"/>
 
-                        <Grid ColumnDefinitions="36,*" HeightRequest="180">
-                            <VerticalStackLayout Grid.Column="0" VerticalOptions="Fill" Spacing="14">
-                                <Label Text="Max" FontSize="8" TextColor="#AAAAAA" HorizontalOptions="End" Margin="0,0,4,0"/>
-                                <Label Text="75%" FontSize="8" TextColor="#AAAAAA" HorizontalOptions="End" Margin="0,0,4,0"/>
-                                <Label Text="50%" FontSize="8" TextColor="#AAAAAA" HorizontalOptions="End" Margin="0,0,4,0"/>
-                                <Label Text="25%" FontSize="8" TextColor="#AAAAAA" HorizontalOptions="End" Margin="0,0,4,0"/>
-                                <Label Text="0"   FontSize="8" TextColor="#AAAAAA" HorizontalOptions="End" Margin="0,0,4,0"/>
-                            </VerticalStackLayout>
-                            <Grid Grid.Column="1">
-                                <BoxView HeightRequest="1" BackgroundColor="#F0F0F0" VerticalOptions="Start" Margin="0,0"/>
-                                <BoxView HeightRequest="1" BackgroundColor="#F0F0F0" VerticalOptions="Start" Margin="0,44"/>
-                                <BoxView HeightRequest="1" BackgroundColor="#F0F0F0" VerticalOptions="Start" Margin="0,88"/>
-                                <BoxView HeightRequest="1" BackgroundColor="#F0F0F0" VerticalOptions="Start" Margin="0,132"/>
-                                <BoxView HeightRequest="1" BackgroundColor="#CCCCCC" VerticalOptions="End"   Margin="0,0"/>
-                                <CollectionView ItemsSource="{Binding LinePoints}"
-                                                ItemsLayout="HorizontalList"
-                                                VerticalOptions="Fill" Margin="0,0,0,16">
-                                    <CollectionView.ItemTemplate>
-                                        <DataTemplate x:DataType="vm:ChartPoint">
-                                            <VerticalStackLayout WidthRequest="24" Spacing="2" VerticalOptions="EndAndExpand">
-                                                <BoxView BackgroundColor="{StaticResource Primary}"
-                                                         WidthRequest="4" HorizontalOptions="Center"
-                                                         CornerRadius="2"
-                                                         HeightRequest="{Binding NormalizedHeight}"
-                                                         VerticalOptions="End"/>
-                                                <Ellipse Fill="{StaticResource Primary}"
-                                                         WidthRequest="6" HeightRequest="6"
-                                                         HorizontalOptions="Center"/>
-                                                <Label Text="{Binding Label}" FontSize="8"
-                                                       TextColor="#AAAAAA" HorizontalOptions="Center"/>
-                                            </VerticalStackLayout>
-                                        </DataTemplate>
-                                    </CollectionView.ItemTemplate>
-                                </CollectionView>
-                            </Grid>
-                        </Grid>
+                        <!-- GraphicsView courbe -->
+                        <GraphicsView x:Name="LineChartView"
+                                      HeightRequest="220"
+                                      HorizontalOptions="Fill"/>
 
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- ══════════════════════════════════════
-                     CARTE 4 — GRAPHIQUE EN BARRES
-                     ══════════════════════════════════════ -->
+                <!-- ── Graphique Barres groupées (GraphicsView) ── -->
                 <Frame Margin="16,0,16,12" Padding="16,14" CornerRadius="16"
                        BackgroundColor="White" BorderColor="Transparent" HasShadow="True">
                     <VerticalStackLayout Spacing="12">
 
                         <Grid ColumnDefinitions="*,Auto">
-                            <Label Grid.Column="0" Text="Budget vs Dépenses"
-                                   FontSize="15" FontAttributes="Bold"
+                            <Label Grid.Column="0" Text="Revenus et dépenses" FontSize="15" FontAttributes="Bold"
                                    TextColor="{StaticResource TextDark}" VerticalOptions="Center"/>
                             <Border Grid.Column="1" BackgroundColor="#F0F0F0" StrokeThickness="0"
                                     StrokeShape="RoundRectangle 14" Padding="4,2">
@@ -296,55 +229,24 @@
                             </Border>
                         </Grid>
 
+                        <!-- Légende -->
                         <HorizontalStackLayout Spacing="20">
                             <HorizontalStackLayout Spacing="6">
-                                <BoxView WidthRequest="12" HeightRequest="12"
-                                         BackgroundColor="{StaticResource Primary}"
+                                <BoxView WidthRequest="12" HeightRequest="12" BackgroundColor="#7B9EC5"
                                          CornerRadius="2" VerticalOptions="Center"/>
                                 <Label Text="Budget" FontSize="12" TextColor="#AAAAAA" VerticalOptions="Center"/>
                             </HorizontalStackLayout>
                             <HorizontalStackLayout Spacing="6">
-                                <BoxView WidthRequest="12" HeightRequest="12" BackgroundColor="#D4D8DE"
+                                <BoxView WidthRequest="12" HeightRequest="12" BackgroundColor="#B0C4D8"
                                          CornerRadius="2" VerticalOptions="Center"/>
                                 <Label Text="Dépenses" FontSize="12" TextColor="#AAAAAA" VerticalOptions="Center"/>
                             </HorizontalStackLayout>
                         </HorizontalStackLayout>
 
-                        <Grid ColumnDefinitions="36,*" HeightRequest="220">
-                            <VerticalStackLayout Grid.Column="0" VerticalOptions="Fill" Spacing="0">
-                                <Label Text="{Binding BarMaxValue, StringFormat='{0:0}€'}"
-                                       FontSize="8" TextColor="#AAAAAA" HorizontalOptions="End" Margin="0,0,4,0"/>
-                                <Label Text="{Binding BarMidValue, StringFormat='{0:0}€'}"
-                                       FontSize="8" TextColor="#AAAAAA" HorizontalOptions="End" Margin="0,0,4,0"
-                                       VerticalOptions="CenterAndExpand"/>
-                                <Label Text="0€" FontSize="8" TextColor="#AAAAAA"
-                                       HorizontalOptions="End" Margin="0,0,4,0" VerticalOptions="End"/>
-                            </VerticalStackLayout>
-                            <ScrollView Grid.Column="1" Orientation="Horizontal">
-                                <CollectionView ItemsSource="{Binding BarMonths}"
-                                                ItemsLayout="HorizontalList" VerticalOptions="Fill">
-                                    <CollectionView.ItemTemplate>
-                                        <DataTemplate x:DataType="vm:BarMonth">
-                                            <VerticalStackLayout WidthRequest="28" Spacing="1"
-                                                                 VerticalOptions="EndAndExpand" Margin="3,0">
-                                                <BoxView BackgroundColor="{StaticResource Primary}"
-                                                         WidthRequest="10" HorizontalOptions="Start"
-                                                         CornerRadius="2,2,0,0"
-                                                         HeightRequest="{Binding BudgetBarHeight}"
-                                                         VerticalOptions="End"/>
-                                                <BoxView BackgroundColor="{Binding SpentBarColor}"
-                                                         WidthRequest="10" HorizontalOptions="End"
-                                                         CornerRadius="2,2,0,0"
-                                                         HeightRequest="{Binding SpentBarHeight}"
-                                                         VerticalOptions="End"/>
-                                                <Label Text="{Binding Month}" FontSize="8" TextColor="#AAAAAA"
-                                                       HorizontalOptions="Center" Margin="0,3,0,0"/>
-                                            </VerticalStackLayout>
-                                        </DataTemplate>
-                                    </CollectionView.ItemTemplate>
-                                </CollectionView>
-                            </ScrollView>
-                        </Grid>
+                        <!-- GraphicsView barres -->
+                        <GraphicsView x:Name="BarChartView"
+                                      HeightRequest="240"
+                                      HorizontalOptions="Fill"/>
 
                         <Label Text="Aucune donnée disponible pour cette année."
                                FontSize="13" TextColor="#AAAAAA"
@@ -356,9 +258,7 @@
             </VerticalStackLayout>
         </ScrollView>
 
-        <!-- ══════════════════════════════════════
-             NAVBAR
-             ══════════════════════════════════════ -->
+        <!-- ══ NAVBAR ══ -->
         <components:Navbar Grid.Row="2" />
 
     </Grid>

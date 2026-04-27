@@ -1,58 +1,149 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:MoneyMate.Components.Layout"
              x:Class="MoneyMate.Views.AddExpensePage"
-             Title="AddExpensePage">
-    <ScrollView>
-        <VerticalStackLayout Style="{StaticResource MainContainer}">
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource BackgroundLight}">
 
-            <Label Text="Ajouter une dépense"
-                   FontSize="24"
-                   FontAttributes="Bold"
-                   TextColor="{StaticResource Primary}" />
+    <Grid RowDefinitions="Auto,*,Auto">
 
-            <!-- Description -->
-            <Label Text="Description" Style="{StaticResource FormLabel}" />
-            <Border Style="{StaticResource InputBorder}">
-                <Entry Placeholder="Ex : courses, essence..."
-                       Text="{Binding Description}" />
-            </Border>
+        <!-- HEADER -->
+        <Border Grid.Row="0" BackgroundColor="{StaticResource PrimaryLight}"
+                StrokeThickness="0" Padding="0">
+            <Border.Shadow>
+                <Shadow Brush="Black" Offset="0,4" Radius="6" Opacity="0.2"/>
+            </Border.Shadow>
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto" Padding="16,10">
+                <HorizontalStackLayout Grid.Column="0" Spacing="8" VerticalOptions="Center">
+                    <Image Source="money_mate_icon.png" WidthRequest="26" HeightRequest="26" VerticalOptions="Center"/>
+                    <Label Text="MoneyMate" FontAttributes="Bold" FontSize="18"
+                           TextColor="{StaticResource TextDark}" VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
 
-            <!-- Montant -->
-            <Label Text="Montant (€)" Style="{StaticResource FormLabel}" />
-            <Border Style="{StaticResource InputBorder}">
-                <Entry Placeholder="Ex : 45.90"
-                       Keyboard="Numeric"
-                       Text="{Binding Amount}" />
-            </Border>
+        <!-- CONTENU -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="0" Padding="16,14,16,12">
 
-            <Label Text="Budget" Style="{StaticResource FormLabel}" />
-            <Picker Title="Sélectionner un budget"
-                    ItemsSource="{Binding Budgets}"
-                    SelectedItem="{Binding SelectedBudget, Mode=TwoWay}"
-                    ItemDisplayBinding="{Binding DisplayName}" />
+                <Label Text="Ajouter une dépense" FontSize="26" FontAttributes="Bold"
+                       TextColor="{StaticResource TextDark}" Margin="0,0,0,16"/>
 
-            <Label Text="Catégorie" Style="{StaticResource FormLabel}" />
-            <Picker Title="Choisir une catégorie"
-                    ItemsSource="{Binding Categories}"
-                    SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
-                    ItemDisplayBinding="{Binding Name}" />
-            
-            <!--Prendre les dates sur l'année actuelle-->
-            <Label Text="Date"
-                   Style="{StaticResource FormLabel}" />
-            <DatePicker Date="{Binding Date}"
-                        MinimumDate="2023-01-01"
-                        MaximumDate="2027-12-31" />
-            
-            <Label Text="{Binding Message}"
-                   TextColor="{Binding MessageColor}"
-                   HorizontalOptions="Center" />
+                <Frame Padding="16,14" CornerRadius="16"
+                       BackgroundColor="White" BorderColor="Transparent" HasShadow="True">
+                    <VerticalStackLayout Spacing="16">
 
-            <Button Text="Ajouter"
-                    Command="{Binding AddExpenseCommand}"
-                    Style="{StaticResource PrimaryButton}" />
+                        <!-- Description -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Description" FontSize="13" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextDark}"/>
+                            <Frame Padding="12,10" CornerRadius="10"
+                                   BackgroundColor="{StaticResource BackgroundLight}"
+                                   BorderColor="Transparent">
+                                <Entry Placeholder="Ex : courses, essence..."
+                                       Text="{Binding Description}"
+                                       PlaceholderColor="#AAAAAA"
+                                       TextColor="{StaticResource TextDark}"
+                                       BackgroundColor="Transparent"
+                                       FontSize="14"/>
+                            </Frame>
+                        </VerticalStackLayout>
 
-        </VerticalStackLayout>
-    </ScrollView>
+                        <!-- Montant -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Montant (€)" FontSize="13" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextDark}"/>
+                            <Frame Padding="12,10" CornerRadius="10"
+                                   BackgroundColor="{StaticResource BackgroundLight}"
+                                   BorderColor="Transparent">
+                                <Entry Placeholder="0"
+                                       Text="{Binding Amount}"
+                                       Keyboard="Numeric"
+                                       PlaceholderColor="#AAAAAA"
+                                       TextColor="{StaticResource TextDark}"
+                                       BackgroundColor="Transparent"
+                                       FontSize="14"/>
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- Budget -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Budget" FontSize="13" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextDark}"/>
+                            <Frame Padding="12,4" CornerRadius="10"
+                                   BackgroundColor="{StaticResource BackgroundLight}"
+                                   BorderColor="Transparent">
+                                <Picker ItemsSource="{Binding Budgets}"
+                                    SelectedItem="{Binding SelectedBudget, Mode=TwoWay}"
+                                    ItemDisplayBinding="{Binding DisplayName}"
+                                    Title="Sélectionner un budget"
+                                    TitleColor="#AAAAAA"
+                                    TextColor="{StaticResource TextDark}"
+                                    BackgroundColor="Transparent"
+                                    FontSize="14"/> 
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- Catégorie -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Catégorie" FontSize="13" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextDark}"/>
+                            <Frame Padding="12,4" CornerRadius="10"
+                                   BackgroundColor="{StaticResource BackgroundLight}"
+                                   BorderColor="Transparent">
+                                <Picker ItemsSource="{Binding Categories}"
+                                        SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+                                        ItemDisplayBinding="{Binding Name}"
+                                        Title="Choisir une catégorie"
+                                        TitleColor="#AAAAAA"
+                                        TextColor="{StaticResource TextDark}"
+                                        BackgroundColor="Transparent"
+                                        FontSize="14"/>
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- Date -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Date" FontSize="13" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextDark}"/>
+                            <Frame Padding="12,4" CornerRadius="10"
+                                   BackgroundColor="{StaticResource BackgroundLight}"
+                                   BorderColor="Transparent">
+                                <DatePicker Date="{Binding Date, Mode=TwoWay}"
+                                            TextColor="{StaticResource TextDark}"
+                                            BackgroundColor="Transparent"
+                                            FontSize="14"
+                                            Format="dd/MM/yyyy"/>
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- Message feedback -->
+                        <Label Text="{Binding Message}"
+                               TextColor="{Binding MessageColor}"
+                               FontSize="13"
+                               HorizontalOptions="Center"
+                               IsVisible="{Binding Message, Converter={StaticResource StringToBoolConverter}}"/>
+
+                        <!-- Bouton ajouter -->
+                        <Button Text="Ajouter la dépense"
+                                Command="{Binding AddExpenseCommand}"
+                                BackgroundColor="{StaticResource Primary}"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                FontSize="15"
+                                CornerRadius="12"
+                                HeightRequest="50"
+                                Margin="0,8,0,0"/>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- NAVBAR -->
+        <components:Navbar Grid.Row="2" />
+
+    </Grid>
 </ContentPage>

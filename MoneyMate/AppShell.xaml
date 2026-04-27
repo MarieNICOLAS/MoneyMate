@@ -69,15 +69,10 @@
     Title="Statistics"
     ContentTemplate="{DataTemplate views:StatisticsPage}"
     Route="StatisticsPage" />
-    
-    <ShellContent
-       Title="Modifier une transaction"
-        ContentTemplate="{DataTemplate views:EditExpensePage}"
-        Route="EditTransactionPage" />
-    
 
     <ShellContent
-        Title="Ajouter une dépense"
-        ContentTemplate="{DataTemplate views:AddExpensePage}"
-        Route="AddExpensePage" />
+    Title="Ajouter une dépense"
+    ContentTemplate="{DataTemplate views:AddExpensePage}"
+    Route="AddExpensePage" />
+
 </Shell>

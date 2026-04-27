@@ -82,22 +82,21 @@ namespace MoneyMate.ViewModels
         public IRelayCommand AddExpenseCommand { get; }
 
         // --- Constructeur ---
-        public ExpenseViewModel(ExpenseService expenseService, BudgetService budgetService, CategoryService categoryService, int userId)
+        public ExpenseViewModel(ExpenseService expenseService, BudgetService budgetService, CategoryService categoryService)
         {
             _expenseService = expenseService;
             _budgetService = budgetService;
             _categoryService = categoryService;
-            _userId = userId; // Initialisez le champ userId
-
+            _userId = Preferences.Get("UserId", 1);
             AddExpenseCommand = new AsyncRelayCommand(AddExpenseAsync);
             LoadBudgets();
-
         }
 
         // --- Méthodes ---
         private async Task LoadBudgets()
         {
-            var budgets = await _budgetService.GetBudgetsAsync();
+            int userId = Preferences.Get("UserId", 1);
+            var budgets = await _budgetService.GetBudgetsByUserAsync(userId);
             Budgets.Clear();
             foreach (var b in budgets)
                 Budgets.Add(b);

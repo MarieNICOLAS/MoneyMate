@@ -57,12 +57,12 @@ namespace MoneyMate.ViewModels
         public ICommand CancelCommand { get; }
 
         // --- Constructeur ---
-        public BudgetViewModel()
+        public BudgetViewModel(BudgetService budgetService)
         {
-            _budgetService = new BudgetService(App.Database);
+            _budgetService = budgetService;
 
             CreateBudgetCommand = new AsyncRelayCommand(CreateBudgetAsync);
-            CancelCommand = new Command(async () => await Shell.Current.GoToAsync("//DashboardPage"));
+            CancelCommand = new Command(async () => await Shell.Current.GoToAsync("///DashboardPage"));
         }
 
         // --- Méthodes ---

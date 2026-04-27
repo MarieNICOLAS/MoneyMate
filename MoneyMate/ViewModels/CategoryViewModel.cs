@@ -11,6 +11,7 @@ namespace MoneyMate.ViewModels
     public class CategoryViewModel : BaseViewModel
     {
         private readonly CategoryService _categoryService;
+        private readonly BudgetService _budgetService;
 
         // -------------------------
         //        PROPRIÉTÉS
@@ -30,6 +31,31 @@ namespace MoneyMate.ViewModels
             set => SetProperty(ref _selectedColor, value);
         }
 
+        private Budget? _selectedBudget;
+        public Budget? SelectedBudget
+        {
+            get => _selectedBudget;
+            set
+            {
+                SetProperty(ref _selectedBudget, value);
+                OnPropertyChanged(nameof(AmountPreview));
+            }
+        }
+
+        private double _percentage;
+        public double Percentage
+        {
+            get => _percentage;
+            set
+            {
+                SetProperty(ref _percentage, value);
+                OnPropertyChanged(nameof(AmountPreview));
+            }
+        }
+
+        public double AmountPreview =>
+            SelectedBudget != null ? SelectedBudget.TotalAmount * (Percentage / 100) : 0;
+
         // Message UX
         private string _message = string.Empty;
         public string Message
@@ -45,8 +71,9 @@ namespace MoneyMate.ViewModels
             set => SetProperty(ref _messageColor, value);
         }
 
-        // Liste des catégories
+        // Collections
         public ObservableCollection<Category> Categories { get; } = new();
+        public ObservableCollection<Budget> Budgets { get; } = new();
 
         // Palette de couleurs
         public ObservableCollection<string> ColorOptions { get; } = new()
@@ -56,7 +83,7 @@ namespace MoneyMate.ViewModels
             "#BFB3FD", "#FFC7FC"
         };
 
-        // Catégorie actuellement en modification
+        // Catégorie en modification
         public int EditingCategoryId { get; set; }
 
         // -------------------------
@@ -72,9 +99,10 @@ namespace MoneyMate.ViewModels
         //        CONSTRUCTEUR
         // -------------------------
 
-        public CategoryViewModel()
+        public CategoryViewModel(CategoryService categoryService, BudgetService budgetService)
         {
-            _categoryService = new CategoryService(App.Database);
+            _categoryService = categoryService;
+            _budgetService = budgetService;
 
             AddCategoryCommand = new AsyncRelayCommand(AddCategoryAsync);
             UpdateCategoryCommand = new AsyncRelayCommand(UpdateCategoryAsync);
@@ -82,6 +110,7 @@ namespace MoneyMate.ViewModels
             CancelCommand = new RelayCommand(Cancel);
 
             _ = LoadCategoriesAsync();
+            _ = LoadBudgetsAsync();
         }
 
         // -------------------------
@@ -91,10 +120,17 @@ namespace MoneyMate.ViewModels
         private async Task LoadCategoriesAsync()
         {
             var list = await _categoryService.GetCategoriesAsync();
-
             Categories.Clear();
             foreach (var c in list)
                 Categories.Add(c);
+        }
+
+        private async Task LoadBudgetsAsync()
+        {
+            var list = await _budgetService.GetBudgetsAsync();
+            Budgets.Clear();
+            foreach (var b in list)
+                Budgets.Add(b);
         }
 
         // -------------------------
@@ -117,6 +153,18 @@ namespace MoneyMate.ViewModels
                 return;
             }
 
+            if (SelectedBudget == null)
+            {
+                ShowMessage("Veuillez sélectionner un budget.", Colors.Red);
+                return;
+            }
+
+            if (Percentage <= 0)
+            {
+                ShowMessage("Veuillez définir un pourcentage.", Colors.Red);
+                return;
+            }
+
             try
             {
                 IsBusy = true;
@@ -125,6 +173,9 @@ namespace MoneyMate.ViewModels
                 {
                     Name = Name.Trim(),
                     ColorHex = SelectedColor!,
+                    BudgetId = SelectedBudget.Id,
+                    Percentage = Percentage,
+                    AllocatedAmount = AmountPreview,
                     CreatedAt = DateTime.Now
                 };
 
@@ -165,9 +216,10 @@ namespace MoneyMate.ViewModels
 
                 category.Name = Name.Trim();
                 category.ColorHex = SelectedColor ?? "#CCCCCC";
+                category.Percentage = Percentage;
+                category.AllocatedAmount = AmountPreview;
 
                 await _categoryService.UpdateCategoryAsync(category);
-
                 ShowMessage("Catégorie mise à jour.", Colors.Green);
             }
             catch (Exception ex)
@@ -197,7 +249,6 @@ namespace MoneyMate.ViewModels
 
             await _categoryService.DeleteCategoryAsync(category);
             Categories.Remove(category);
-
             ShowMessage("Catégorie supprimée.", Colors.Green);
         }
 
@@ -214,6 +265,8 @@ namespace MoneyMate.ViewModels
         {
             Name = string.Empty;
             SelectedColor = null;
+            SelectedBudget = null;
+            Percentage = 0;
         }
 
         // -------------------------

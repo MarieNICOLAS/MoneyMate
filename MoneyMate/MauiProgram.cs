@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microcharts.Maui;
+using Microsoft.Extensions.Logging;
 using MoneyMate.Database;
 using MoneyMate.Services;
 using MoneyMate.ViewModels;
@@ -14,6 +15,7 @@ namespace MoneyMate
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMicrocharts()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -48,6 +50,10 @@ namespace MoneyMate
             builder.Services.AddTransient<AddBudgetPage>();
             builder.Services.AddTransient<AddCategoryPage>();
             builder.Services.AddTransient<AddExpensePage>();
+            builder.Services.AddTransient<HistoryTransactionPage>();
+            builder.Services.AddTransient<StatisticsPage>();
+            builder.Services.AddTransient<StatisticsViewModel>();
+
 
             builder.Services.AddTransient<StatisticsPage>();
             builder.Services.AddTransient<StatisticsViewModel>();

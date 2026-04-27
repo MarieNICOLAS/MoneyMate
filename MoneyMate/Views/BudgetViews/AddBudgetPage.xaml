@@ -7,11 +7,6 @@
              x:Class="MoneyMate.Views.AddBudgetPage"
              Title="Ajouter un budget">
 
-    <!-- ViewModel -->
-    <ContentPage.BindingContext>
-        <viewmodels:BudgetViewModel />
-    </ContentPage.BindingContext>
-
     <!-- STRUCTURE GLOBALE -->
     <Grid RowDefinitions="Auto,*,Auto"
           BackgroundColor="{StaticResource BackgroundLight}">
